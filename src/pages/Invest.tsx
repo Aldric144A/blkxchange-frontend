@@ -680,10 +680,16 @@ function ImpactDashboardTab({ stats }: { stats: InvestImpactStats | null }) {
     );
   }
 
-  const chartData = [
+  const hasData = stats.total_funds_reinvested > 0 || stats.hbcu_donations > 0 || stats.startup_investments > 0;
+  
+  const chartData = hasData ? [
     { name: 'HBCU Donations', value: stats.hbcu_donations, color: '#C5A14E' },
     { name: 'Startup Investments', value: stats.startup_investments, color: '#023020' },
     { name: 'Platform Operations', value: stats.total_funds_reinvested - stats.hbcu_donations, color: '#1A1A1A' }
+  ] : [
+    { name: 'HBCU Donations', value: 30, color: '#C5A14E' },
+    { name: 'Startup Investments', value: 60, color: '#023020' },
+    { name: 'Platform Operations', value: 10, color: '#1A1A1A' }
   ];
 
   return (
