@@ -770,26 +770,15 @@ function ImpactDashboardTab({ stats }: { stats: InvestImpactStats | null }) {
               <CardTitle className="text-xl text-[#C5A14E]">Fund Distribution</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={400}>
                 <RechartsPieChart>
                   <Pie
                     data={chartData}
                     cx="50%"
-                    cy="50%"
+                    cy="40%"
                     labelLine={false}
-                    label={({ name, percent, x, y }) => (
-                      <text 
-                        x={x} 
-                        y={y} 
-                        fill="#FFFFFF" 
-                        textAnchor="middle" 
-                        dominantBaseline="central"
-                        style={{ fontSize: '14px', fontWeight: 'bold' }}
-                      >
-                        {`${name}: ${(percent * 100).toFixed(0)}%`}
-                      </text>
-                    )}
-                    outerRadius={80}
+                    label={false}
+                    outerRadius={100}
                     fill="#8884d8"
                     dataKey="value"
                   >
@@ -799,11 +788,13 @@ function ImpactDashboardTab({ stats }: { stats: InvestImpactStats | null }) {
                   </Pie>
                   <Tooltip 
                     formatter={(value: number) => `$${value.toLocaleString()}`}
-                    contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #C5A14E' }}
+                    contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #C5A14E', color: '#FFFFFF' }}
+                    labelStyle={{ color: '#C5A14E' }}
                   />
                   <Legend 
-                    wrapperStyle={{ color: '#FFFFFF' }}
+                    wrapperStyle={{ color: '#C5A14E', fontSize: '16px', fontWeight: 'bold' }}
                     iconType="circle"
+                    formatter={(value) => <span style={{ color: '#C5A14E' }}>{value}</span>}
                   />
                 </RechartsPieChart>
               </ResponsiveContainer>
