@@ -105,9 +105,14 @@ export default function Marketplace() {
                     )}
                   </div>
                   <div className="p-4">
-                    <h3 className="font-semibold text-lg mb-2 text-brand-black line-clamp-2">
+                    <h3 className="font-semibold text-lg mb-1 text-brand-black line-clamp-2">
                       {product.name}
                     </h3>
+                    {product.vendor_name && (
+                      <p className="text-brand-gold text-sm mb-2 font-medium">
+                        by {product.vendor_name}
+                      </p>
+                    )}
                     <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                       {product.description}
                     </p>

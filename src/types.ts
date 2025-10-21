@@ -44,6 +44,7 @@ export interface Vendor {
 export interface Product {
   id: string;
   vendor_id: string;
+  vendor_name?: string;
   name: string;
   description: string;
   price: number;
