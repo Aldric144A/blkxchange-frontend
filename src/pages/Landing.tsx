@@ -1,10 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShoppingBag, Users, Heart, TrendingUp } from 'lucide-react';
+import { ArrowRight, ShoppingBag, Users, Heart, TrendingUp, Newspaper } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { api } from '../api';
 import { ImpactStats } from '../types';
+
+interface Article {
+  id: string;
+  title: string;
+  author: string;
+  category: string;
+  excerpt: string;
+  image_url: string | null;
+  slug: string;
+  created_at: string;
+}
 
 const categories = [
   { name: 'Apparel', value: 'apparel', icon: '👔' },
@@ -19,10 +30,21 @@ const categories = [
 
 export default function Landing() {
   const [impactStats, setImpactStats] = useState<ImpactStats | null>(null);
+  const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
     api.getImpactStats().then(setImpactStats);
+    loadArticles();
   }, []);
+
+  const loadArticles = async () => {
+    try {
+      const response = await api.get('/articles?status=published');
+      setArticles(response.data.slice(0, 4));
+    } catch (error) {
+      console.error('Error loading articles:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-brand-ivory">
@@ -81,6 +103,58 @@ export default function Landing() {
           we continue the legacy of economic empowerment and community building.
         </p>
       </section>
+
+      {articles.length > 0 && (
+        <section className="py-16 bg-gradient-to-b from-[#0b1c0e] to-[#000000]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <Newspaper className="w-8 h-8 text-[#C5A14E]" />
+                <h2 className="text-3xl md:text-4xl font-bold text-[#C5A14E]">
+                  From The Black Chronicle
+                </h2>
+              </div>
+              <Link to="/news">
+                <Button className="bg-[#C5A14E] hover:bg-[#b39145] text-black">
+                  View All Stories
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+            <p className="text-white/80 text-lg mb-8 text-center">
+              Latest in Black Excellence, Innovation, and Achievement
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {articles.map((article) => (
+                <Link key={article.id} to={`/news/${article.slug}`}>
+                  <Card className="bg-[#1A1A1A] border-[#C5A14E]/20 hover:border-[#C5A14E] transition-all h-full">
+                    <CardContent className="p-0">
+                      {article.image_url && (
+                        <img
+                          src={article.image_url}
+                          alt={article.title}
+                          className="w-full h-40 object-cover"
+                        />
+                      )}
+                      <div className="p-4">
+                        <h3 className="text-white font-semibold mb-2 line-clamp-2 hover:text-[#C5A14E]">
+                          {article.title}
+                        </h3>
+                        <p className="text-white/60 text-sm line-clamp-2 mb-3">
+                          {article.excerpt}
+                        </p>
+                        <p className="text-[#C5A14E] text-xs">
+                          By {article.author}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
