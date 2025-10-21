@@ -78,10 +78,10 @@ export default function VendorRegister() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Store className="w-16 h-16 text-brand-gold mx-auto mb-4" />
           <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            Become a Vendor
+            Vendor Application
           </h1>
           <p className="text-xl text-gray-300">
-            Join BlkXchange™ and start selling to our community
+            Join The Internet's Black Wall Street
           </p>
         </div>
       </div>
@@ -95,19 +95,15 @@ export default function VendorRegister() {
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-5 h-5 text-brand-gold flex-shrink-0 mt-0.5" />
-                <span><strong>No upfront fees:</strong> Only pay when you make a sale (10% platform fee)</span>
+                <span><strong>No upfront fees:</strong> Only pay when you make a sale (15% platform fee)</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-5 h-5 text-brand-gold flex-shrink-0 mt-0.5" />
-                <span><strong>Automatic payments:</strong> Get paid directly via Stripe Connect</span>
+                <span><strong>Community impact:</strong> Portion of sales supports HBCUs and scholarships</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-5 h-5 text-brand-gold flex-shrink-0 mt-0.5" />
-                <span><strong>Community impact:</strong> 3% of every sale supports HBCUs and scholarships</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle className="w-5 h-5 text-brand-gold flex-shrink-0 mt-0.5" />
-                <span><strong>Full dashboard:</strong> Manage products, orders, and track your impact</span>
+                <span><strong>Full dashboard:</strong> Manage products, orders, and track your sales</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-5 h-5 text-brand-gold flex-shrink-0 mt-0.5" />
@@ -192,8 +188,8 @@ export default function VendorRegister() {
 
               <Alert className="bg-brand-ivory border-brand-gold">
                 <AlertDescription className="text-gray-700">
-                  By submitting this application, you agree to our vendor terms and revenue sharing model 
-                  (90% to you, 7% platform operations, 3% community impact).
+                  By submitting this application, you agree to our vendor terms and 15% platform fee 
+                  (85% to you, 12% platform operations, 3% community impact).
                 </AlertDescription>
               </Alert>
 

@@ -46,7 +46,7 @@ export default function Landing() {
                   Shop Marketplace
                 </Button>
               </Link>
-              <Link to="/vendor/register">
+              <Link to="/vendor-apply">
                 <Button variant="outline" className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black text-lg px-8 py-6">
                   <TrendingUp className="w-5 h-5 mr-2" />
                   Sell on BlkXchange
@@ -201,7 +201,7 @@ export default function Landing() {
             Be part of building a sustainable digital economy that reinvests in our community.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/vendor/register">
+            <Link to="/vendor-apply">
               <Button className="bg-brand-black text-brand-gold hover:bg-brand-charcoal text-lg px-8 py-6">
                 Become a Vendor
               </Button>
