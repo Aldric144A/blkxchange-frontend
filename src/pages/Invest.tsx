@@ -776,8 +776,22 @@ function ImpactDashboardTab({ stats }: { stats: InvestImpactStats | null }) {
                     data={chartData}
                     cx="50%"
                     cy="40%"
-                    labelLine={false}
-                    label={false}
+                    labelLine={true}
+                    label={({ percent, x, y }) => {
+                      if (percent === 0) return null;
+                      return (
+                        <text 
+                          x={x} 
+                          y={y} 
+                          fill="#FFFFFF" 
+                          textAnchor="middle" 
+                          dominantBaseline="central"
+                          style={{ fontSize: '18px', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}
+                        >
+                          {`${(percent * 100).toFixed(0)}%`}
+                        </text>
+                      );
+                    }}
                     outerRadius={100}
                     fill="#8884d8"
                     dataKey="value"
