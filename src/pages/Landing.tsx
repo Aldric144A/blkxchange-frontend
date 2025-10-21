@@ -39,8 +39,8 @@ export default function Landing() {
 
   const loadArticles = async () => {
     try {
-      const response = await api.get('/articles?status=published');
-      setArticles(response.data.slice(0, 4));
+      const articles = await api.get('/api/articles?status=published');
+      setArticles(articles.slice(0, 4));
     } catch (error) {
       console.error('Error loading articles:', error);
     }

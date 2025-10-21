@@ -47,8 +47,8 @@ export default function News() {
   const loadArticles = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/articles?status=published&category=${selectedCategory}`);
-      setArticles(response.data);
+      const articles = await api.get(`/api/articles?status=published&category=${selectedCategory}`);
+      setArticles(articles);
     } catch (error) {
       console.error('Error loading articles:', error);
     } finally {
@@ -235,7 +235,7 @@ function ArticleSubmissionForm({ onSuccess }: { onSuccess: () => void }) {
 
     try {
       setSubmitting(true);
-      await api.post('/articles', formData);
+      await api.post('/api/articles', formData);
       setSuccess(true);
       setFormData({
         title: '',

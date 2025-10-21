@@ -40,8 +40,8 @@ export default function NewsArticle() {
   const loadArticle = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/articles/slug/${slug}`);
-      setArticle(response.data);
+      const article = await api.get(`/api/articles/slug/${slug}`);
+      setArticle(article);
     } catch (error) {
       console.error('Error loading article:', error);
     } finally {
