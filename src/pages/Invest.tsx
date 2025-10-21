@@ -777,7 +777,18 @@ function ImpactDashboardTab({ stats }: { stats: InvestImpactStats | null }) {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent, x, y }) => (
+                      <text 
+                        x={x} 
+                        y={y} 
+                        fill="#FFFFFF" 
+                        textAnchor="middle" 
+                        dominantBaseline="central"
+                        style={{ fontSize: '14px', fontWeight: 'bold' }}
+                      >
+                        {`${name}: ${(percent * 100).toFixed(0)}%`}
+                      </text>
+                    )}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
@@ -790,7 +801,10 @@ function ImpactDashboardTab({ stats }: { stats: InvestImpactStats | null }) {
                     formatter={(value: number) => `$${value.toLocaleString()}`}
                     contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #C5A14E' }}
                   />
-                  <Legend />
+                  <Legend 
+                    wrapperStyle={{ color: '#FFFFFF' }}
+                    iconType="circle"
+                  />
                 </RechartsPieChart>
               </ResponsiveContainer>
             </CardContent>
