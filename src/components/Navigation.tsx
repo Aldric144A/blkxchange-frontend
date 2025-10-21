@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Users, Heart, Info } from 'lucide-react';
+import { ShoppingBag, Users, Heart, Info, TrendingUp } from 'lucide-react';
 
 export default function Navigation() {
   return (
@@ -26,6 +26,13 @@ export default function Navigation() {
             >
               <Users className="w-4 h-4" />
               <span>Professionals</span>
+            </Link>
+            <Link 
+              to="/invest" 
+              className="flex items-center space-x-1 hover:text-brand-gold transition-colors"
+            >
+              <TrendingUp className="w-4 h-4" />
+              <span>Invest</span>
             </Link>
             <Link 
               to="/impact" 

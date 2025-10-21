@@ -5,6 +5,7 @@ import Marketplace from './pages/Marketplace';
 import Professionals from './pages/Professionals';
 import Impact from './pages/Impact';
 import About from './pages/About';
+import Invest from './pages/Invest';
 import VendorRegister from './pages/VendorRegister';
 import VendorApply from './pages/VendorApply';
 import VendorAgreement from './pages/VendorAgreement';
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/professionals" element={<Professionals />} />
+          <Route path="/invest" element={<Invest />} />
           <Route path="/impact" element={<Impact />} />
           <Route path="/about" element={<About />} />
           <Route path="/vendor/register" element={<VendorRegister />} />

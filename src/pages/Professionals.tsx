@@ -14,7 +14,13 @@ const categories = [
   { label: 'Finance', value: 'finance' },
   { label: 'Coaching', value: 'coaching' },
   { label: 'Consulting', value: 'consulting' },
-  { label: 'Education', value: 'education' }
+  { label: 'Education', value: 'education' },
+  { label: 'Real Estate & Wealth Advisors', value: 'real_estate' },
+  { label: 'Barbers & Beauty Professionals', value: 'barbers_beauty' },
+  { label: 'Photographers & Designers', value: 'photography_design' },
+  { label: 'Automotive & Housing Finance', value: 'automotive_housing' },
+  { label: 'Media & Marketing', value: 'media_marketing' },
+  { label: 'Nonprofits & Community Services', value: 'nonprofits' }
 ];
 
 export default function Professionals() {

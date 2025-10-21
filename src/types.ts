@@ -18,6 +18,12 @@ export enum ProfessionalCategory {
   COACHING = "coaching",
   CONSULTING = "consulting",
   EDUCATION = "education",
+  REAL_ESTATE = "real_estate",
+  BARBERS_BEAUTY = "barbers_beauty",
+  PHOTOGRAPHY_DESIGN = "photography_design",
+  AUTOMOTIVE_HOUSING = "automotive_housing",
+  MEDIA_MARKETING = "media_marketing",
+  NONPROFITS = "nonprofits",
   OTHER = "other"
 }
 
@@ -167,4 +173,84 @@ export interface ProductEnhancedCreate {
   category: ProductCategory;
   quantity: number;
   image_urls: string[];
+}
+
+export interface StartupApplication {
+  id: string;
+  name: string;
+  business_name: string;
+  email: string;
+  phone: string;
+  website?: string;
+  funding_goal: number;
+  business_summary: string;
+  pitch_deck_url?: string;
+  agreement_accepted: boolean;
+  created_at: string;
+}
+
+export interface StartupApplicationCreate {
+  name: string;
+  business_name: string;
+  email: string;
+  phone: string;
+  website?: string;
+  funding_goal: number;
+  business_summary: string;
+  pitch_deck_url?: string;
+  agreement_accepted: boolean;
+}
+
+export interface AngelInvestor {
+  id: string;
+  name: string;
+  email: string;
+  company?: string;
+  accreditation_type: string;
+  investment_range: string;
+  interests: string[];
+  agreement_accepted: boolean;
+  created_at: string;
+}
+
+export interface AngelInvestorCreate {
+  name: string;
+  email: string;
+  company?: string;
+  accreditation_type: string;
+  investment_range: string;
+  interests: string[];
+  agreement_accepted: boolean;
+}
+
+export interface Donation {
+  id: string;
+  donor_name: string;
+  email: string;
+  amount: number;
+  institution: string;
+  created_at: string;
+}
+
+export interface DonationCreate {
+  donor_name: string;
+  email: string;
+  amount: number;
+  institution: string;
+}
+
+export interface BlackBank {
+  id: string;
+  name: string;
+  description: string;
+  location: string;
+  affiliate_link: string;
+}
+
+export interface InvestImpactStats {
+  total_funds_reinvested: number;
+  hbcu_donations: number;
+  startup_investments: number;
+  angel_investors_count: number;
+  businesses_supported: number;
 }
