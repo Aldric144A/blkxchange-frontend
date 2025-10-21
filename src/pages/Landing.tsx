@@ -63,6 +63,25 @@ export default function Landing() {
         </div>
       </section>
 
+      <section className="bg-[#1A1A1A] py-16 px-4 flex flex-col items-center justify-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-[#C5A14E] mb-6 text-center">
+          Legacy of Black Wall Street
+        </h2>
+        <div className="relative w-full max-w-4xl aspect-video border-2 border-[#C5A14E] rounded-xl overflow-hidden shadow-lg">
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/UfVzbM3l7RQ?autoplay=1&mute=1&loop=1&playlist=UfVzbM3l7RQ"
+            title="Legacy of Black Wall Street"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+        <p className="mt-6 text-[#C5A14E] text-lg md:text-xl text-center max-w-2xl">
+          Honoring the resilience and entrepreneurial spirit of Black Wall Street, 
+          we continue the legacy of economic empowerment and community building.
+        </p>
+      </section>
+
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-heading font-bold text-center mb-12 text-brand-black">
