@@ -6,6 +6,11 @@ import Professionals from './pages/Professionals';
 import Impact from './pages/Impact';
 import About from './pages/About';
 import VendorRegister from './pages/VendorRegister';
+import VendorApply from './pages/VendorApply';
+import VendorAgreement from './pages/VendorAgreement';
+import VendorDashboard from './pages/VendorDashboard';
+import AdminVendors from './pages/AdminVendors';
+import AdminProducts from './pages/AdminProducts';
 
 function App() {
   return (
@@ -19,6 +24,11 @@ function App() {
           <Route path="/impact" element={<Impact />} />
           <Route path="/about" element={<About />} />
           <Route path="/vendor/register" element={<VendorRegister />} />
+          <Route path="/vendor-apply" element={<VendorApply />} />
+          <Route path="/vendor-agreement" element={<VendorAgreement />} />
+          <Route path="/vendor-dashboard" element={<VendorDashboard />} />
+          <Route path="/admin/vendors" element={<AdminVendors />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

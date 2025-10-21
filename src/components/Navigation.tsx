@@ -45,7 +45,7 @@ export default function Navigation() {
 
           <div className="flex items-center space-x-4">
             <Link 
-              to="/vendor/register" 
+              to="/vendor-apply" 
               className="px-4 py-2 bg-brand-gold text-brand-black font-semibold rounded hover:bg-opacity-90 transition-colors"
             >
               Become a Vendor
