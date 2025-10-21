@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { FileText, Download } from 'lucide-react';
 
 export default function VendorAgreement() {
   return (
@@ -8,9 +9,12 @@ export default function VendorAgreement() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FileText className="w-16 h-16 text-brand-gold mx-auto mb-4" />
           <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            Vendor Agreement
+            BlkXchange™ Vendor Agreement
           </h1>
-          <p className="text-xl text-gray-300">
+          <p className="text-xl text-brand-gold mb-2">
+            Empowering Ownership. Elevating Community.
+          </p>
+          <p className="text-lg text-gray-300">
             BlkXchange™ Marketplace Terms & Conditions
           </p>
         </div>
@@ -185,7 +189,18 @@ export default function VendorAgreement() {
             </section>
 
             <div className="pt-6 border-t border-gray-300">
-              <p className="text-center text-sm text-gray-600">
+              <p className="text-center text-sm text-gray-600 mb-4">
+                <strong>Effective Date:</strong> January 1, 2025
+              </p>
+              <div className="flex justify-center">
+                <a href="/docs/vendor-agreement.pdf" download>
+                  <Button className="bg-brand-gold text-brand-black hover:bg-opacity-90">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download PDF
+                  </Button>
+                </a>
+              </div>
+              <p className="text-center text-sm text-gray-600 mt-6">
                 BlkXchange™ Marketplace Agreement © 2025. All Rights Reserved.
               </p>
             </div>

@@ -369,19 +369,29 @@ export default function VendorApply() {
               </div>
 
               <div className="space-y-4 pt-4 border-t">
-                <h3 className="text-lg font-semibold text-brand-black">Agreement</h3>
+                <h3 className="text-lg font-semibold text-brand-black">Vendor Agreement</h3>
                 
-                <Alert className="bg-brand-ivory border-brand-gold">
-                  <AlertDescription className="text-gray-700">
-                    Please review the{' '}
-                    <a href="/vendor-agreement" target="_blank" className="text-brand-gold underline font-semibold">
-                      BlkXchange™ Vendor Agreement
+                <Card className="bg-brand-ivory border-brand-gold">
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold text-brand-black mb-2">Vendor Agreement Summary:</h4>
+                    <p className="text-sm text-gray-700 mb-3">
+                      By selling on BlkXchange™, you agree to the BlkXchange™ Vendor Agreement. 
+                      The agreement covers your responsibilities as a vendor, our commission structure, 
+                      product guidelines, and payout terms. Please review it carefully before submitting 
+                      your application.
+                    </p>
+                    <a 
+                      href="/vendor-agreement" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-brand-gold underline font-semibold hover:text-opacity-80 flex items-center gap-1"
+                    >
+                      Read Full Agreement →
                     </a>
-                    {' '}before submitting your application.
-                  </AlertDescription>
-                </Alert>
+                  </CardContent>
+                </Card>
 
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 p-4 bg-white rounded-md border-2 border-brand-gold">
                   <Checkbox
                     id="agreement_accepted"
                     checked={formData.agreement_accepted}
@@ -389,10 +399,11 @@ export default function VendorApply() {
                       setFormData({ ...formData, agreement_accepted: checked as boolean })
                     }
                     className="mt-1"
+                    required
                   />
                   <Label htmlFor="agreement_accepted" className="text-sm text-gray-700 cursor-pointer">
-                    I have read and agree to the BlkXchange™ Vendor Agreement and certify that my 
-                    products are authentic and compliant with all applicable laws and regulations. *
+                    ☐ I have read and agree to the BlkXchange™ Vendor Agreement and certify that my 
+                    products are authentic and compliant. *
                   </Label>
                 </div>
               </div>
