@@ -19,6 +19,8 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useEffect } from 'react';
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { StartupInvestorTerms } from '../components/StartupInvestorTerms';
+import { AngelInvestorTerms } from '../components/AngelInvestorTerms';
 
 export default function Invest() {
   const [activeTab, setActiveTab] = useState('startups');
@@ -296,6 +298,7 @@ function StartupApplicationTab() {
             />
             <Label htmlFor="agreement" className="text-sm text-gray-300 leading-relaxed">
               I affirm this is a legitimate BIPOC-owned business seeking capital investment and agree to the BlkXchange™ Investor Terms.
+              <StartupInvestorTerms />
             </Label>
           </div>
           <Button 
@@ -606,6 +609,7 @@ function AngelInvestorTab() {
             />
             <Label htmlFor="investor_agreement" className="text-sm text-gray-300 leading-relaxed">
               I am an accredited investor and agree to the BlkXchange™ Investor Terms.
+              <AngelInvestorTerms />
             </Label>
           </div>
 
