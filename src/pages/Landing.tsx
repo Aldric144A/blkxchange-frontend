@@ -63,11 +63,11 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="bg-[#1A1A1A] py-16 px-4 flex flex-col items-center justify-center">
+      <section className="bg-[#1A1A1A] py-12 px-4 flex flex-col items-center justify-center">
         <h2 className="text-3xl md:text-4xl font-bold text-[#C5A14E] mb-6 text-center">
           Legacy of Black Wall Street
         </h2>
-        <div className="relative w-full max-w-3xl aspect-video border-2 border-[#C5A14E] rounded-xl overflow-hidden shadow-lg mx-auto">
+        <div className="relative w-full max-w-2xl aspect-video border-2 border-[#C5A14E] rounded-xl overflow-hidden shadow-lg mx-auto">
           <iframe
             className="w-full h-full"
             src="https://www.youtube.com/embed/AMZ9kvXPGb8?autoplay=1&mute=1&loop=1&playlist=AMZ9kvXPGb8"
