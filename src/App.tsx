@@ -44,6 +44,12 @@ function App() {
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="border-t border-gray-700 pt-6 mb-6">
+              <p className="text-sm text-gray-400 leading-relaxed max-w-4xl mx-auto">
+                BlkXchange™ operates on a 15% community-centered revenue model:<br />
+                85% goes directly to our vendors, 12% sustains platform operations, and 3% supports HBCUs, scholarships, and nonprofit partners.
+              </p>
+            </div>
             <p className="text-gray-400">
               © 2025 BlkXchange™. All rights reserved. Empower. Exchange. Elevate.
             </p>
