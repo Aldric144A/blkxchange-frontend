@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Star, Calendar, CheckCircle } from 'lucide-react';
 import { api } from '../api';
 import { Professional } from '../types';
-import { BannerAd, SpotlightAd } from '../components/ads';
+import { SidebarAd } from '../components/ads';
 
 const categories = [
   { label: 'All Categories', value: 'all' },
@@ -39,8 +39,6 @@ export default function Professionals() {
 
   return (
     <div className="min-h-screen bg-brand-ivory">
-      <BannerAd page="professionals" />
-      
       <div className="bg-brand-black text-brand-ivory py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
@@ -53,8 +51,9 @@ export default function Professionals() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <SpotlightAd page="professionals" />
-        <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-4">
             <label className="font-semibold text-brand-black">Filter by:</label>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -160,6 +159,11 @@ export default function Professionals() {
             ))}
           </div>
         )}
+          </div>
+          <aside className="hidden md:block">
+            <SidebarAd page="professionals" />
+          </aside>
+        </div>
       </div>
     </div>
   );

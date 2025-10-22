@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Newspaper, TrendingUp, Users, GraduationCap, Heart } from 'lucide-react';
 import { api } from '../api';
-import { CarouselAd } from '../components/ads';
+import { SidebarAd } from '../components/ads';
 
 interface Article {
   id: string;
@@ -67,7 +67,6 @@ export default function News() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#000000] to-[#0b1c0e]">
-      <CarouselAd page="news" />
       <div className="relative bg-gradient-to-b from-[#000000] to-[#0b1c0e] py-24 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <div className="mb-6">
@@ -103,7 +102,9 @@ export default function News() {
       </div>
 
       <div id="articles-section" className="max-w-7xl mx-auto px-4 py-16">
-        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-2 bg-[#1A1A1A] p-2 mb-8">
             {Object.entries(categoryLabels).map(([key, label]) => {
               const Icon = categoryIcons[key as keyof typeof categoryIcons];
@@ -151,6 +152,11 @@ export default function News() {
             </TabsContent>
           ))}
         </Tabs>
+          </div>
+          <aside className="hidden md:block">
+            <SidebarAd page="news" />
+          </aside>
+        </div>
       </div>
 
       <div id="submission-form" className="max-w-4xl mx-auto px-4 py-16">

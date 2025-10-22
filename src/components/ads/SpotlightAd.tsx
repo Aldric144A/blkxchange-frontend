@@ -17,61 +17,73 @@ interface Ad {
 }
 
 export const SpotlightAd: React.FC<SpotlightAdProps> = ({ page }) => {
-  const [ad, setAd] = useState<Ad | null>(null);
+  const [ads, setAds] = useState<Ad[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true);
 
   useEffect(() => {
-    const fetchAd = async () => {
+    const fetchAds = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/ads/${page}?placement=spotlight`);
-        const ads = await response.json();
-        if (ads.length > 0) {
-          setAd(ads[0]);
-          await fetch(`${API_BASE_URL}/api/ads/${ads[0].id}/impression`, { method: 'POST' });
+        const fetchedAds = await response.json();
+        if (fetchedAds.length > 0) {
+          setAds(fetchedAds);
+          await fetch(`${API_BASE_URL}/api/ads/${fetchedAds[0].id}/impression`, { method: 'POST' });
         }
       } catch (error) {
         console.error('Error fetching spotlight ad:', error);
       }
     };
 
-    fetchAd();
+    fetchAds();
   }, [page]);
 
+  useEffect(() => {
+    if (ads.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % ads.length);
+        setFade(true);
+      }, 300);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [ads.length]);
+
   const handleClick = async () => {
-    if (ad) {
-      await fetch(`${API_BASE_URL}/api/ads/${ad.id}/click`, { method: 'POST' });
-      if (ad.link_url) {
-        window.open(ad.link_url, '_blank');
+    const currentAd = ads[currentIndex];
+    if (currentAd) {
+      await fetch(`${API_BASE_URL}/api/ads/${currentAd.id}/click`, { method: 'POST' });
+      if (currentAd.link_url) {
+        window.open(currentAd.link_url, '_blank');
       }
     }
   };
 
-  if (!ad) return null;
+  if (ads.length === 0) return null;
+
+  const currentAd = ads[currentIndex];
 
   return (
-    <div className="w-full bg-gradient-to-r from-[#1A1A1A] to-[#2A2A2A] border-2 border-[#C5A14E] rounded-lg p-6 my-8 shadow-lg">
+    <div className="w-full max-w-7xl mx-auto px-4 mb-4">
       <div className="relative">
-        <div className="flex items-center justify-between mb-4">
-          <span className="bg-[#C5A14E] text-black text-sm px-3 py-1 rounded font-bold">
-            ⭐ Featured Partner
-          </span>
-          <span className="text-[#C5A14E] text-xs font-semibold uppercase tracking-wider">
-            {ad.price_tier}
-          </span>
-        </div>
+        <span className="absolute top-2 left-2 text-xs bg-[#C5A14E] text-black px-2 py-1 rounded z-10">
+          Sponsored
+        </span>
         <button
           onClick={handleClick}
-          className="w-full cursor-pointer hover:opacity-90 transition-all hover:scale-[1.02]"
+          className={`w-full cursor-pointer hover:opacity-90 transition-all duration-300 ${
+            fade ? 'opacity-100' : 'opacity-0'
+          }`}
         >
           <img
-            src={ad.asset_url}
-            alt={`Ad by ${ad.advertiser_name}`}
-            className="w-full h-64 object-cover rounded-lg shadow-md"
+            src={currentAd.asset_url}
+            alt={`Ad by ${currentAd.advertiser_name}`}
+            className="object-contain w-full h-[150px] rounded-lg shadow-md bg-black/20 border border-[#C5A14E]"
           />
         </button>
-        <div className="mt-4 text-center">
-          <p className="text-[#C5A14E] text-lg font-bold">{ad.advertiser_name}</p>
-          <p className="text-gray-400 text-sm mt-1">Premium Advertising Partner</p>
-        </div>
       </div>
     </div>
   );

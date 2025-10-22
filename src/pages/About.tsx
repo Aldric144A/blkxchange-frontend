@@ -2,12 +2,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Heart, Users, TrendingUp, Target, Eye, Zap } from 'lucide-react';
-import { CarouselAd } from '../components/ads';
+import { SidebarAd } from '../components/ads';
 
 export default function About() {
   return (
     <div className="min-h-screen bg-brand-ivory">
-      <CarouselAd page="about" />
       <div className="bg-gradient-to-br from-brand-black to-brand-charcoal text-brand-ivory py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-heading font-bold mb-6">
@@ -19,7 +18,9 @@ export default function About() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1 max-w-4xl">
         <div className="prose prose-lg max-w-none mb-12">
           <h2 className="text-3xl font-heading font-bold mb-6 text-brand-black">Our Story</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
@@ -154,6 +155,11 @@ export default function About() {
             </div>
           </CardContent>
         </Card>
+          </div>
+          <aside className="hidden md:block">
+            <SidebarAd page="about" />
+          </aside>
+        </div>
       </div>
     </div>
   );

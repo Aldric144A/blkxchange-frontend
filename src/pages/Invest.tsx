@@ -21,7 +21,7 @@ import { useEffect } from 'react';
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { StartupInvestorTerms } from '../components/StartupInvestorTerms';
 import { AngelInvestorTerms } from '../components/AngelInvestorTerms';
-import { SpotlightAd } from '../components/ads';
+import { SidebarAd } from '../components/ads';
 
 export default function Invest() {
   const [activeTab, setActiveTab] = useState('startups');
@@ -60,7 +60,6 @@ export default function Invest() {
 
   return (
     <div className="min-h-screen bg-[#111111]">
-      <SpotlightAd page="invest" />
       <section className="bg-gradient-to-b from-[#000000] to-[#023020] py-20 px-4 text-center">
         <div className="max-w-5xl mx-auto">
           <TrendingUp className="w-20 h-20 text-[#C5A14E] mx-auto mb-6" />
@@ -90,7 +89,9 @@ export default function Invest() {
 
       <section id="tabs-section" className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 bg-[#1A1A1A] mb-8">
               <TabsTrigger value="startups" className="text-white data-[state=active]:bg-[#C5A14E] data-[state=active]:text-black">
                 <Building2 className="w-4 h-4 mr-2" />
@@ -134,6 +135,11 @@ export default function Invest() {
               <ImpactDashboardTab stats={impactStats} />
             </TabsContent>
           </Tabs>
+            </div>
+            <aside className="hidden md:block">
+              <SidebarAd page="invest" />
+            </aside>
+          </div>
         </div>
       </section>
     </div>

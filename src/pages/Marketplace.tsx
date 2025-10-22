@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Star, ShoppingCart } from 'lucide-react';
 import { api } from '../api';
 import { Product } from '../types';
-import { BannerAd, SpotlightAd } from '../components/ads';
+import { SidebarAd } from '../components/ads';
 
 const categories = [
   { label: 'All Categories', value: 'all' },
@@ -46,8 +46,6 @@ export default function Marketplace() {
 
   return (
     <div className="min-h-screen bg-brand-ivory">
-      <BannerAd page="marketplace" />
-      
       <div className="bg-brand-black text-brand-ivory py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
@@ -60,8 +58,9 @@ export default function Marketplace() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <SpotlightAd page="marketplace" />
-        <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-4">
             <label className="font-semibold text-brand-black">Filter by:</label>
             <Select value={selectedCategory} onValueChange={handleCategoryChange}>
@@ -151,6 +150,11 @@ export default function Marketplace() {
             ))}
           </div>
         )}
+          </div>
+          <aside className="hidden md:block">
+            <SidebarAd page="marketplace" />
+          </aside>
+        </div>
       </div>
     </div>
   );

@@ -14,57 +14,82 @@ interface Ad {
   ad_type: string;
   placement: string;
   price_tier: string;
+  tagline?: string;
 }
 
 export const SidebarAd: React.FC<SidebarAdProps> = ({ page }) => {
-  const [ad, setAd] = useState<Ad | null>(null);
+  const [ads, setAds] = useState<Ad[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true);
 
   useEffect(() => {
-    const fetchAd = async () => {
+    const fetchAds = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/ads/${page}?placement=sidebar`);
-        const ads = await response.json();
-        if (ads.length > 0) {
-          setAd(ads[0]);
-          await fetch(`${API_BASE_URL}/api/ads/${ads[0].id}/impression`, { method: 'POST' });
+        const fetchedAds = await response.json();
+        if (fetchedAds.length > 0) {
+          setAds(fetchedAds);
+          await fetch(`${API_BASE_URL}/api/ads/${fetchedAds[0].id}/impression`, { method: 'POST' });
         }
       } catch (error) {
         console.error('Error fetching sidebar ad:', error);
       }
     };
 
-    fetchAd();
+    fetchAds();
   }, [page]);
 
+  useEffect(() => {
+    if (ads.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % ads.length);
+        setFade(true);
+      }, 300);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [ads.length]);
+
   const handleClick = async () => {
-    if (ad) {
-      await fetch(`${API_BASE_URL}/api/ads/${ad.id}/click`, { method: 'POST' });
-      if (ad.link_url) {
-        window.open(ad.link_url, '_blank');
+    const currentAd = ads[currentIndex];
+    if (currentAd) {
+      await fetch(`${API_BASE_URL}/api/ads/${currentAd.id}/click`, { method: 'POST' });
+      if (currentAd.link_url) {
+        window.open(currentAd.link_url, '_blank');
       }
     }
   };
 
-  if (!ad) return null;
+  if (ads.length === 0) return null;
+
+  const currentAd = ads[currentIndex];
 
   return (
-    <div className="w-full bg-[#1A1A1A] border border-[#C5A14E] rounded-lg p-4 sticky top-4">
+    <div className="w-[280px] bg-[#111111] border border-[#C5A14E] rounded-xl p-3 shadow-md sticky top-4">
       <div className="relative">
-        <span className="absolute top-2 left-2 bg-[#C5A14E] text-black text-xs px-2 py-1 rounded font-semibold z-10">
-          Partner Ad
+        <span className="text-xs bg-[#C5A14E] text-black px-2 py-1 rounded mb-2 inline-block">
+          Sponsored
         </span>
         <button
           onClick={handleClick}
-          className="w-full cursor-pointer hover:opacity-90 transition-opacity"
+          className={`w-full cursor-pointer hover:opacity-90 transition-all duration-300 ${
+            fade ? 'opacity-100' : 'opacity-0'
+          }`}
         >
           <img
-            src={ad.asset_url}
-            alt={`Ad by ${ad.advertiser_name}`}
-            className="w-full h-64 object-cover rounded"
+            src={currentAd.asset_url}
+            alt={`Ad by ${currentAd.advertiser_name}`}
+            className="object-contain w-full h-[180px] rounded-md bg-black/20"
           />
         </button>
-        <div className="mt-3 text-center">
-          <p className="text-[#C5A14E] text-sm font-semibold">{ad.advertiser_name}</p>
+        <div className="mt-2">
+          <h4 className="text-sm font-semibold text-white">{currentAd.advertiser_name}</h4>
+          {currentAd.tagline && (
+            <p className="text-xs text-gray-300 mt-1">{currentAd.tagline}</p>
+          )}
         </div>
       </div>
     </div>
