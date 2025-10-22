@@ -31,25 +31,34 @@ const categoryLabels = {
 export default function News() {
   const navigate = useNavigate();
   const [articles, setArticles] = useState<Article[]>([]);
-  const [featuredArticle, setFeaturedArticle] = useState<Article | null>(null);
+  const [latestArticle, setLatestArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('latest_news');
 
   useEffect(() => {
+    loadLatestArticle();
+  }, []);
+
+  useEffect(() => {
     loadArticles();
   }, [selectedCategory]);
+
+  const loadLatestArticle = async () => {
+    try {
+      const allArticles = await api.get('/api/articles?status=published');
+      if (allArticles.length > 0) {
+        setLatestArticle(allArticles[0]);
+      }
+    } catch (error) {
+      console.error('Error loading latest article:', error);
+    }
+  };
 
   const loadArticles = async () => {
     try {
       setLoading(true);
       const articles = await api.get(`/api/articles?status=published&category=${selectedCategory}`);
       setArticles(articles);
-      
-      if (selectedCategory === 'latest_news' && articles.length > 0) {
-        setFeaturedArticle(articles[0]);
-      } else {
-        setFeaturedArticle(null);
-      }
     } catch (error) {
       console.error('Error loading articles:', error);
     } finally {
@@ -76,6 +85,50 @@ export default function News() {
           <p className="text-xl text-white/90 max-w-3xl mx-auto mb-10">
             The Black Chronicle™ spotlights Black brilliance, innovation, and empowerment from around the world.
           </p>
+
+          {/* Latest Article Preview Card */}
+          {latestArticle ? (
+            <div className="max-w-2xl mx-auto mb-8">
+              <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl overflow-hidden border border-[#C5A14E]/30 hover:border-[#C5A14E] transition-all">
+                {latestArticle.image_url && (
+                  <div className="relative h-48">
+                    <img
+                      src={latestArticle.image_url}
+                      alt={latestArticle.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span className="bg-[#C5A14E] text-black px-3 py-1 rounded-full text-xs font-bold">
+                        LATEST
+                      </span>
+                    </div>
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-2">
+                    {latestArticle.title}
+                  </h3>
+                  <p className="text-white/70 text-sm mb-4 line-clamp-2">
+                    {latestArticle.excerpt}
+                  </p>
+                  <div className="flex items-center gap-3 text-white/60 text-xs">
+                    <span>By {latestArticle.author}</span>
+                    <span>•</span>
+                    <span>{new Date(latestArticle.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="max-w-2xl mx-auto mb-8">
+              <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl p-8 text-center border border-[#C5A14E]/20">
+                <Newspaper className="w-12 h-12 text-[#C5A14E] mx-auto mb-3 opacity-50" />
+                <p className="text-white/70 text-sm">
+                  No articles published yet. Be the first to share a story!
+                </p>
+              </div>
+            </div>
+          )}
           
           <Button
             onClick={() => navigate('/news/all')}
@@ -86,72 +139,8 @@ export default function News() {
         </div>
       </div>
 
-      {/* Featured Story Block */}
-      {selectedCategory === 'latest_news' && (
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          {featuredArticle ? (
-            <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl overflow-hidden border border-[#C5A14E]/30 hover:border-[#C5A14E] transition-all">
-              <div className="grid md:grid-cols-2 gap-0">
-                {featuredArticle.image_url && (
-                  <div className="relative h-64 md:h-full">
-                    <img
-                      src={featuredArticle.image_url}
-                      alt={featuredArticle.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-[#C5A14E] text-black px-4 py-2 rounded-full text-sm font-bold">
-                        FEATURED STORY
-                      </span>
-                    </div>
-                  </div>
-                )}
-                <div className="p-8 md:p-12 flex flex-col justify-center">
-                  <span className="text-[#C5A14E] text-sm font-semibold mb-3">
-                    {categoryLabels[featuredArticle.category as keyof typeof categoryLabels]}
-                  </span>
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                    {featuredArticle.title}
-                  </h2>
-                  <p className="text-white/80 text-lg mb-6">
-                    {featuredArticle.excerpt}
-                  </p>
-                  <div className="flex items-center gap-4 text-white/60 text-sm mb-6">
-                    <span>By {featuredArticle.author}</span>
-                    <span>•</span>
-                    <span>{new Date(featuredArticle.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                  </div>
-                  <Button
-                    onClick={() => navigate(`/news/${featuredArticle.slug}`)}
-                    className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold w-fit"
-                  >
-                    Read Full Story
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-gradient-to-br from-[#1A1A1A] via-[#1A1A1A] to-[#2A1810] rounded-xl p-10 text-center border border-[#C5A14E]/30">
-              <Sparkles className="w-12 h-12 text-[#C5A14E] mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-[#C5A14E] mb-4">
-                ✨ No Featured Story Yet
-              </h3>
-              <p className="text-white/70 text-base mb-6">
-                Submit one to inspire the community.
-              </p>
-              <Button
-                onClick={() => navigate('/submit-story')}
-                className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-6 py-3 text-base font-semibold"
-              >
-                Submit an Article
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Articles Section */}
-      <div id="articles-section" className="max-w-7xl mx-auto px-4 py-8">
+      <div id="articles-section" className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             {/* Category Tabs */}
@@ -175,6 +164,27 @@ export default function News() {
                 ))}
               </div>
             </div>
+
+            {/* Featured Story Placeholder (below tabs) */}
+            {selectedCategory === 'latest_news' && articles.length === 0 && (
+              <div className="mb-8">
+                <div className="bg-gradient-to-br from-[#1A1A1A] via-[#1A1A1A] to-[#2A1810] rounded-xl p-10 text-center border border-[#C5A14E]/30">
+                  <Sparkles className="w-12 h-12 text-[#C5A14E] mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-[#C5A14E] mb-4">
+                    ✨ No Featured Story Yet
+                  </h3>
+                  <p className="text-white/70 text-base mb-6">
+                    Submit one to inspire the community.
+                  </p>
+                  <Button
+                    onClick={() => navigate('/submit-story')}
+                    className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-6 py-3 text-base font-semibold"
+                  >
+                    Submit an Article
+                  </Button>
+                </div>
+              </div>
+            )}
 
             {/* Articles Grid */}
             {loading ? (
