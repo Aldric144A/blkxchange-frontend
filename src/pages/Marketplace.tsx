@@ -152,7 +152,7 @@ export default function Marketplace() {
         )}
 
         {/* Partner CTA Card */}
-        <Card className="mt-8 bg-[#012B1A] border-[#C5A14E] rounded-2xl shadow-md">
+        <Card className="mt-8 bg-[#012B1A] border-2 border-[#C5A14E] rounded-xl shadow-md">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="flex-shrink-0">
@@ -163,10 +163,10 @@ export default function Marketplace() {
                   Become a Vendor on BlkXchange™
                 </h3>
                 <p className="text-gray-300 mb-4">
-                  Ready to showcase your brand and reach conscious consumers nationwide?
+                  Showcase your products, gain exposure, and join the movement supporting Black entrepreneurship.
                 </p>
                 <Link to="/partner">
-                  <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 rounded-full px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+                  <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 hover:shadow-2xl rounded-full px-8 py-3 text-lg font-semibold shadow-lg transition-all">
                     Partner With Us
                   </Button>
                 </Link>

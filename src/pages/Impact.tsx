@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Heart, TrendingUp, Users, ShoppingBag, GraduationCap, Building, HandHeart } from 'lucide-react';
 import { api } from '../api';
 import { ImpactStats } from '../types';
@@ -206,6 +208,24 @@ export default function Impact() {
                 </div>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Partner CTA Card */}
+        <Card className="mt-8 bg-[#000000] border-2 border-[#012B1A] rounded-xl shadow-md">
+          <CardContent className="p-8 text-center">
+            <Heart className="w-16 h-16 text-[#C5A14E] mx-auto mb-4" />
+            <h3 className="text-3xl font-heading font-bold text-white mb-3">
+              Your Business Can Drive Change
+            </h3>
+            <p className="text-gray-300 text-lg mb-6 max-w-2xl mx-auto">
+              Join the 3% Impact Network — every subscription funds HBCUs, scholarships, and community empowerment.
+            </p>
+            <Link to="/partner">
+              <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 hover:shadow-2xl rounded-full px-10 py-4 text-lg font-semibold shadow-lg transition-all">
+                Partner With BlkXchange™
+              </Button>
+            </Link>
           </CardContent>
         </Card>
           </div>

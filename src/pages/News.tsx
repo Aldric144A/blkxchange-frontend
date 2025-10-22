@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { api } from '../api';
 import { SidebarAd } from '../components/ads';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 interface Article {
   id: string;
@@ -202,6 +202,20 @@ export default function News() {
           <aside className="hidden md:block">
             <SidebarAd page="news" />
           </aside>
+        </div>
+      </div>
+
+      {/* Partner Banner */}
+      <div className="bg-[#000000] py-8 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-white text-xl font-bold mb-4">
+            Are you a Black business, creator, or professional? Partner with BlkXchange™ and be part of our legacy.
+          </p>
+          <Link to="/partner">
+            <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 hover:shadow-2xl rounded-full px-10 py-4 text-lg font-semibold shadow-lg transition-all">
+              Join the Movement
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

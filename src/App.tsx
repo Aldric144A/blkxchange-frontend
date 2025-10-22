@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Landing from './pages/Landing';
 import Marketplace from './pages/Marketplace';
@@ -51,6 +51,12 @@ function App() {
                 BlkXchange™ operates on a 15% community-centered revenue model:<br />
                 85% goes directly to our vendors, 12% sustains platform operations, and 3% supports HBCUs, scholarships, and nonprofit partners.
               </p>
+            </div>
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-400 mb-2">Opportunities</h3>
+              <Link to="/partner" className="text-brand-gold hover:text-opacity-80 text-sm transition-colors">
+                Partner With Us
+              </Link>
             </div>
             <p className="text-gray-400">
               © 2025 BlkXchange™. All rights reserved. Empower. Exchange. Elevate.

@@ -56,7 +56,7 @@ export default function Professionals() {
           <div className="flex-1">
             {/* Partner CTA Card */}
             <div className="border-t-2 border-[#C5A14E] mb-8">
-              <Card className="mt-6 bg-[#012B1A] border-[#C5A14E] rounded-2xl shadow-md">
+              <Card className="mt-6 bg-[#012B1A] border-2 border-[#C5A14E] rounded-xl shadow-md">
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row items-center gap-6">
                     <div className="flex-shrink-0">
@@ -67,11 +67,11 @@ export default function Professionals() {
                         Join Our Professional Network
                       </h3>
                       <p className="text-gray-300 mb-4">
-                        Feature your business or service on BlkXchange™ and grow your visibility.
+                        Feature your business or service on BlkXchange™ and grow your visibility nationwide.
                       </p>
                       <Link to="/partner">
-                        <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 rounded-full px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
-                          Partner With BlkXchange™
+                        <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 hover:shadow-2xl rounded-full px-8 py-3 text-lg font-semibold shadow-lg transition-all">
+                          Become a Partner
                         </Button>
                       </Link>
                     </div>
