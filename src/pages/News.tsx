@@ -29,29 +29,15 @@ const categoryLabels = {
 
 export default function News() {
   const navigate = useNavigate();
-  const [latestArticle, setLatestArticle] = useState<Article | null>(null);
   const [categoryArticles, setCategoryArticles] = useState<Article[]>([]);
+  const [currentArticleIndex, setCurrentArticleIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('latest_news');
 
   useEffect(() => {
-    loadLatestArticle();
-  }, []);
-
-  useEffect(() => {
     loadCategoryArticles();
+    setCurrentArticleIndex(0);
   }, [selectedCategory]);
-
-  const loadLatestArticle = async () => {
-    try {
-      const allArticles = await api.get('/api/articles?status=published');
-      if (allArticles.length > 0) {
-        setLatestArticle(allArticles[0]);
-      }
-    } catch (error) {
-      console.error('Error loading latest article:', error);
-    }
-  };
 
   const loadCategoryArticles = async () => {
     try {
@@ -61,13 +47,28 @@ export default function News() {
         url += `&category=${selectedCategory}`;
       }
       const articles = await api.get(url);
-      setCategoryArticles(articles);
+      
+      if (selectedCategory === 'latest_news' && articles.length > 0) {
+        setCategoryArticles([articles[0]]);
+      } else {
+        setCategoryArticles(articles);
+      }
     } catch (error) {
       console.error('Error loading category articles:', error);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleNextArticle = () => {
+    if (categoryArticles.length > 0) {
+      setCurrentArticleIndex((prevIndex) => 
+        prevIndex === categoryArticles.length - 1 ? 0 : prevIndex + 1
+      );
+    }
+  };
+
+  const currentArticle = categoryArticles[currentArticleIndex];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#000000] to-[#0b1c0e]">
@@ -113,63 +114,16 @@ export default function News() {
         </div>
       </div>
 
-      {/* Latest Article / Articles Section */}
+      {/* Article Display Section */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
-            {/* Latest Article Box */}
-            {latestArticle && (
-              <div className="mb-8">
-                <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl overflow-hidden border border-[#C5A14E]/30 hover:border-[#C5A14E] transition-all">
-                  <div className="grid md:grid-cols-2 gap-0">
-                    {latestArticle.image_url && (
-                      <div className="relative h-64 md:h-full">
-                        <img
-                          src={latestArticle.image_url}
-                          alt={latestArticle.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute top-4 left-4">
-                          <span className="bg-[#C5A14E] text-black px-4 py-2 rounded-full text-sm font-bold">
-                            LATEST ARTICLE
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                    <div className="p-8 md:p-12 flex flex-col justify-center">
-                      <span className="text-[#C5A14E] text-sm font-semibold mb-3">
-                        {categoryLabels[latestArticle.category as keyof typeof categoryLabels]}
-                      </span>
-                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                        {latestArticle.title}
-                      </h2>
-                      <p className="text-white/80 text-lg mb-6">
-                        {latestArticle.excerpt}
-                      </p>
-                      <div className="flex items-center gap-4 text-white/60 text-sm mb-6">
-                        <span>By {latestArticle.author}</span>
-                        <span>•</span>
-                        <span>{new Date(latestArticle.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                      </div>
-                      <Button
-                        onClick={() => navigate(`/news/${latestArticle.slug}`)}
-                        className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold w-fit"
-                      >
-                        Read Full Story
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Category Articles Grid */}
             {loading ? (
               <div className="text-center py-16">
                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#C5A14E]"></div>
                 <p className="text-white mt-4">Loading articles...</p>
               </div>
-            ) : categoryArticles.length === 0 ? (
+            ) : !currentArticle ? (
               <div className="text-center py-16 bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-lg border border-[#C5A14E]/20">
                 <h3 className="text-2xl font-bold text-[#C5A14E] mb-3">
                   No stories yet in this section.
@@ -179,10 +133,57 @@ export default function News() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {categoryArticles.map((article) => (
-                  <ArticleCard key={article.id} article={article} />
-                ))}
+              <div className="mb-8">
+                <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl overflow-hidden border border-[#C5A14E]/30 hover:border-[#C5A14E] transition-all">
+                  <div className="grid md:grid-cols-2 gap-0">
+                    {currentArticle.image_url && (
+                      <div className="relative h-64 md:h-full">
+                        <img
+                          src={currentArticle.image_url}
+                          alt={currentArticle.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-4 left-4">
+                          <span className="bg-[#C5A14E] text-black px-4 py-2 rounded-full text-sm font-bold">
+                            {selectedCategory === 'latest_news' ? 'LATEST ARTICLE' : categoryLabels[selectedCategory as keyof typeof categoryLabels].toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="p-8 md:p-12 flex flex-col justify-center">
+                      <span className="text-[#C5A14E] text-sm font-semibold mb-3">
+                        {categoryLabels[currentArticle.category as keyof typeof categoryLabels]}
+                      </span>
+                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                        {currentArticle.title}
+                      </h2>
+                      <p className="text-white/80 text-lg mb-6">
+                        {currentArticle.excerpt}
+                      </p>
+                      <div className="flex items-center gap-4 text-white/60 text-sm mb-6">
+                        <span>By {currentArticle.author}</span>
+                        <span>•</span>
+                        <span>{new Date(currentArticle.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <Button
+                          onClick={() => navigate(`/news/${currentArticle.slug}`)}
+                          className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold"
+                        >
+                          Read Full Story
+                        </Button>
+                        {categoryArticles.length > 1 && (
+                          <Button
+                            onClick={handleNextArticle}
+                            className="bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white border border-[#C5A14E]/30 px-6 py-4 text-lg font-semibold"
+                          >
+                            Next Article →
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -202,56 +203,6 @@ export default function News() {
             <SidebarAd page="news" />
           </aside>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function ArticleCard({ article }: { article: Article }) {
-  const navigate = useNavigate();
-  
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
-
-  return (
-    <div className="bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#C5A14E]/20 hover:border-[#C5A14E] transition-all group">
-      {article.image_url && (
-        <div className="relative h-48 overflow-hidden">
-          <img
-            src={article.image_url}
-            alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      )}
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-semibold text-[#C5A14E] bg-[#C5A14E]/10 px-3 py-1 rounded-full">
-            {categoryLabels[article.category as keyof typeof categoryLabels]}
-          </span>
-        </div>
-        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-[#C5A14E] transition-colors">
-          {article.title}
-        </h3>
-        <p className="text-white/70 text-sm mb-4 line-clamp-3">
-          {article.excerpt}
-        </p>
-        <div className="flex items-center justify-between text-sm text-white/60 mb-4">
-          <span>By {article.author}</span>
-          <span>{formatDate(article.created_at)}</span>
-        </div>
-        <Button
-          onClick={() => navigate(`/news/${article.slug}`)}
-          className="w-full bg-[#046C4E] hover:bg-[#035a40] text-white"
-        >
-          Read More
-        </Button>
       </div>
     </div>
   );
