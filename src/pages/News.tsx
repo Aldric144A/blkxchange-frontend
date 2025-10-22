@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Newspaper } from 'lucide-react';
+import { Newspaper, Sparkles } from 'lucide-react';
 import { api } from '../api';
 import { SidebarAd } from '../components/ads';
 import { useNavigate } from 'react-router-dom';
@@ -57,10 +57,6 @@ export default function News() {
     }
   };
 
-  const scrollToArticles = () => {
-    document.getElementById('articles-section')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#000000] to-[#0b1c0e]">
       {/* Header */}
@@ -82,7 +78,7 @@ export default function News() {
           </p>
           
           <Button
-            onClick={scrollToArticles}
+            onClick={() => navigate('/news/all')}
             className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-6 text-lg font-semibold"
           >
             Read Latest Stories
@@ -92,7 +88,7 @@ export default function News() {
 
       {/* Featured Story Block */}
       {selectedCategory === 'latest_news' && (
-        <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 py-6">
           {featuredArticle ? (
             <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl overflow-hidden border border-[#C5A14E]/30 hover:border-[#C5A14E] transition-all">
               <div className="grid md:grid-cols-2 gap-0">
@@ -135,17 +131,17 @@ export default function News() {
               </div>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl p-16 text-center border border-[#C5A14E]/20">
-              <Newspaper className="w-20 h-20 text-[#C5A14E] mx-auto mb-6 opacity-50" />
-              <h3 className="text-2xl font-bold text-white mb-3">
-                No Featured Story Yet
+            <div className="bg-gradient-to-br from-[#1A1A1A] via-[#1A1A1A] to-[#2A1810] rounded-xl p-10 text-center border border-[#C5A14E]/30">
+              <Sparkles className="w-12 h-12 text-[#C5A14E] mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-[#C5A14E] mb-4">
+                ✨ No Featured Story Yet
               </h3>
-              <p className="text-white/70 text-lg mb-6">
+              <p className="text-white/70 text-base mb-6">
                 Submit one to inspire the community.
               </p>
               <Button
                 onClick={() => navigate('/submit-story')}
-                className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold"
+                className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-6 py-3 text-base font-semibold"
               >
                 Submit an Article
               </Button>
@@ -155,17 +151,17 @@ export default function News() {
       )}
 
       {/* Articles Section */}
-      <div id="articles-section" className="max-w-7xl mx-auto px-4 py-12">
+      <div id="articles-section" className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             {/* Category Tabs */}
             <div className="mb-8">
-              <div className="flex flex-wrap gap-2 border-b border-[#C5A14E]/20 pb-2">
+              <div className="flex flex-wrap justify-center md:justify-start gap-6 border-b border-[#C5A14E]/20 pb-1">
                 {Object.entries(categoryLabels).map(([key, label]) => (
                   <button
                     key={key}
                     onClick={() => setSelectedCategory(key)}
-                    className={`px-6 py-3 text-lg font-semibold transition-all relative ${
+                    className={`px-4 py-3 text-base font-semibold transition-all relative ${
                       selectedCategory === key
                         ? 'text-[#C5A14E]'
                         : 'text-white/60 hover:text-white'
@@ -173,7 +169,7 @@ export default function News() {
                   >
                     {label}
                     {selectedCategory === key && (
-                      <div className="absolute bottom-[-10px] left-0 right-0 h-1 bg-[#C5A14E] rounded-full animate-in slide-in-from-bottom-2"></div>
+                      <div className="absolute bottom-[-5px] left-0 right-0 h-0.5 bg-[#C5A14E] rounded-full"></div>
                     )}
                   </button>
                 ))}
@@ -187,46 +183,32 @@ export default function News() {
                 <p className="text-white mt-4">Loading articles...</p>
               </div>
             ) : articles.length === 0 ? (
-              <div className="text-center py-16 bg-[#1A1A1A] rounded-lg border border-[#C5A14E]/20">
+              <div className="text-center py-16 bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-lg border border-[#C5A14E]/20">
                 <Newspaper className="w-16 h-16 text-[#C5A14E] mx-auto mb-4 opacity-50" />
-                <h3 className="text-2xl font-bold text-white mb-3">
+                <h3 className="text-2xl font-bold text-[#C5A14E] mb-3">
                   📰 No stories yet in this section.
                 </h3>
                 <p className="text-white/70 mb-6 text-lg">
                   Be the first to spotlight Black brilliance.
                 </p>
-                <Button
-                  onClick={() => navigate('/submit-story')}
-                  className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold"
-                >
-                  Submit an Article
-                </Button>
               </div>
             ) : (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  {articles.map((article) => (
-                    <ArticleCard key={article.id} article={article} />
-                  ))}
-                </div>
-                
-                {/* Submit CTA at bottom */}
-                <div className="mt-12 text-center bg-gradient-to-r from-[#1A1A1A] to-[#0b1c0e] rounded-lg p-8 border border-[#C5A14E]/20">
-                  <h3 className="text-2xl font-bold text-white mb-3">
-                    Have a Story to Share?
-                  </h3>
-                  <p className="text-white/70 mb-6">
-                    Submit your article and inspire the BlkXchange™ community.
-                  </p>
-                  <Button
-                    onClick={() => navigate('/submit-story')}
-                    className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold"
-                  >
-                    Submit an Article
-                  </Button>
-                </div>
-              </>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {articles.map((article) => (
+                  <ArticleCard key={article.id} article={article} />
+                ))}
+              </div>
             )}
+
+            {/* Single Submit CTA at bottom */}
+            <div className="mt-16 pt-10 text-center">
+              <Button
+                onClick={() => navigate('/submit-story')}
+                className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-10 py-5 text-lg font-semibold shadow-lg"
+              >
+                Submit an Article
+              </Button>
+            </div>
           </div>
           
           {/* Sidebar Ad */}

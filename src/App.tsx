@@ -15,6 +15,7 @@ import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
 import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
+import NewsAll from './pages/NewsAll';
 import SubmitStory from './pages/SubmitStory';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/admin/ads" element={<AdminAds />} />
           <Route path="/news" element={<News />} />
+          <Route path="/news/all" element={<NewsAll />} />
           <Route path="/news/:slug" element={<NewsArticle />} />
           <Route path="/submit-story" element={<SubmitStory />} />
         </Routes>
