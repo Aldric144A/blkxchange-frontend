@@ -17,6 +17,7 @@ import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
 import NewsAll from './pages/NewsAll';
 import SubmitStory from './pages/SubmitStory';
+import Partner from './pages/Partner';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/news/all" element={<NewsAll />} />
           <Route path="/news/:slug" element={<NewsArticle />} />
           <Route path="/submit-story" element={<SubmitStory />} />
+          <Route path="/partner" element={<Partner />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
