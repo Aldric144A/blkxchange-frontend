@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Newspaper, TrendingUp, Users, GraduationCap, Heart } from 'lucide-react';
+import { Newspaper } from 'lucide-react';
 import { api } from '../api';
 import { SidebarAd } from '../components/ads';
+import { useNavigate } from 'react-router-dom';
 
 interface Article {
   id: string;
@@ -20,24 +20,18 @@ interface Article {
   updated_at: string;
 }
 
-const categoryIcons = {
-  latest_news: Newspaper,
-  black_achievements: TrendingUp,
-  entrepreneur_spotlight: Users,
-  education_culture: GraduationCap,
-  faith_resilience: Heart,
-};
-
 const categoryLabels = {
-  latest_news: 'Latest News',
-  black_achievements: 'Black Achievements',
-  entrepreneur_spotlight: 'Entrepreneur Spotlight',
-  education_culture: 'Education & Culture',
-  faith_resilience: 'Faith & Resilience',
+  latest_news: 'Latest',
+  black_achievements: 'Achievements',
+  entrepreneur_spotlight: 'Entrepreneurs',
+  education_culture: 'Education',
+  faith_resilience: 'Faith',
 };
 
 export default function News() {
+  const navigate = useNavigate();
   const [articles, setArticles] = useState<Article[]>([]);
+  const [featuredArticle, setFeaturedArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('latest_news');
 
@@ -50,15 +44,17 @@ export default function News() {
       setLoading(true);
       const articles = await api.get(`/api/articles?status=published&category=${selectedCategory}`);
       setArticles(articles);
+      
+      if (selectedCategory === 'latest_news' && articles.length > 0) {
+        setFeaturedArticle(articles[0]);
+      } else {
+        setFeaturedArticle(null);
+      }
     } catch (error) {
       console.error('Error loading articles:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const scrollToSubmission = () => {
-    document.getElementById('submission-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const scrollToArticles = () => {
@@ -67,7 +63,8 @@ export default function News() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#000000] to-[#0b1c0e]">
-      <div className="relative bg-gradient-to-b from-[#000000] to-[#0b1c0e] py-24 px-4">
+      {/* Header */}
+      <div className="relative bg-gradient-to-b from-[#000000] to-[#0b1c0e] py-20 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <div className="mb-6">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
@@ -84,90 +81,158 @@ export default function News() {
             The Black Chronicle™ spotlights Black brilliance, innovation, and empowerment from around the world.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              onClick={scrollToSubmission}
-              className="bg-[#046C4E] hover:bg-[#035a40] text-white px-8 py-6 text-lg"
-            >
-              Submit an Article
-            </Button>
-            <Button
-              onClick={scrollToArticles}
-              className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-6 text-lg"
-            >
-              Read Latest Stories
-            </Button>
-          </div>
+          <Button
+            onClick={scrollToArticles}
+            className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-6 text-lg font-semibold"
+          >
+            Read Latest Stories
+          </Button>
         </div>
       </div>
 
-      <div id="articles-section" className="max-w-7xl mx-auto px-4 py-16">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="flex-1">
-            <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-2 bg-[#1A1A1A] p-2 mb-8">
-            {Object.entries(categoryLabels).map(([key, label]) => {
-              const Icon = categoryIcons[key as keyof typeof categoryIcons];
-              return (
-                <TabsTrigger
-                  key={key}
-                  value={key}
-                  className="flex items-center gap-2 data-[state=active]:bg-[#C5A14E] data-[state=active]:text-black text-white"
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="hidden sm:inline">{label}</span>
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
-
-          {Object.keys(categoryLabels).map((category) => (
-            <TabsContent key={category} value={category} className="mt-8">
-              {loading ? (
-                <div className="text-center py-12">
-                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#C5A14E]"></div>
-                  <p className="text-white mt-4">Loading articles...</p>
-                </div>
-              ) : articles.length === 0 ? (
-                <div className="text-center py-12 bg-[#1A1A1A] rounded-lg">
-                  <Newspaper className="w-16 h-16 text-[#C5A14E] mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-white mb-2">No Articles Yet</h3>
-                  <p className="text-white/70 mb-6">
-                    Be the first to share a story in this category!
+      {/* Featured Story Block */}
+      {selectedCategory === 'latest_news' && (
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {featuredArticle ? (
+            <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl overflow-hidden border border-[#C5A14E]/30 hover:border-[#C5A14E] transition-all">
+              <div className="grid md:grid-cols-2 gap-0">
+                {featuredArticle.image_url && (
+                  <div className="relative h-64 md:h-full">
+                    <img
+                      src={featuredArticle.image_url}
+                      alt={featuredArticle.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-[#C5A14E] text-black px-4 py-2 rounded-full text-sm font-bold">
+                        FEATURED STORY
+                      </span>
+                    </div>
+                  </div>
+                )}
+                <div className="p-8 md:p-12 flex flex-col justify-center">
+                  <span className="text-[#C5A14E] text-sm font-semibold mb-3">
+                    {categoryLabels[featuredArticle.category as keyof typeof categoryLabels]}
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                    {featuredArticle.title}
+                  </h2>
+                  <p className="text-white/80 text-lg mb-6">
+                    {featuredArticle.excerpt}
                   </p>
+                  <div className="flex items-center gap-4 text-white/60 text-sm mb-6">
+                    <span>By {featuredArticle.author}</span>
+                    <span>•</span>
+                    <span>{new Date(featuredArticle.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                  </div>
                   <Button
-                    onClick={scrollToSubmission}
-                    className="bg-[#C5A14E] hover:bg-[#b39145] text-black"
+                    onClick={() => navigate(`/news/${featuredArticle.slug}`)}
+                    className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold w-fit"
                   >
-                    Submit an Article
+                    Read Full Story
                   </Button>
                 </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              </div>
+            </div>
+          ) : (
+            <div className="bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-xl p-16 text-center border border-[#C5A14E]/20">
+              <Newspaper className="w-20 h-20 text-[#C5A14E] mx-auto mb-6 opacity-50" />
+              <h3 className="text-2xl font-bold text-white mb-3">
+                No Featured Story Yet
+              </h3>
+              <p className="text-white/70 text-lg mb-6">
+                Submit one to inspire the community.
+              </p>
+              <Button
+                onClick={() => navigate('/submit-story')}
+                className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold"
+              >
+                Submit an Article
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Articles Section */}
+      <div id="articles-section" className="max-w-7xl mx-auto px-4 py-12">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            {/* Category Tabs */}
+            <div className="mb-8">
+              <div className="flex flex-wrap gap-2 border-b border-[#C5A14E]/20 pb-2">
+                {Object.entries(categoryLabels).map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSelectedCategory(key)}
+                    className={`px-6 py-3 text-lg font-semibold transition-all relative ${
+                      selectedCategory === key
+                        ? 'text-[#C5A14E]'
+                        : 'text-white/60 hover:text-white'
+                    }`}
+                  >
+                    {label}
+                    {selectedCategory === key && (
+                      <div className="absolute bottom-[-10px] left-0 right-0 h-1 bg-[#C5A14E] rounded-full animate-in slide-in-from-bottom-2"></div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Articles Grid */}
+            {loading ? (
+              <div className="text-center py-16">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#C5A14E]"></div>
+                <p className="text-white mt-4">Loading articles...</p>
+              </div>
+            ) : articles.length === 0 ? (
+              <div className="text-center py-16 bg-[#1A1A1A] rounded-lg border border-[#C5A14E]/20">
+                <Newspaper className="w-16 h-16 text-[#C5A14E] mx-auto mb-4 opacity-50" />
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  📰 No stories yet in this section.
+                </h3>
+                <p className="text-white/70 mb-6 text-lg">
+                  Be the first to spotlight Black brilliance.
+                </p>
+                <Button
+                  onClick={() => navigate('/submit-story')}
+                  className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold"
+                >
+                  Submit an Article
+                </Button>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   {articles.map((article) => (
                     <ArticleCard key={article.id} article={article} />
                   ))}
                 </div>
-              )}
-            </TabsContent>
-          ))}
-        </Tabs>
+                
+                {/* Submit CTA at bottom */}
+                <div className="mt-12 text-center bg-gradient-to-r from-[#1A1A1A] to-[#0b1c0e] rounded-lg p-8 border border-[#C5A14E]/20">
+                  <h3 className="text-2xl font-bold text-white mb-3">
+                    Have a Story to Share?
+                  </h3>
+                  <p className="text-white/70 mb-6">
+                    Submit your article and inspire the BlkXchange™ community.
+                  </p>
+                  <Button
+                    onClick={() => navigate('/submit-story')}
+                    className="bg-[#C5A14E] hover:bg-[#b39145] text-black px-8 py-4 text-lg font-semibold"
+                  >
+                    Submit an Article
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
+          
+          {/* Sidebar Ad */}
           <aside className="hidden md:block">
             <SidebarAd page="news" />
           </aside>
-        </div>
-      </div>
-
-      <div id="submission-form" className="max-w-4xl mx-auto px-4 py-16">
-        <div className="bg-[#1A1A1A] rounded-lg p-8 border border-[#C5A14E]/20">
-          <h2 className="text-3xl font-bold text-[#C5A14E] mb-6 text-center">
-            Submit Your Story
-          </h2>
-          <p className="text-white/80 text-center mb-8">
-            Share stories of Black excellence, innovation, and achievement with our community.
-          </p>
-          <ArticleSubmissionForm onSuccess={loadArticles} />
         </div>
       </div>
     </div>
@@ -175,6 +240,8 @@ export default function News() {
 }
 
 function ArticleCard({ article }: { article: Article }) {
+  const navigate = useNavigate();
+  
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { 
@@ -185,13 +252,15 @@ function ArticleCard({ article }: { article: Article }) {
   };
 
   return (
-    <div className="bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#C5A14E]/20 hover:border-[#C5A14E] transition-all">
+    <div className="bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#C5A14E]/20 hover:border-[#C5A14E] transition-all group">
       {article.image_url && (
-        <img
-          src={article.image_url}
-          alt={article.title}
-          className="w-full h-48 object-cover"
-        />
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={article.image_url}
+            alt={article.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
       )}
       <div className="p-6">
         <div className="flex items-center gap-2 mb-3">
@@ -199,7 +268,7 @@ function ArticleCard({ article }: { article: Article }) {
             {categoryLabels[article.category as keyof typeof categoryLabels]}
           </span>
         </div>
-        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2">
+        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-[#C5A14E] transition-colors">
           {article.title}
         </h3>
         <p className="text-white/70 text-sm mb-4 line-clamp-3">
@@ -210,173 +279,12 @@ function ArticleCard({ article }: { article: Article }) {
           <span>{formatDate(article.created_at)}</span>
         </div>
         <Button
-          onClick={() => window.location.href = `/news/${article.slug}`}
+          onClick={() => navigate(`/news/${article.slug}`)}
           className="w-full bg-[#046C4E] hover:bg-[#035a40] text-white"
         >
           Read More
         </Button>
       </div>
     </div>
-  );
-}
-
-function ArticleSubmissionForm({ onSuccess }: { onSuccess: () => void }) {
-  const [formData, setFormData] = useState({
-    title: '',
-    author: '',
-    email: '',
-    category: 'latest_news',
-    excerpt: '',
-    body: '',
-    image_url: '',
-  });
-  const [agreed, setAgreed] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!agreed) {
-      alert('Please certify that your submission is original and accurate.');
-      return;
-    }
-
-    try {
-      setSubmitting(true);
-      await api.post('/api/articles', formData);
-      setSuccess(true);
-      setFormData({
-        title: '',
-        author: '',
-        email: '',
-        category: 'latest_news',
-        excerpt: '',
-        body: '',
-        image_url: '',
-      });
-      setAgreed(false);
-      setTimeout(() => {
-        setSuccess(false);
-        onSuccess();
-      }, 3000);
-    } catch (error) {
-      console.error('Error submitting article:', error);
-      alert('Failed to submit article. Please try again.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {success && (
-        <div className="bg-[#046C4E]/20 border border-[#046C4E] text-white p-4 rounded-lg">
-          ✓ Article submitted successfully! It will be reviewed before publication.
-        </div>
-      )}
-
-      <div>
-        <label className="block text-white font-semibold mb-2">Full Name *</label>
-        <input
-          type="text"
-          required
-          value={formData.author}
-          onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-          className="w-full px-4 py-2 bg-[#111111] border border-[#C5A14E]/30 rounded-lg text-white focus:outline-none focus:border-[#C5A14E]"
-        />
-      </div>
-
-      <div>
-        <label className="block text-white font-semibold mb-2">Email *</label>
-        <input
-          type="email"
-          required
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="w-full px-4 py-2 bg-[#111111] border border-[#C5A14E]/30 rounded-lg text-white focus:outline-none focus:border-[#C5A14E]"
-        />
-      </div>
-
-      <div>
-        <label className="block text-white font-semibold mb-2">Headline *</label>
-        <input
-          type="text"
-          required
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-2 bg-[#111111] border border-[#C5A14E]/30 rounded-lg text-white focus:outline-none focus:border-[#C5A14E]"
-        />
-      </div>
-
-      <div>
-        <label className="block text-white font-semibold mb-2">Category *</label>
-        <select
-          required
-          value={formData.category}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-          className="w-full px-4 py-2 bg-[#111111] border border-[#C5A14E]/30 rounded-lg text-white focus:outline-none focus:border-[#C5A14E]"
-        >
-          {Object.entries(categoryLabels).map(([key, label]) => (
-            <option key={key} value={key}>{label}</option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-white font-semibold mb-2">Excerpt (150-200 characters) *</label>
-        <textarea
-          required
-          value={formData.excerpt}
-          onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-          maxLength={200}
-          rows={3}
-          className="w-full px-4 py-2 bg-[#111111] border border-[#C5A14E]/30 rounded-lg text-white focus:outline-none focus:border-[#C5A14E]"
-        />
-        <p className="text-white/60 text-sm mt-1">{formData.excerpt.length}/200 characters</p>
-      </div>
-
-      <div>
-        <label className="block text-white font-semibold mb-2">Article Body *</label>
-        <textarea
-          required
-          value={formData.body}
-          onChange={(e) => setFormData({ ...formData, body: e.target.value })}
-          rows={10}
-          className="w-full px-4 py-2 bg-[#111111] border border-[#C5A14E]/30 rounded-lg text-white focus:outline-none focus:border-[#C5A14E]"
-        />
-      </div>
-
-      <div>
-        <label className="block text-white font-semibold mb-2">Image URL (optional)</label>
-        <input
-          type="url"
-          value={formData.image_url}
-          onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-          placeholder="https://example.com/image.jpg"
-          className="w-full px-4 py-2 bg-[#111111] border border-[#C5A14E]/30 rounded-lg text-white focus:outline-none focus:border-[#C5A14E]"
-        />
-      </div>
-
-      <div className="flex items-start gap-3">
-        <input
-          type="checkbox"
-          id="agreement"
-          checked={agreed}
-          onChange={(e) => setAgreed(e.target.checked)}
-          className="mt-1"
-        />
-        <label htmlFor="agreement" className="text-white/80 text-sm">
-          I certify this submission is original and accurate.
-        </label>
-      </div>
-
-      <Button
-        type="submit"
-        disabled={submitting || !agreed}
-        className="w-full bg-[#C5A14E] hover:bg-[#b39145] text-black py-6 text-lg font-semibold disabled:opacity-50"
-      >
-        {submitting ? 'Submitting...' : 'Submit for Review'}
-      </Button>
-    </form>
   );
 }
