@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Star, Calendar, CheckCircle } from 'lucide-react';
+import { Star, Calendar, CheckCircle, Briefcase } from 'lucide-react';
 import { api } from '../api';
 import { Professional } from '../types';
 import { SidebarAd } from '../components/ads';
@@ -53,6 +54,32 @@ export default function Professionals() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
+            {/* Partner CTA Card */}
+            <div className="border-t-2 border-[#C5A14E] mb-8">
+              <Card className="mt-6 bg-[#012B1A] border-[#C5A14E] rounded-2xl shadow-md">
+                <CardContent className="p-6">
+                  <div className="flex flex-col md:flex-row items-center gap-6">
+                    <div className="flex-shrink-0">
+                      <Briefcase className="w-16 h-16 text-[#C5A14E]" />
+                    </div>
+                    <div className="flex-1 text-center md:text-left">
+                      <h3 className="text-2xl font-heading font-bold text-white mb-2">
+                        Join Our Professional Network
+                      </h3>
+                      <p className="text-gray-300 mb-4">
+                        Feature your business or service on BlkXchange™ and grow your visibility.
+                      </p>
+                      <Link to="/partner">
+                        <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 rounded-full px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+                          Partner With BlkXchange™
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-4">
             <label className="font-semibold text-brand-black">Filter by:</label>

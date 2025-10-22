@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Star, ShoppingCart } from 'lucide-react';
+import { Star, ShoppingCart, Store } from 'lucide-react';
 import { api } from '../api';
 import { Product } from '../types';
 import { SidebarAd } from '../components/ads';
@@ -150,6 +150,30 @@ export default function Marketplace() {
             ))}
           </div>
         )}
+
+        {/* Partner CTA Card */}
+        <Card className="mt-8 bg-[#012B1A] border-[#C5A14E] rounded-2xl shadow-md">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="flex-shrink-0">
+                <Store className="w-16 h-16 text-[#C5A14E]" />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-2xl font-heading font-bold text-white mb-2">
+                  Become a Vendor on BlkXchange™
+                </h3>
+                <p className="text-gray-300 mb-4">
+                  Ready to showcase your brand and reach conscious consumers nationwide?
+                </p>
+                <Link to="/partner">
+                  <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 rounded-full px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+                    Partner With Us
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
           </div>
           <aside className="hidden md:block">
             <SidebarAd page="marketplace" />
