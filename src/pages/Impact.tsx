@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heart, TrendingUp, Users, ShoppingBag, GraduationCap, Building, HandHeart } from 'lucide-react';
 import { api } from '../api';
 import { ImpactStats } from '../types';
+import { CarouselAd } from '../components/ads';
 
 export default function Impact() {
   const [stats, setStats] = useState<ImpactStats | null>(null);
@@ -16,8 +17,11 @@ export default function Impact() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-brand-ivory flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading impact data...</div>
+      <div className="min-h-screen bg-brand-ivory">
+        <CarouselAd page="impact" />
+        <div className="flex items-center justify-center py-12">
+          <div className="text-xl text-gray-600">Loading impact data...</div>
+        </div>
       </div>
     );
   }
@@ -32,6 +36,7 @@ export default function Impact() {
 
   return (
     <div className="min-h-screen bg-brand-ivory">
+      <CarouselAd page="impact" />
       <div className="bg-gradient-to-br from-brand-black to-brand-charcoal text-brand-ivory py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">

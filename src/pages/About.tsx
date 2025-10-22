@@ -2,10 +2,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Heart, Users, TrendingUp, Target, Eye, Zap } from 'lucide-react';
+import { CarouselAd } from '../components/ads';
 
 export default function About() {
   return (
     <div className="min-h-screen bg-brand-ivory">
+      <CarouselAd page="about" />
       <div className="bg-gradient-to-br from-brand-black to-brand-charcoal text-brand-ivory py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-heading font-bold mb-6">

@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Newspaper, TrendingUp, Users, GraduationCap, Heart } from 'lucide-react';
 import { api } from '../api';
+import { CarouselAd } from '../components/ads';
 
 interface Article {
   id: string;
@@ -66,6 +67,7 @@ export default function News() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#000000] to-[#0b1c0e]">
+      <CarouselAd page="news" />
       <div className="relative bg-gradient-to-b from-[#000000] to-[#0b1c0e] py-24 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <div className="mb-6">

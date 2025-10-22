@@ -21,6 +21,7 @@ import { useEffect } from 'react';
 import { PieChart as RechartsPieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { StartupInvestorTerms } from '../components/StartupInvestorTerms';
 import { AngelInvestorTerms } from '../components/AngelInvestorTerms';
+import { SpotlightAd } from '../components/ads';
 
 export default function Invest() {
   const [activeTab, setActiveTab] = useState('startups');
@@ -59,6 +60,7 @@ export default function Invest() {
 
   return (
     <div className="min-h-screen bg-[#111111]">
+      <SpotlightAd page="invest" />
       <section className="bg-gradient-to-b from-[#000000] to-[#023020] py-20 px-4 text-center">
         <div className="max-w-5xl mx-auto">
           <TrendingUp className="w-20 h-20 text-[#C5A14E] mx-auto mb-6" />

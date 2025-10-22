@@ -8,6 +8,8 @@ import {
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
+export const API_BASE_URL = API_URL;
+
 export const api = {
   async get(endpoint: string): Promise<any> {
     const response = await fetch(`${API_URL}${endpoint}`);

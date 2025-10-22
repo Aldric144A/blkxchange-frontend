@@ -12,6 +12,7 @@ import VendorAgreement from './pages/VendorAgreement';
 import VendorDashboard from './pages/VendorDashboard';
 import AdminVendors from './pages/AdminVendors';
 import AdminProducts from './pages/AdminProducts';
+import AdminAds from './pages/AdminAds';
 import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
           <Route path="/admin/vendors" element={<AdminVendors />} />
           <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/ads" element={<AdminAds />} />
           <Route path="/news" element={<News />} />
           <Route path="/news/:slug" element={<NewsArticle />} />
         </Routes>
