@@ -184,24 +184,24 @@ export default function Impact() {
               </p>
               <div className="grid md:grid-cols-3 gap-6 text-left">
                 <div>
-                  <div className="text-4xl font-bold text-brand-black mb-2">90%</div>
+                  <div className="text-4xl font-bold text-brand-black mb-2">85%</div>
                   <div className="font-semibold text-brand-charcoal mb-1">To Vendors</div>
                   <p className="text-sm text-brand-charcoal">
-                    The majority goes directly to our vendors, supporting their businesses and families.
+                    The majority (85%) goes directly to our vendors, supporting their businesses, families, and communities.
                   </p>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-brand-black mb-2">7%</div>
+                  <div className="text-4xl font-bold text-brand-black mb-2">12%</div>
                   <div className="font-semibold text-brand-charcoal mb-1">Platform Operations</div>
                   <p className="text-sm text-brand-charcoal">
-                    Keeps BlkXchange™ running, improving, and growing to serve you better.
+                    Covers platform maintenance, secure payment processing, and continuous improvement.
                   </p>
                 </div>
                 <div>
                   <div className="text-4xl font-bold text-brand-black mb-2">3%</div>
-                  <div className="font-semibold text-brand-charcoal mb-1">Community Impact</div>
+                  <div className="font-semibold text-brand-charcoal mb-1">Community Impact Fund</div>
                   <p className="text-sm text-brand-charcoal">
-                    Automatically distributed to HBCUs, scholarships, and nonprofit partners.
+                    Directly supports HBCUs, scholarships, and nonprofit partners through the BlkXchange™ Community Impact Fund.
                   </p>
                 </div>
               </div>
