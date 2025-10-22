@@ -29,18 +29,12 @@ const categoryLabels = {
 
 export default function News() {
   const navigate = useNavigate();
-  const [articles, setArticles] = useState<Article[]>([]);
   const [latestArticle, setLatestArticle] = useState<Article | null>(null);
-  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('latest_news');
 
   useEffect(() => {
     loadLatestArticle();
   }, []);
-
-  useEffect(() => {
-    loadArticles();
-  }, [selectedCategory]);
 
   const loadLatestArticle = async () => {
     try {
@@ -50,22 +44,6 @@ export default function News() {
       }
     } catch (error) {
       console.error('Error loading latest article:', error);
-    }
-  };
-
-  const loadArticles = async () => {
-    try {
-      setLoading(true);
-      let url = '/api/articles?status=published';
-      if (selectedCategory !== 'latest_news') {
-        url += `&category=${selectedCategory}`;
-      }
-      const articles = await api.get(url);
-      setArticles(articles);
-    } catch (error) {
-      console.error('Error loading articles:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -163,20 +141,6 @@ export default function News() {
               </div>
             )}
 
-            {/* Articles Grid */}
-            {loading ? (
-              <div className="text-center py-16">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#C5A14E]"></div>
-                <p className="text-white mt-4">Loading articles...</p>
-              </div>
-            ) : articles.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {articles.map((article) => (
-                  <ArticleCard key={article.id} article={article} />
-                ))}
-              </div>
-            )}
-
             {/* Single Submit CTA at bottom */}
             <div className="mt-16 pt-10 text-center">
               <Button
@@ -193,56 +157,6 @@ export default function News() {
             <SidebarAd page="news" />
           </aside>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function ArticleCard({ article }: { article: Article }) {
-  const navigate = useNavigate();
-  
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
-
-  return (
-    <div className="bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#C5A14E]/20 hover:border-[#C5A14E] transition-all group">
-      {article.image_url && (
-        <div className="relative h-48 overflow-hidden">
-          <img
-            src={article.image_url}
-            alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        </div>
-      )}
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-semibold text-[#C5A14E] bg-[#C5A14E]/10 px-3 py-1 rounded-full">
-            {categoryLabels[article.category as keyof typeof categoryLabels]}
-          </span>
-        </div>
-        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-[#C5A14E] transition-colors">
-          {article.title}
-        </h3>
-        <p className="text-white/70 text-sm mb-4 line-clamp-3">
-          {article.excerpt}
-        </p>
-        <div className="flex items-center justify-between text-sm text-white/60 mb-4">
-          <span>By {article.author}</span>
-          <span>{formatDate(article.created_at)}</span>
-        </div>
-        <Button
-          onClick={() => navigate(`/news/${article.slug}`)}
-          className="w-full bg-[#046C4E] hover:bg-[#035a40] text-white"
-        >
-          Read More
-        </Button>
       </div>
     </div>
   );
