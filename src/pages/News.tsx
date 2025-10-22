@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Newspaper } from 'lucide-react';
 import { api } from '../api';
 import { SidebarAd } from '../components/ads';
 import { useNavigate } from 'react-router-dom';
@@ -166,17 +165,7 @@ export default function News() {
                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#C5A14E]"></div>
                 <p className="text-white mt-4">Loading articles...</p>
               </div>
-            ) : articles.length === 0 ? (
-              <div className="text-center py-16 bg-gradient-to-br from-[#1A1A1A] to-[#0b1c0e] rounded-lg border border-[#C5A14E]/20">
-                <Newspaper className="w-16 h-16 text-[#C5A14E] mx-auto mb-4 opacity-50" />
-                <h3 className="text-2xl font-bold text-[#C5A14E] mb-3">
-                  📰 No stories yet in this section.
-                </h3>
-                <p className="text-white/70 mb-6 text-lg">
-                  Be the first to spotlight Black brilliance.
-                </p>
-              </div>
-            ) : (
+            ) : articles.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {articles.map((article) => (
                   <ArticleCard key={article.id} article={article} />

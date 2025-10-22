@@ -31,6 +31,7 @@ export default function NewsArticle() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [article, setArticle] = useState<Article | null>(null);
+  const [nextArticle, setNextArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,6 +43,15 @@ export default function NewsArticle() {
       setLoading(true);
       const article = await api.get(`/api/articles/slug/${slug}`);
       setArticle(article);
+      
+      const allArticles = await api.get('/api/articles?status=published');
+      const currentIndex = allArticles.findIndex((a: Article) => a.slug === slug);
+      
+      if (currentIndex !== -1 && currentIndex < allArticles.length - 1) {
+        setNextArticle(allArticles[currentIndex + 1]);
+      } else if (allArticles.length > 0) {
+        setNextArticle(allArticles[0]);
+      }
     } catch (error) {
       console.error('Error loading article:', error);
     } finally {
@@ -176,12 +186,14 @@ export default function NewsArticle() {
                   <p className="text-white/60 text-sm mb-1">Written by</p>
                   <p className="text-white text-lg font-semibold">{article.author}</p>
                 </div>
-                <Button
-                  onClick={() => navigate('/news')}
-                  className="bg-[#C5A14E] hover:bg-[#b39145] text-black"
-                >
-                  Read More Stories
-                </Button>
+                {nextArticle && (
+                  <Button
+                    onClick={() => navigate(`/news/${nextArticle.slug}`)}
+                    className="bg-[#C5A14E] hover:bg-[#b39145] text-black"
+                  >
+                    Read More Stories
+                  </Button>
+                )}
               </div>
             </div>
           </div>
