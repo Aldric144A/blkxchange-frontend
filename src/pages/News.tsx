@@ -56,7 +56,11 @@ export default function News() {
   const loadArticles = async () => {
     try {
       setLoading(true);
-      const articles = await api.get(`/api/articles?status=published&category=${selectedCategory}`);
+      let url = '/api/articles?status=published';
+      if (selectedCategory !== 'latest_news') {
+        url += `&category=${selectedCategory}`;
+      }
+      const articles = await api.get(url);
       setArticles(articles);
     } catch (error) {
       console.error('Error loading articles:', error);
