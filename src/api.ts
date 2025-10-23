@@ -61,6 +61,28 @@ export const api = {
     return response.json();
   },
 
+  async getProfessionalsNearby(params: {
+    lat?: number;
+    lng?: number;
+    zip?: string;
+    city?: string;
+    state?: string;
+    radius?: number;
+    category?: string;
+  }): Promise<any[]> {
+    const queryParams = new URLSearchParams();
+    if (params.lat !== undefined) queryParams.append('lat', params.lat.toString());
+    if (params.lng !== undefined) queryParams.append('lng', params.lng.toString());
+    if (params.zip) queryParams.append('zip', params.zip);
+    if (params.city) queryParams.append('city', params.city);
+    if (params.state) queryParams.append('state', params.state);
+    if (params.radius !== undefined) queryParams.append('radius', params.radius.toString());
+    if (params.category) queryParams.append('category', params.category);
+    
+    const response = await fetch(`${API_URL}/api/professionals/nearby/search?${queryParams}`);
+    return response.json();
+  },
+
   async getImpactStats(): Promise<ImpactStats> {
     const response = await fetch(`${API_URL}/api/impact`);
     return response.json();

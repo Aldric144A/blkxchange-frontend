@@ -4,7 +4,8 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Star, Calendar, CheckCircle, Briefcase } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Star, Calendar, CheckCircle, Briefcase, MapPin, Navigation, Map } from 'lucide-react';
 import { api } from '../api';
 import { Professional } from '../types';
 import { SidebarAd } from '../components/ads';
@@ -36,14 +37,117 @@ export default function Professionals() {
   const [professionals, setProfessionals] = useState<Professional[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchMode, setSearchMode] = useState<'all' | 'nearby'>('all');
+  const [zipCode, setZipCode] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [radius, setRadius] = useState(25);
+  const [showMap, setShowMap] = useState(false);
+  const [nearbyResults, setNearbyResults] = useState<any[]>([]);
 
   useEffect(() => {
+    if (searchMode === 'all') {
+      setLoading(true);
+      const category = selectedCategory === 'all' ? undefined : selectedCategory;
+      api.getProfessionals(category)
+        .then(setProfessionals)
+        .finally(() => setLoading(false));
+    }
+  }, [selectedCategory, searchMode]);
+
+  const handleLocationSearch = async () => {
+    if (!zipCode && !city) {
+      alert('Please enter a ZIP code or city name');
+      return;
+    }
+
     setLoading(true);
-    const category = selectedCategory === 'all' ? undefined : selectedCategory;
-    api.getProfessionals(category)
-      .then(setProfessionals)
-      .finally(() => setLoading(false));
-  }, [selectedCategory]);
+    setSearchMode('nearby');
+    
+    try {
+      const params: any = {
+        radius,
+        category: selectedCategory === 'all' ? undefined : selectedCategory
+      };
+
+      if (zipCode) {
+        params.zip = zipCode;
+      } else if (city) {
+        params.city = city;
+        if (state) params.state = state;
+      }
+
+      const results = await api.getProfessionalsNearby(params);
+      if (Array.isArray(results)) {
+        setNearbyResults(results);
+      } else {
+        console.error('Invalid response format:', results);
+        alert('ZIP/City search requires geocoding API keys. Please use "Use My Location" button instead.');
+        setSearchMode('all');
+      }
+    } catch (error) {
+      console.error('Location search error:', error);
+      alert('Failed to search by location. Please try again.');
+      setSearchMode('all');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setLoading(true);
+    setSearchMode('nearby');
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const params: any = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            radius,
+            category: selectedCategory === 'all' ? undefined : selectedCategory
+          };
+
+          const results = await api.getProfessionalsNearby(params);
+          if (Array.isArray(results)) {
+            setNearbyResults(results);
+          } else {
+            console.error('Invalid response format:', results);
+            alert('Failed to search by GPS location. Please try again.');
+            setSearchMode('all');
+          }
+        } catch (error) {
+          console.error('GPS search error:', error);
+          alert('Failed to search by GPS location. Please try again.');
+          setSearchMode('all');
+        } finally {
+          setLoading(false);
+        }
+      },
+      (error) => {
+        console.error('Geolocation error:', error);
+        alert('Failed to get your location. Please enable location services.');
+        setSearchMode('all');
+        setLoading(false);
+      }
+    );
+  };
+
+  const handleClearSearch = () => {
+    setSearchMode('all');
+    setZipCode('');
+    setCity('');
+    setState('');
+    setNearbyResults([]);
+    setShowMap(false);
+  };
+
+  const displayedProfessionals = searchMode === 'nearby' ? nearbyResults : professionals;
 
   return (
     <div className="min-h-screen bg-brand-ivory">
@@ -87,6 +191,129 @@ export default function Professionals() {
               </Card>
             </div>
 
+            {/* Location Search Section */}
+            <Card className="mb-8 border-2 border-brand-gold">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <MapPin className="w-5 h-5 text-brand-gold" />
+                  <h3 className="text-xl font-semibold text-brand-black">Find Professionals Near You</h3>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">ZIP Code</label>
+                    <Input
+                      type="text"
+                      placeholder="e.g., 33401"
+                      value={zipCode}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '').slice(0, 5);
+                        setZipCode(value);
+                        if (value) {
+                          setCity('');
+                          setState('');
+                        }
+                      }}
+                      maxLength={5}
+                      className="border-gray-300"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">City</label>
+                    <Input
+                      type="text"
+                      placeholder="e.g., Miami"
+                      value={city}
+                      onChange={(e) => {
+                        setCity(e.target.value);
+                        if (e.target.value) setZipCode('');
+                      }}
+                      disabled={!!zipCode}
+                      className="border-gray-300"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">State (Optional)</label>
+                    <Input
+                      type="text"
+                      placeholder="e.g., FL"
+                      value={state}
+                      onChange={(e) => setState(e.target.value.toUpperCase().slice(0, 2))}
+                      maxLength={2}
+                      disabled={!!zipCode}
+                      className="border-gray-300"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">Distance</label>
+                    <Select value={radius.toString()} onValueChange={(val) => setRadius(Number(val))}>
+                      <SelectTrigger className="border-gray-300">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="10">10 miles</SelectItem>
+                        <SelectItem value="25">25 miles</SelectItem>
+                        <SelectItem value="50">50 miles</SelectItem>
+                        <SelectItem value="100">100 miles</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <Button 
+                    onClick={handleLocationSearch}
+                    className="bg-brand-gold text-brand-black hover:bg-opacity-90"
+                    disabled={!zipCode && !city}
+                  >
+                    <MapPin className="w-4 h-4 mr-2" />
+                    Search by Location
+                  </Button>
+
+                  <Button 
+                    onClick={handleUseMyLocation}
+                    variant="outline"
+                    className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                  >
+                    <Navigation className="w-4 h-4 mr-2" />
+                    Use My Location
+                  </Button>
+
+                  {searchMode === 'nearby' && (
+                    <>
+                      <Button 
+                        onClick={handleClearSearch}
+                        variant="outline"
+                        className="border-gray-400 text-gray-700 hover:bg-gray-100"
+                      >
+                        Clear Search
+                      </Button>
+
+                      <Button 
+                        onClick={() => setShowMap(!showMap)}
+                        variant="outline"
+                        className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                      >
+                        <Map className="w-4 h-4 mr-2" />
+                        {showMap ? 'Hide Map' : 'Show Map'}
+                      </Button>
+                    </>
+                  )}
+                </div>
+
+                {searchMode === 'nearby' && nearbyResults.length > 0 && (
+                  <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm text-green-800">
+                      ✓ Found {nearbyResults.length} professional{nearbyResults.length !== 1 ? 's' : ''} within {radius} miles
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
             <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-4">
             <label className="font-semibold text-brand-black">Filter by:</label>
@@ -109,7 +336,7 @@ export default function Professionals() {
             </Select>
           </div>
           <div className="text-gray-600">
-            {professionals.length} {professionals.length === 1 ? 'professional' : 'professionals'} found
+            {displayedProfessionals.length} {displayedProfessionals.length === 1 ? 'professional' : 'professionals'} found
           </div>
         </div>
 
@@ -117,13 +344,13 @@ export default function Professionals() {
           <div className="text-center py-12">
             <div className="text-xl text-gray-600">Loading professionals...</div>
           </div>
-        ) : professionals.length === 0 ? (
+        ) : displayedProfessionals.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-xl text-gray-600">No professionals found in this category.</div>
+            <div className="text-xl text-gray-600">No professionals found{searchMode === 'nearby' ? ' in this area' : ' in this category'}.</div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {professionals.map((professional) => (
+            {displayedProfessionals.map((professional) => (
               <Card key={professional.id} className="hover:shadow-lg transition-shadow border-2 hover:border-brand-gold">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4 mb-4">
@@ -155,9 +382,23 @@ export default function Professionals() {
                     </div>
                   </div>
 
-                  <Badge className="mb-3 capitalize bg-brand-charcoal text-brand-gold">
-                    {professional.category}
-                  </Badge>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge className="capitalize bg-brand-charcoal text-brand-gold">
+                      {professional.category}
+                    </Badge>
+                    {searchMode === 'nearby' && professional.distance_miles !== undefined && (
+                      <Badge className="bg-green-100 text-green-800 border-green-300">
+                        <MapPin className="w-3 h-3 mr-1" />
+                        {professional.distance_miles} mi
+                      </Badge>
+                    )}
+                  </div>
+
+                  {searchMode === 'nearby' && (professional.city || professional.state) && (
+                    <p className="text-sm text-gray-600 mb-2">
+                      📍 {professional.city}{professional.city && professional.state ? ', ' : ''}{professional.state}
+                    </p>
+                  )}
 
                   <p className="text-gray-700 text-sm mb-4 line-clamp-3">
                     {professional.bio}
