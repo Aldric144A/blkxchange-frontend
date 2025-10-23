@@ -9,16 +9,18 @@ import { Product } from '../types';
 import { SidebarAd } from '../components/ads';
 
 const categories = [
-  { label: 'All Categories', value: 'all' },
-  { label: 'Apparel', value: 'apparel' },
-  { label: 'Beauty', value: 'beauty' },
-  { label: 'Books', value: 'books' },
-  { label: 'Art', value: 'art' },
-  { label: 'Tech', value: 'tech' },
-  { label: 'Food', value: 'food' },
-  { label: 'Wellness', value: 'wellness' },
-  { label: 'Home', value: 'home' },
-  { label: 'Jewelry', value: 'jewelry' }
+  { label: 'All Categories', value: 'all', group: '' },
+  { label: '🛍️ Product Industries', value: 'header-products', group: 'header', disabled: true },
+  { label: 'Apparel & Accessories', value: 'apparel_accessories', group: 'products' },
+  { label: 'Art & Collectibles', value: 'art_collectibles', group: 'products' },
+  { label: 'Automotive & Transportation', value: 'automotive_transportation', group: 'products' },
+  { label: 'Beauty & Wellness', value: 'beauty_wellness', group: 'products' },
+  { label: 'Books & Stationery', value: 'books_stationery', group: 'products' },
+  { label: 'Food & Beverage', value: 'food_beverage', group: 'products' },
+  { label: 'Health & Pharmacy', value: 'health_pharmacy', group: 'products' },
+  { label: 'Home & Living', value: 'home_living', group: 'products' },
+  { label: 'Manufacturing & Trades', value: 'manufacturing_trades', group: 'products' },
+  { label: 'Technology & Gadgets', value: 'technology_gadgets', group: 'products' }
 ];
 
 export default function Marketplace() {
@@ -93,7 +95,12 @@ export default function Marketplace() {
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
+                  <SelectItem 
+                    key={cat.value} 
+                    value={cat.value}
+                    disabled={cat.disabled}
+                    className={cat.group === 'header' ? 'font-semibold text-[#C5A14E] cursor-default' : 'text-brand-black hover:text-[#C5A14E] transition'}
+                  >
                     {cat.label}
                   </SelectItem>
                 ))}

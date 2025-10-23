@@ -10,19 +10,26 @@ import { Professional } from '../types';
 import { SidebarAd } from '../components/ads';
 
 const categories = [
-  { label: 'All Categories', value: 'all' },
-  { label: 'Health', value: 'health' },
-  { label: 'Legal', value: 'legal' },
-  { label: 'Finance', value: 'finance' },
-  { label: 'Coaching', value: 'coaching' },
-  { label: 'Consulting', value: 'consulting' },
-  { label: 'Education', value: 'education' },
-  { label: 'Real Estate & Wealth Advisors', value: 'real_estate' },
-  { label: 'Barbers & Beauty Professionals', value: 'barbers_beauty' },
-  { label: 'Photographers & Designers', value: 'photography_design' },
-  { label: 'Automotive & Housing Finance', value: 'automotive_housing' },
-  { label: 'Media & Marketing', value: 'media_marketing' },
-  { label: 'Nonprofits & Community Services', value: 'nonprofits' }
+  { label: 'All Categories', value: 'all', group: '' },
+  { label: '💼 Service Industries', value: 'header-services', group: 'header', disabled: true },
+  { label: 'Coaching & Consulting', value: 'coaching_consulting', group: 'services' },
+  { label: 'Education & Tutoring', value: 'education_tutoring', group: 'services' },
+  { label: 'Event & Hospitality Services', value: 'event_hospitality', group: 'services' },
+  { label: 'Finance & Insurance', value: 'finance_insurance', group: 'services' },
+  { label: 'Health & Medical', value: 'health_medical', group: 'services' },
+  { label: 'Legal & Advocacy', value: 'legal_advocacy', group: 'services' },
+  { label: 'Media & Marketing', value: 'media_marketing', group: 'services' },
+  { label: 'Nonprofits & Community Services', value: 'nonprofits_community', group: 'services' },
+  { label: 'Real Estate & Wealth Advisors', value: 'real_estate_wealth', group: 'services' },
+  { label: 'Technology & Innovation', value: 'technology_innovation', group: 'services' },
+  { label: 'Trades & Home Services', value: 'trades_home', group: 'services' },
+  { label: 'Transportation & Logistics', value: 'transportation_logistics', group: 'services' },
+  { label: '🌍 Cultural & Community', value: 'header-cultural', group: 'header', disabled: true },
+  { label: 'Arts & Culture Education', value: 'arts_culture', group: 'cultural' },
+  { label: 'Black Media & Publications', value: 'black_media', group: 'cultural' },
+  { label: 'Faith & Resilience', value: 'faith_resilience', group: 'cultural' },
+  { label: 'HBCUs & Educational Partners', value: 'hbcus_education', group: 'cultural' },
+  { label: 'Travel & Heritage Experiences', value: 'travel_heritage', group: 'cultural' }
 ];
 
 export default function Professionals() {
@@ -89,7 +96,12 @@ export default function Professionals() {
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
+                  <SelectItem 
+                    key={cat.value} 
+                    value={cat.value}
+                    disabled={cat.disabled}
+                    className={cat.group === 'header' ? 'font-semibold text-[#C5A14E] cursor-default' : 'text-brand-black hover:text-[#C5A14E] transition'}
+                  >
                     {cat.label}
                   </SelectItem>
                 ))}
