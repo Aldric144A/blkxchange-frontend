@@ -19,7 +19,7 @@ const categories = [
   { label: 'Food & Beverage', value: 'food_beverage', group: 'products' },
   { label: 'Health & Pharmacy', value: 'health_pharmacy', group: 'products' },
   { label: 'Home & Living', value: 'home_living', group: 'products' },
-  { label: 'Manufacturing & Trades', value: 'manufacturing_trades', group: 'products' },
+  { label: 'Trades & Manufacturing', value: 'manufacturing_trades', group: 'products' },
   { label: 'Technology & Gadgets', value: 'technology_gadgets', group: 'products' }
 ];
 
