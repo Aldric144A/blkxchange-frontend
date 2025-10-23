@@ -86,6 +86,41 @@ export default function Marketplace() {
               </CardContent>
             </Card>
 
+            {/* Shop by Category Grid */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-heading font-bold text-brand-black mb-6">Shop by Category</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
+                {categories.filter(cat => cat.group === 'products').map((cat) => (
+                  <button
+                    key={cat.value}
+                    onClick={() => handleCategoryChange(cat.value)}
+                    className={`
+                      p-4 rounded-lg border-2 transition-all duration-200
+                      ${selectedCategory === cat.value 
+                        ? 'border-[#00A86B] bg-[#00A86B]/10 shadow-lg' 
+                        : 'border-gray-300 hover:border-[#C5A14E] hover:shadow-[0_0_15px_rgba(197,161,78,0.5)]'
+                      }
+                      flex flex-col items-center justify-center gap-2 min-h-[100px]
+                    `}
+                  >
+                    <span className="text-3xl">{cat.label.split(' ')[0]}</span>
+                    <span className="text-sm font-medium text-center text-brand-black">
+                      {cat.label.replace(/^[^\s]+\s/, '')}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => handleCategoryChange('all')}
+                  variant="outline"
+                  className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                >
+                  View All Products
+                </Button>
+              </div>
+            </div>
+
             <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-4">
             <label className="font-semibold text-brand-black">Filter by:</label>
