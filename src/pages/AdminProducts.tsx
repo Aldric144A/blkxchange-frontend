@@ -12,10 +12,12 @@ import {
   Package,
   DollarSign,
   Box,
-  Plus
+  Plus,
+  Upload
 } from 'lucide-react';
 import { ProductEnhanced, ProductStatus } from '@/types';
 import { AddProductModal } from '@/components/AddProductModal';
+import { BulkImportModal } from '@/components/BulkImportModal';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<ProductEnhanced[]>([]);
@@ -24,6 +26,7 @@ export default function AdminProducts() {
   const [actionLoading, setActionLoading] = useState(false);
   const [adminSecret, setAdminSecret] = useState<string>('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showBulkImportModal, setShowBulkImportModal] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_secret') || '';
@@ -303,13 +306,22 @@ export default function AdminProducts() {
             <CardHeader className="bg-brand-gold">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-2xl text-brand-black">Product Submissions</CardTitle>
-                <Button
-                  onClick={() => setShowAddModal(true)}
-                  className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold border-2 border-black"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Product
-                </Button>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => setShowBulkImportModal(true)}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Bulk Import
+                  </Button>
+                  <Button
+                    onClick={() => setShowAddModal(true)}
+                    className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold border-2 border-black"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Product
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="p-6">
@@ -388,6 +400,20 @@ export default function AdminProducts() {
           setShowAddModal(false);
         }}
         adminSecret={adminSecret}
+      />
+
+      <BulkImportModal
+        isOpen={showBulkImportModal}
+        onClose={() => setShowBulkImportModal(false)}
+        onSuccess={() => {
+          fetchProducts();
+          setShowBulkImportModal(false);
+        }}
+        adminSecret={adminSecret}
+        type="products"
+        apiEndpoint="/api/admin/products/import"
+        templateUrl="/templates/products-template.csv"
+        requiredFields={['product_name', 'vendor_email', 'category', 'price', 'description', 'quantity', 'status']}
       />
     </div>
   );

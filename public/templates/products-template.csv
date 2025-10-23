@@ -1,0 +1,2 @@
+product_name,vendor_email,category,price,description,sku,image_url,quantity,status
+Sample Product,vendor@example.com,apparel_accessories,29.99,High-quality product description,PROD-001,https://example.com/product.jpg,100,approved

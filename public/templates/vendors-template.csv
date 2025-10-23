@@ -1,0 +1,2 @@
+business_name,owner_name,email,phone,description,category,website,logo_url,address,zip,status
+Sample Vendor Co,John Doe,vendor@example.com,555-1234,High-quality products and services,apparel_accessories,https://example.com,https://example.com/logo.png,123 Main St,12345,approved

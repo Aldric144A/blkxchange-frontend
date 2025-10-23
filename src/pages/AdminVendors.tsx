@@ -14,10 +14,12 @@ import {
   Phone,
   MapPin,
   Globe,
-  Plus
+  Plus,
+  Upload
 } from 'lucide-react';
 import { VendorApplication, VendorApplicationStatus } from '@/types';
 import { AddVendorModal } from '@/components/AddVendorModal';
+import { BulkImportModal } from '@/components/BulkImportModal';
 
 export default function AdminVendors() {
   const [applications, setApplications] = useState<VendorApplication[]>([]);
@@ -26,6 +28,7 @@ export default function AdminVendors() {
   const [actionLoading, setActionLoading] = useState(false);
   const [adminSecret, setAdminSecret] = useState<string>('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showBulkImportModal, setShowBulkImportModal] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_secret') || '';
@@ -351,13 +354,22 @@ export default function AdminVendors() {
             <CardHeader className="bg-brand-gold">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-2xl text-brand-black">Vendor Applications</CardTitle>
-                <Button
-                  onClick={() => setShowAddModal(true)}
-                  className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold border-2 border-black"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Vendor
-                </Button>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => setShowBulkImportModal(true)}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Bulk Import
+                  </Button>
+                  <Button
+                    onClick={() => setShowAddModal(true)}
+                    className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold border-2 border-black"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Vendor
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="p-6">
@@ -425,6 +437,20 @@ export default function AdminVendors() {
           setShowAddModal(false);
         }}
         adminSecret={adminSecret}
+      />
+
+      <BulkImportModal
+        isOpen={showBulkImportModal}
+        onClose={() => setShowBulkImportModal(false)}
+        onSuccess={() => {
+          fetchApplications();
+          setShowBulkImportModal(false);
+        }}
+        adminSecret={adminSecret}
+        type="vendors"
+        apiEndpoint="/api/admin/vendors/import"
+        templateUrl="/templates/vendors-template.csv"
+        requiredFields={['business_name', 'owner_name', 'email', 'phone', 'description', 'category', 'address', 'zip', 'status']}
       />
     </div>
   );

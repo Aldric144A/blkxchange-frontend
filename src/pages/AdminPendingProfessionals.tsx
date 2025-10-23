@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Loader2, ExternalLink, Mail, MapPin, Plus } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2, ExternalLink, Mail, MapPin, Plus, Upload } from 'lucide-react';
 import { AddProfessionalModal } from '@/components/AddProfessionalModal';
+import { BulkImportModal } from '@/components/BulkImportModal';
 
 interface PendingProfessional {
   id: string;
@@ -46,6 +47,7 @@ export default function AdminPendingProfessionals() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [adminSecret, setAdminSecret] = useState<string>('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showBulkImportModal, setShowBulkImportModal] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_secret') || '';
@@ -161,13 +163,22 @@ export default function AdminPendingProfessionals() {
                 Review and approve community-submitted professionals
               </p>
             </div>
-            <Button
-              onClick={() => setShowAddModal(true)}
-              className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Professional
-            </Button>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => setShowBulkImportModal(true)}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Bulk Import
+              </Button>
+              <Button
+                onClick={() => setShowAddModal(true)}
+                className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Professional
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -317,6 +328,20 @@ export default function AdminPendingProfessionals() {
           setShowAddModal(false);
         }}
         adminSecret={adminSecret}
+      />
+
+      <BulkImportModal
+        isOpen={showBulkImportModal}
+        onClose={() => setShowBulkImportModal(false)}
+        onSuccess={() => {
+          fetchPendingProfessionals();
+          setShowBulkImportModal(false);
+        }}
+        adminSecret={adminSecret}
+        type="professionals"
+        apiEndpoint="/api/admin/professionals/import"
+        templateUrl="/templates/professionals-template.csv"
+        requiredFields={['name', 'category', 'bio', 'email', 'zip', 'status']}
       />
     </div>
   );
