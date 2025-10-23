@@ -38,7 +38,16 @@ export default function AdminAds() {
   const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
-    const secret = prompt('Enter admin password:');
+    const saved = localStorage.getItem('admin_secret') || '';
+    let secret = saved;
+    if (!secret) {
+      secret = prompt('🔐 Enter Admin Password\n\nDefault password: changeme\n\nThis password is required to access the admin dashboard.') || '';
+      if (secret) {
+        localStorage.setItem('admin_secret', secret);
+      } else {
+        alert('⚠️ Admin password is required to access this page. Please reload and enter the password.');
+      }
+    }
     if (secret) {
       setAdminSecret(secret);
       setIsAuthenticated(true);

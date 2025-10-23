@@ -45,6 +45,11 @@ export function AddVendorModal({ isOpen, onClose, onSuccess, adminSecret }: AddV
     e.preventDefault();
     setError('');
 
+    if (!adminSecret || adminSecret.trim() === '') {
+      setError('Admin password is required. Please reload the page and enter the admin password when prompted.');
+      return;
+    }
+
     if (!formData.business_name || !formData.owner_name || !formData.email || !formData.phone || !formData.description || !formData.category || !formData.address || !formData.zip) {
       setError('Please fill in all required fields');
       return;
@@ -63,7 +68,11 @@ export function AddVendorModal({ isOpen, onClose, onSuccess, adminSecret }: AddV
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create vendor');
+        if (response.status === 401) {
+          throw new Error('Unauthorized: Invalid admin password. Please reload the page and enter the correct password.');
+        }
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to create vendor');
       }
 
       alert('✅ Vendor created successfully!');

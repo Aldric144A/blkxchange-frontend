@@ -34,11 +34,17 @@ export default function AdminVendors() {
     const saved = localStorage.getItem('admin_secret') || '';
     let secret = saved;
     if (!secret) {
-      secret = prompt('Enter admin password (temporary)') || '';
-      if (secret) localStorage.setItem('admin_secret', secret);
+      secret = prompt('🔐 Enter Admin Password\n\nDefault password: changeme\n\nThis password is required to access the admin dashboard.') || '';
+      if (secret) {
+        localStorage.setItem('admin_secret', secret);
+      } else {
+        alert('⚠️ Admin password is required to access this page. Please reload and enter the password.');
+      }
     }
     setAdminSecret(secret);
-    fetchApplications(secret);
+    if (secret) {
+      fetchApplications(secret);
+    }
   }, []);
 
   const fetchApplications = async (secretParam?: string) => {

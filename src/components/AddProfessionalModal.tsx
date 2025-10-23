@@ -12,18 +12,24 @@ interface AddProfessionalModalProps {
 }
 
 const categories = [
-  { label: 'Accounting & Finance', value: 'accounting_finance' },
-  { label: 'Business Consulting', value: 'business_consulting' },
-  { label: 'Coaching & Mentorship', value: 'coaching_mentorship' },
-  { label: 'Creative Services', value: 'creative_services' },
+  { label: 'Coaching & Consulting', value: 'coaching_consulting' },
   { label: 'Education & Tutoring', value: 'education_tutoring' },
-  { label: 'Event Planning', value: 'event_planning' },
-  { label: 'Healthcare & Wellness', value: 'healthcare_wellness' },
-  { label: 'IT & Technology', value: 'it_technology' },
-  { label: 'Legal Services', value: 'legal_services' },
-  { label: 'Marketing & PR', value: 'marketing_pr' },
-  { label: 'Real Estate', value: 'real_estate' },
-  { label: 'Trades & Skilled Labor', value: 'trades_skilled_labor' },
+  { label: 'Event & Hospitality', value: 'event_hospitality' },
+  { label: 'Finance & Insurance', value: 'finance_insurance' },
+  { label: 'Health & Medical', value: 'health_medical' },
+  { label: 'Legal & Advocacy', value: 'legal_advocacy' },
+  { label: 'Media & Marketing', value: 'media_marketing' },
+  { label: 'Nonprofits & Community', value: 'nonprofits_community' },
+  { label: 'Real Estate & Wealth', value: 'real_estate_wealth' },
+  { label: 'Technology & Innovation', value: 'technology_innovation' },
+  { label: 'Trades & Home', value: 'trades_home' },
+  { label: 'Transportation & Logistics', value: 'transportation_logistics' },
+  { label: 'Arts & Culture', value: 'arts_culture' },
+  { label: 'Black Media', value: 'black_media' },
+  { label: 'Faith & Resilience', value: 'faith_resilience' },
+  { label: 'HBCUs & Education', value: 'hbcus_education' },
+  { label: 'Travel & Heritage', value: 'travel_heritage' },
+  { label: 'Other', value: 'other' },
 ];
 
 export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret }: AddProfessionalModalProps) {
@@ -47,6 +53,11 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!adminSecret || adminSecret.trim() === '') {
+      setError('Admin password is required. Please reload the page and enter the admin password when prompted.');
+      return;
+    }
 
     if (!formData.name || !formData.category || !formData.bio || !formData.email || !formData.zip) {
       setError('Please fill in all required fields');
@@ -73,7 +84,15 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret }
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create professional');
+        if (response.status === 401) {
+          throw new Error('Unauthorized: Invalid admin password. Please reload the page and enter the correct password.');
+        }
+        if (response.status === 422) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(`Validation error: ${errorData.detail || 'Please check all fields are correct'}`);
+        }
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to create professional');
       }
 
       alert('✅ Professional created successfully!');
