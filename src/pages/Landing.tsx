@@ -33,10 +33,12 @@ const categories = [
 export default function Landing() {
   const [impactStats, setImpactStats] = useState<ImpactStats | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [visitorCount, setVisitorCount] = useState<number>(0);
 
   useEffect(() => {
     api.getImpactStats().then(setImpactStats);
     loadArticles();
+    loadVisitorCount();
   }, []);
 
   const loadArticles = async () => {
@@ -45,6 +47,17 @@ export default function Landing() {
       setArticles(articles.slice(0, 4));
     } catch (error) {
       console.error('Error loading articles:', error);
+    }
+  };
+
+  const loadVisitorCount = async () => {
+    try {
+      await api.post('/api/visitor-count', {});
+      const response = await api.get('/api/visitor-count');
+      setVisitorCount(response.visitor_count || 0);
+    } catch (error) {
+      console.error('Error loading visitor count:', error);
+      setVisitorCount(0);
     }
   };
 
@@ -302,6 +315,19 @@ export default function Landing() {
                 Learn More
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-8 bg-gradient-to-b from-brand-black to-brand-charcoal">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-black/40 rounded-xl p-6 shadow-lg backdrop-blur-sm border border-brand-gold/20">
+            <div className="flex items-center justify-center gap-3 text-brand-gold">
+              <Users className="w-6 h-6" />
+              <p className="text-lg font-medium">
+                <span className="text-2xl font-bold">{visitorCount.toLocaleString()}</span> visitors this month empowering Black commerce.
+              </p>
+            </div>
           </div>
         </div>
       </section>
