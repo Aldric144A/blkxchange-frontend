@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, ExternalLink, CheckCircle, XCircle, Plus } from 'lucide-react';
 import { API_BASE_URL } from '../api';
 import { AddAdModal } from '@/components/AddAdModal';
+import { TestModeToggle } from '@/components/TestModeToggle';
 
 interface AdCreative {
   id: string;
@@ -36,6 +37,7 @@ export default function AdminAds() {
   const [adminSecret, setAdminSecret] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [testMode, setTestMode] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_secret') || '';
@@ -208,8 +210,21 @@ export default function AdminAds() {
 
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <CardTitle className="text-2xl text-brand-black">Ad Campaigns</CardTitle>
+              <TestModeToggle 
+                onTestModeChange={setTestMode}
+                adminSecret={adminSecret}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-brand-black">
+                {testMode ? (
+                  <span className="font-semibold">🧪 Test Mode Active - Entries will not be published to live site</span>
+                ) : (
+                  <span className="font-semibold">✅ Live Mode - Entries will be published after approval</span>
+                )}
+              </div>
               <Button
                 onClick={() => setShowAddModal(true)}
                 className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold"
@@ -323,6 +338,7 @@ export default function AdminAds() {
           setShowAddModal(false);
         }}
         adminSecret={adminSecret}
+        testMode={testMode}
       />
     </div>
   );

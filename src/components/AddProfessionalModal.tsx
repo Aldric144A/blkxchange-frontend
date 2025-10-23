@@ -9,6 +9,7 @@ interface AddProfessionalModalProps {
   onClose: () => void;
   onSuccess: () => void;
   adminSecret: string;
+  testMode?: boolean;
 }
 
 const categories = [
@@ -32,7 +33,7 @@ const categories = [
   { label: 'Other', value: 'other' },
 ];
 
-export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret }: AddProfessionalModalProps) {
+export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret, testMode = false }: AddProfessionalModalProps) {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -67,7 +68,11 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret }
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/professionals/manual`, {
+      const endpoint = testMode 
+        ? `${import.meta.env.VITE_API_URL}/api/admin/test-mode/professionals/manual`
+        : `${import.meta.env.VITE_API_URL}/api/admin/professionals/manual`;
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +100,10 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret }
         throw new Error(errorData.detail || 'Failed to create professional');
       }
 
-      alert('✅ Professional created successfully!');
+      const successMessage = testMode 
+        ? '✅ Test professional created successfully! (Not published to live site)'
+        : '✅ Professional created successfully!';
+      alert(successMessage);
       onSuccess();
       onClose();
       
@@ -126,9 +134,16 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
       <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="bg-emerald-600 p-6 rounded-t-xl flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">Add New Professional</h2>
-          <button onClick={onClose} className="text-white hover:text-gray-200 transition-colors">
+        <div className={`p-6 rounded-t-xl flex justify-between items-center ${testMode ? 'bg-[#C5A14E]' : 'bg-emerald-600'}`}>
+          <div>
+            <h2 className={`text-2xl font-bold ${testMode ? 'text-black' : 'text-white'}`}>
+              Add New Professional {testMode && '🧪'}
+            </h2>
+            {testMode && (
+              <p className="text-sm text-black mt-1">Test Mode - Entry will not be published to live site</p>
+            )}
+          </div>
+          <button onClick={onClose} className={`${testMode ? 'text-black hover:text-gray-700' : 'text-white hover:text-gray-200'} transition-colors`}>
             <X className="w-6 h-6" />
           </button>
         </div>

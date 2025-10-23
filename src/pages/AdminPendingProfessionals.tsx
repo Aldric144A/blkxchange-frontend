@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, XCircle, Loader2, ExternalLink, Mail, MapPin, Plus, Upload } from 'lucide-react';
 import { AddProfessionalModal } from '@/components/AddProfessionalModal';
+import { TestModeToggle } from '@/components/TestModeToggle';
 import { BulkImportModal } from '@/components/BulkImportModal';
 
 interface PendingProfessional {

@@ -20,6 +20,7 @@ import {
 import { VendorApplication, VendorApplicationStatus } from '@/types';
 import { AddVendorModal } from '@/components/AddVendorModal';
 import { BulkImportModal } from '@/components/BulkImportModal';
+import { TestModeToggle } from '@/components/TestModeToggle';
 
 export default function AdminVendors() {
   const [applications, setApplications] = useState<VendorApplication[]>([]);
@@ -29,6 +30,7 @@ export default function AdminVendors() {
   const [adminSecret, setAdminSecret] = useState<string>('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showBulkImportModal, setShowBulkImportModal] = useState(false);
+  const [testMode, setTestMode] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_secret') || '';
@@ -358,8 +360,21 @@ export default function AdminVendors() {
         ) : (
           <Card className="border-2 border-brand-gold">
             <CardHeader className="bg-brand-gold">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-4">
                 <CardTitle className="text-2xl text-brand-black">Vendor Applications</CardTitle>
+                <TestModeToggle 
+                  onTestModeChange={setTestMode}
+                  adminSecret={adminSecret}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-brand-black">
+                  {testMode ? (
+                    <span className="font-semibold">🧪 Test Mode Active - Entries will not be published to live site</span>
+                  ) : (
+                    <span className="font-semibold">✅ Live Mode - Entries will be published after approval</span>
+                  )}
+                </div>
                 <div className="flex gap-3">
                   <Button
                     onClick={() => setShowBulkImportModal(true)}
@@ -443,6 +458,7 @@ export default function AdminVendors() {
           setShowAddModal(false);
         }}
         adminSecret={adminSecret}
+        testMode={testMode}
       />
 
       <BulkImportModal
