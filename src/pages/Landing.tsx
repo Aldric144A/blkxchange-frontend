@@ -18,14 +18,16 @@ interface Article {
 }
 
 const categories = [
-  { name: 'Apparel', value: 'apparel', icon: '👔' },
-  { name: 'Beauty', value: 'beauty', icon: '💄' },
-  { name: 'Books', value: 'books', icon: '📚' },
-  { name: 'Art', value: 'art', icon: '🎨' },
-  { name: 'Tech', value: 'tech', icon: '💻' },
-  { name: 'Food', value: 'food', icon: '🍽️' },
-  { name: 'Wellness', value: 'wellness', icon: '🧘' },
-  { name: 'Home', value: 'home', icon: '🏠' }
+  { label: 'Apparel & Accessories', value: 'apparel_accessories' },
+  { label: 'Art & Collectibles', value: 'art_collectibles' },
+  { label: 'Automotive & Transportation', value: 'automotive_transportation' },
+  { label: 'Beauty & Wellness', value: 'beauty_wellness' },
+  { label: 'Books & Stationery', value: 'books_stationery' },
+  { label: 'Food & Beverage', value: 'food_beverage' },
+  { label: 'Health & Pharmacy', value: 'health_pharmacy' },
+  { label: 'Home & Living', value: 'home_living' },
+  { label: 'Trades & Manufacturing', value: 'manufacturing_trades' },
+  { label: 'Technology & Gadgets', value: 'technology_gadgets' }
 ];
 
 export default function Landing() {
@@ -161,17 +163,32 @@ export default function Landing() {
           <h2 className="text-4xl font-heading font-bold text-center mb-12 text-brand-black">
             Shop by Category
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {categories.map((category) => (
-              <Link key={category.value} to={`/marketplace?category=${category.value}`}>
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-brand-gold">
-                  <CardContent className="p-6 text-center">
-                    <div className="text-4xl mb-3">{category.icon}</div>
-                    <h3 className="font-semibold text-lg text-brand-black">{category.name}</h3>
-                  </CardContent>
-                </Card>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
+            {categories.map((cat) => (
+              <Link key={cat.value} to={`/marketplace?category=${cat.value}`}>
+                <button
+                  className="
+                    p-4 rounded-lg border-2 transition-all duration-200
+                    border-gray-300 hover:border-[#C5A14E] hover:shadow-[0_0_15px_rgba(197,161,78,0.5)]
+                    flex flex-col items-center justify-center gap-2 min-h-[100px] w-full
+                  "
+                >
+                  <span className="text-sm font-medium text-center text-brand-black">
+                    {cat.label}
+                  </span>
+                </button>
               </Link>
             ))}
+          </div>
+          <div className="flex justify-center">
+            <Link to="/marketplace">
+              <Button
+                variant="outline"
+                className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+              >
+                View All Products
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
