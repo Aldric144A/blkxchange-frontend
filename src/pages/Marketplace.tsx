@@ -76,9 +76,9 @@ export default function Marketplace() {
                     <p className="text-gray-300 mb-4">
                       Showcase your products, gain exposure, and join the movement supporting Black entrepreneurship.
                     </p>
-                    <Link to="/partner">
+                    <Link to="/vendor-partner">
                       <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 hover:shadow-2xl rounded-full px-8 py-3 text-lg font-semibold shadow-lg transition-all">
-                        Partner With Us
+                        Learn More
                       </Button>
                     </Link>
                   </div>
