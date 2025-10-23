@@ -1,5 +1,5 @@
 import { useState, useEffect, ReactNode } from 'react';
-import { AdminLogin } from './AdminLogin';
+import { useNavigate } from 'react-router-dom';
 import { AdminLogout } from './AdminLogout';
 import { isAdminAuthenticated } from '@/utils/auth';
 
@@ -8,6 +8,7 @@ interface AdminAuthWrapperProps {
 }
 
 export function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -15,15 +16,15 @@ export function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
     const authenticated = isAdminAuthenticated();
     setIsAuthenticated(authenticated);
     setLoading(false);
-  }, []);
 
-  const handleLoginSuccess = () => {
-    setIsAuthenticated(true);
-  };
+    if (!authenticated) {
+      navigate('/admin/login');
+    }
+  }, [navigate]);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    window.location.reload(); // Reload to clear any cached data
+    navigate('/admin/login');
   };
 
   if (loading) {
@@ -38,7 +39,7 @@ export function AdminAuthWrapper({ children }: AdminAuthWrapperProps) {
   }
 
   if (!isAuthenticated) {
-    return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
+    return null; // Will redirect to login
   }
 
   return (

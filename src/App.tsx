@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Navigation from './components/Navigation';
+import { AdminAuthWrapper } from './components/AdminAuthWrapper';
 import Landing from './pages/Landing';
 import Marketplace from './pages/Marketplace';
 import Professionals from './pages/Professionals';
@@ -10,6 +11,8 @@ import VendorRegister from './pages/VendorRegister';
 import VendorApply from './pages/VendorApply';
 import VendorAgreement from './pages/VendorAgreement';
 import VendorDashboard from './pages/VendorDashboard';
+import AdminLogin from './pages/AdminLogin';
+import AdminResetPassword from './pages/AdminResetPassword';
 import AdminVendors from './pages/AdminVendors';
 import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
@@ -38,10 +41,12 @@ function App() {
           <Route path="/vendor-apply" element={<VendorApply />} />
           <Route path="/vendor-agreement" element={<VendorAgreement />} />
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
-          <Route path="/admin/vendors" element={<AdminVendors />} />
-          <Route path="/admin/products" element={<AdminProducts />} />
-          <Route path="/admin/ads" element={<AdminAds />} />
-          <Route path="/admin/pending-professionals" element={<AdminPendingProfessionals />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/reset-password" element={<AdminResetPassword />} />
+          <Route path="/admin/vendors" element={<AdminAuthWrapper><AdminVendors /></AdminAuthWrapper>} />
+          <Route path="/admin/products" element={<AdminAuthWrapper><AdminProducts /></AdminAuthWrapper>} />
+          <Route path="/admin/ads" element={<AdminAuthWrapper><AdminAds /></AdminAuthWrapper>} />
+          <Route path="/admin/pending-professionals" element={<AdminAuthWrapper><AdminPendingProfessionals /></AdminAuthWrapper>} />
           <Route path="/news" element={<News />} />
           <Route path="/news/all" element={<NewsAll />} />
           <Route path="/news/:slug" element={<NewsArticle />} />
