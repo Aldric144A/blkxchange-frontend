@@ -92,12 +92,28 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret, 
         if (response.status === 401) {
           throw new Error('Unauthorized: Invalid admin password. Please reload the page and enter the correct password.');
         }
-        if (response.status === 422) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(`Validation error: ${errorData.detail || 'Please check all fields are correct'}`);
-        }
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Failed to create professional');
+        console.error('Backend error response:', errorData);
+        console.error('Status code:', response.status);
+        console.error('Endpoint:', endpoint);
+        console.error('Payload:', {
+          ...formData,
+          business_name: formData.business_name || null,
+          tagline: formData.tagline || null,
+          website: formData.website || null,
+          phone: formData.phone || null,
+          image_url: formData.image_url || null,
+        });
+        
+        let errorMessage = 'Failed to create professional';
+        if (errorData.detail) {
+          if (typeof errorData.detail === 'string') {
+            errorMessage = errorData.detail;
+          } else if (Array.isArray(errorData.detail)) {
+            errorMessage = errorData.detail.map((err: any) => `${err.loc?.join('.')||'field'}: ${err.msg}`).join(', ');
+          }
+        }
+        throw new Error(errorMessage);
       }
 
       const successMessage = testMode 
@@ -123,7 +139,8 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret, 
       });
     } catch (err) {
       console.error('Error creating professional:', err);
-      setError('Failed to create professional. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create professional. Please try again.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

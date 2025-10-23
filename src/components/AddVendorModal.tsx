@@ -77,7 +77,20 @@ export function AddVendorModal({ isOpen, onClose, onSuccess, adminSecret, testMo
           throw new Error('Unauthorized: Invalid admin password. Please reload the page and enter the correct password.');
         }
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Failed to create vendor');
+        console.error('Backend error response:', errorData);
+        console.error('Status code:', response.status);
+        console.error('Endpoint:', endpoint);
+        console.error('Payload:', formData);
+        
+        let errorMessage = 'Failed to create vendor';
+        if (errorData.detail) {
+          if (typeof errorData.detail === 'string') {
+            errorMessage = errorData.detail;
+          } else if (Array.isArray(errorData.detail)) {
+            errorMessage = errorData.detail.map((err: any) => `${err.loc?.join('.')||'field'}: ${err.msg}`).join(', ');
+          }
+        }
+        throw new Error(errorMessage);
       }
 
       const successMessage = testMode 
@@ -102,7 +115,8 @@ export function AddVendorModal({ isOpen, onClose, onSuccess, adminSecret, testMo
       });
     } catch (err) {
       console.error('Error creating vendor:', err);
-      setError('Failed to create vendor. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create vendor. Please try again.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
