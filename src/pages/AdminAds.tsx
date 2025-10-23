@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, ExternalLink, CheckCircle, XCircle } from 'lucide-react';
+import { Calendar, ExternalLink, CheckCircle, XCircle, Plus } from 'lucide-react';
 import { API_BASE_URL } from '../api';
+import { AddAdModal } from '@/components/AddAdModal';
 
 interface AdCreative {
   id: string;
@@ -34,6 +35,7 @@ export default function AdminAds() {
   const [loading, setLoading] = useState(true);
   const [adminSecret, setAdminSecret] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const secret = prompt('Enter admin password:');
@@ -197,7 +199,16 @@ export default function AdminAds() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-brand-black">Ad Campaigns</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-2xl text-brand-black">Ad Campaigns</CardTitle>
+              <Button
+                onClick={() => setShowAddModal(true)}
+                className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Ad
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -294,6 +305,16 @@ export default function AdminAds() {
           </CardContent>
         </Card>
       </div>
+
+      <AddAdModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSuccess={() => {
+          loadData(adminSecret);
+          setShowAddModal(false);
+        }}
+        adminSecret={adminSecret}
+      />
     </div>
   );
 }

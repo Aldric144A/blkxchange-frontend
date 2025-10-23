@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Loader2, ExternalLink, Mail, MapPin } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2, ExternalLink, Mail, MapPin, Plus } from 'lucide-react';
+import { AddProfessionalModal } from '@/components/AddProfessionalModal';
 
 interface PendingProfessional {
   id: string;
@@ -44,6 +45,7 @@ export default function AdminPendingProfessionals() {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [adminSecret, setAdminSecret] = useState<string>('');
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_secret') || '';
@@ -150,12 +152,23 @@ export default function AdminPendingProfessionals() {
     <div className="min-h-screen bg-brand-ivory">
       <div className="bg-brand-black text-brand-ivory py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            Pending Professional Submissions
-          </h1>
-          <p className="text-xl text-gray-300">
-            Review and approve community-submitted professionals
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+                Pending Professional Submissions
+              </h1>
+              <p className="text-xl text-gray-300">
+                Review and approve community-submitted professionals
+              </p>
+            </div>
+            <Button
+              onClick={() => setShowAddModal(true)}
+              className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Professional
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -295,6 +308,16 @@ export default function AdminPendingProfessionals() {
           </div>
         )}
       </div>
+
+      <AddProfessionalModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSuccess={() => {
+          fetchPendingProfessionals();
+          setShowAddModal(false);
+        }}
+        adminSecret={adminSecret}
+      />
     </div>
   );
 }

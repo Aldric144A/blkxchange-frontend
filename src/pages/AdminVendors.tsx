@@ -13,9 +13,11 @@ import {
   Mail,
   Phone,
   MapPin,
-  Globe
+  Globe,
+  Plus
 } from 'lucide-react';
 import { VendorApplication, VendorApplicationStatus } from '@/types';
+import { AddVendorModal } from '@/components/AddVendorModal';
 
 export default function AdminVendors() {
   const [applications, setApplications] = useState<VendorApplication[]>([]);
@@ -23,6 +25,7 @@ export default function AdminVendors() {
   const [selectedApplication, setSelectedApplication] = useState<VendorApplication | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [adminSecret, setAdminSecret] = useState<string>('');
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_secret') || '';
@@ -346,7 +349,16 @@ export default function AdminVendors() {
         ) : (
           <Card className="border-2 border-brand-gold">
             <CardHeader className="bg-brand-gold">
-              <CardTitle className="text-2xl text-brand-black">Vendor Applications</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-2xl text-brand-black">Vendor Applications</CardTitle>
+                <Button
+                  onClick={() => setShowAddModal(true)}
+                  className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold border-2 border-black"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Vendor
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="p-6">
               {applications.length === 0 ? (
@@ -404,6 +416,16 @@ export default function AdminVendors() {
           </Card>
         )}
       </div>
+
+      <AddVendorModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSuccess={() => {
+          fetchApplications();
+          setShowAddModal(false);
+        }}
+        adminSecret={adminSecret}
+      />
     </div>
   );
 }

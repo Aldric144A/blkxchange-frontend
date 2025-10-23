@@ -11,9 +11,11 @@ import {
   Shield,
   Package,
   DollarSign,
-  Box
+  Box,
+  Plus
 } from 'lucide-react';
 import { ProductEnhanced, ProductStatus } from '@/types';
+import { AddProductModal } from '@/components/AddProductModal';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<ProductEnhanced[]>([]);
@@ -21,6 +23,7 @@ export default function AdminProducts() {
   const [selectedProduct, setSelectedProduct] = useState<ProductEnhanced | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [adminSecret, setAdminSecret] = useState<string>('');
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_secret') || '';
@@ -298,7 +301,16 @@ export default function AdminProducts() {
         ) : (
           <Card className="border-2 border-brand-gold">
             <CardHeader className="bg-brand-gold">
-              <CardTitle className="text-2xl text-brand-black">Product Submissions</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-2xl text-brand-black">Product Submissions</CardTitle>
+                <Button
+                  onClick={() => setShowAddModal(true)}
+                  className="bg-brand-gold hover:bg-brand-gold/90 text-black font-semibold border-2 border-black"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Product
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="p-6">
               {products.length === 0 ? (
@@ -367,6 +379,16 @@ export default function AdminProducts() {
           </Card>
         )}
       </div>
+
+      <AddProductModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSuccess={() => {
+          fetchProducts();
+          setShowAddModal(false);
+        }}
+        adminSecret={adminSecret}
+      />
     </div>
   );
 }
