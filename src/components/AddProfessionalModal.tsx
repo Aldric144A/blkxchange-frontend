@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getAdminHeaders } from '@/utils/auth';
 import { X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +9,6 @@ interface AddProfessionalModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  adminSecret: string;
   testMode?: boolean;
 }
 
@@ -33,7 +33,7 @@ const categories = [
   { label: 'Other', value: 'other' },
 ];
 
-export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret, testMode = false }: AddProfessionalModalProps) {
+export function AddProfessionalModal({ isOpen, onClose, onSuccess, testMode = false }: AddProfessionalModalProps) {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -55,10 +55,6 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret, 
     e.preventDefault();
     setError('');
 
-    if (!adminSecret || adminSecret.trim() === '') {
-      setError('Admin password is required. Please reload the page and enter the admin password when prompted.');
-      return;
-    }
 
     if (!formData.name || !formData.category || !formData.bio || !formData.email || !formData.zip) {
       setError('Please fill in all required fields');
@@ -76,7 +72,7 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, adminSecret, 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Admin-Secret': adminSecret,
+          ...getAdminHeaders(),
         },
         body: JSON.stringify({
           ...formData,

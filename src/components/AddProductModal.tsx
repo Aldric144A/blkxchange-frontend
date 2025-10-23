@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getAdminHeaders } from '@/utils/auth';
 import { X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +9,6 @@ interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  adminSecret: string;
 }
 
 const categories = [
@@ -24,7 +24,7 @@ const categories = [
   { label: 'Technology & Gadgets', value: 'technology_gadgets' },
 ];
 
-export function AddProductModal({ isOpen, onClose, onSuccess, adminSecret }: AddProductModalProps) {
+export function AddProductModal({ isOpen, onClose, onSuccess }: AddProductModalProps) {
   const [vendors, setVendors] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     vendor_id: '',
@@ -50,7 +50,7 @@ export function AddProductModal({ isOpen, onClose, onSuccess, adminSecret }: Add
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/vendor-applications`, {
         headers: {
-          'X-Admin-Secret': adminSecret,
+          ...getAdminHeaders(),
         },
       });
       if (response.ok) {
@@ -83,7 +83,7 @@ export function AddProductModal({ isOpen, onClose, onSuccess, adminSecret }: Add
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Admin-Secret': adminSecret,
+          ...getAdminHeaders(),
         },
         body: JSON.stringify({
           ...formData,

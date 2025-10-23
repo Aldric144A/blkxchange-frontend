@@ -399,7 +399,7 @@ export default function AdminProducts() {
           fetchProducts();
           setShowAddModal(false);
         }}
-        adminSecret={adminSecret}
+        
       />
 
       <BulkImportModal
@@ -409,7 +409,7 @@ export default function AdminProducts() {
           fetchProducts();
           setShowBulkImportModal(false);
         }}
-        adminSecret={adminSecret}
+        
         type="products"
         apiEndpoint="/api/admin/products/import"
         templateUrl="/templates/products-template.csv"

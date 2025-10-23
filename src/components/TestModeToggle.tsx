@@ -3,12 +3,13 @@ import { TestTube, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
+import { getAdminHeaders } from '@/utils/auth'
+
 interface TestModeToggleProps {
   onTestModeChange: (enabled: boolean) => void;
-  adminSecret: string;
 }
 
-export function TestModeToggle({ onTestModeChange, adminSecret }: TestModeToggleProps) {
+export function TestModeToggle({ onTestModeChange }: TestModeToggleProps) {
   const [testMode, setTestMode] = useState(false);
   const [testCounts, setTestCounts] = useState({ vendors: 0, professionals: 0, ads: 0 });
 
@@ -23,16 +24,11 @@ export function TestModeToggle({ onTestModeChange, adminSecret }: TestModeToggle
 
   const loadTestCounts = async () => {
     try {
+      const headers = getAdminHeaders();
       const [vendorsRes, professionalsRes, adsRes] = await Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/test-mode/vendors`, {
-          headers: { 'X-Admin-Secret': adminSecret }
-        }),
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/test-mode/professionals`, {
-          headers: { 'X-Admin-Secret': adminSecret }
-        }),
-        fetch(`${import.meta.env.VITE_API_URL}/api/admin/test-mode/ads`, {
-          headers: { 'X-Admin-Secret': adminSecret }
-        })
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/test-mode/vendors`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/test-mode/professionals`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL}/api/admin/test-mode/ads`, { headers })
       ]);
 
       if (vendorsRes.ok && professionalsRes.ok && adsRes.ok) {
@@ -64,9 +60,10 @@ export function TestModeToggle({ onTestModeChange, adminSecret }: TestModeToggle
     }
 
     try {
+      const headers = getAdminHeaders();
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/test-mode/purge`, {
         method: 'DELETE',
-        headers: { 'X-Admin-Secret': adminSecret }
+        headers
       });
 
       if (response.ok) {

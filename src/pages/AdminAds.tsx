@@ -214,7 +214,7 @@ export default function AdminAds() {
               <CardTitle className="text-2xl text-brand-black">Ad Campaigns</CardTitle>
               <TestModeToggle 
                 onTestModeChange={setTestMode}
-                adminSecret={adminSecret}
+                
               />
             </div>
             <div className="flex items-center justify-between">
@@ -337,7 +337,7 @@ export default function AdminAds() {
           loadData(adminSecret);
           setShowAddModal(false);
         }}
-        adminSecret={adminSecret}
+        
         testMode={testMode}
       />
     </div>

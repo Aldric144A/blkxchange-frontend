@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { X, Upload, Download, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Papa from 'papaparse';
+import { getAdminHeaders } from '@/utils/auth';
 
 interface BulkImportModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  adminSecret: string;
   type: 'vendors' | 'products' | 'professionals';
   apiEndpoint: string;
   templateUrl: string;
@@ -27,7 +27,6 @@ export function BulkImportModal({
   isOpen,
   onClose,
   onSuccess,
-  adminSecret,
   type,
   apiEndpoint,
   templateUrl,
@@ -92,12 +91,10 @@ export function BulkImportModal({
     setLoading(true);
 
     try {
+      const headers = getAdminHeaders();
       const response = await fetch(`${import.meta.env.VITE_API_URL}${apiEndpoint}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Admin-Secret': adminSecret,
-        },
+        headers,
         body: JSON.stringify({ data: parsedData }),
       });
 

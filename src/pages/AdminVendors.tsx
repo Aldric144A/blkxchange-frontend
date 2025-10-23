@@ -364,7 +364,7 @@ export default function AdminVendors() {
                 <CardTitle className="text-2xl text-brand-black">Vendor Applications</CardTitle>
                 <TestModeToggle 
                   onTestModeChange={setTestMode}
-                  adminSecret={adminSecret}
+                  
                 />
               </div>
               <div className="flex items-center justify-between">
@@ -457,7 +457,7 @@ export default function AdminVendors() {
           fetchApplications();
           setShowAddModal(false);
         }}
-        adminSecret={adminSecret}
+        
         testMode={testMode}
       />
 
@@ -468,7 +468,7 @@ export default function AdminVendors() {
           fetchApplications();
           setShowBulkImportModal(false);
         }}
-        adminSecret={adminSecret}
+        
         type="vendors"
         apiEndpoint="/api/admin/vendors/import"
         templateUrl="/templates/vendors-template.csv"

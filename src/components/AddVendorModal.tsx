@@ -3,12 +3,12 @@ import { X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getAdminHeaders } from '@/utils/auth';
 
 interface AddVendorModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  adminSecret: string;
   testMode?: boolean;
 }
 
@@ -25,7 +25,7 @@ const categories = [
   { label: 'Technology & Gadgets', value: 'technology_gadgets' },
 ];
 
-export function AddVendorModal({ isOpen, onClose, onSuccess, adminSecret, testMode = false }: AddVendorModalProps) {
+export function AddVendorModal({ isOpen, onClose, onSuccess, testMode = false }: AddVendorModalProps) {
   const [formData, setFormData] = useState({
     business_name: '',
     owner_name: '',
@@ -46,11 +46,6 @@ export function AddVendorModal({ isOpen, onClose, onSuccess, adminSecret, testMo
     e.preventDefault();
     setError('');
 
-    if (!adminSecret || adminSecret.trim() === '') {
-      setError('Admin password is required. Please reload the page and enter the admin password when prompted.');
-      return;
-    }
-
     if (!formData.business_name || !formData.owner_name || !formData.email || !formData.phone || !formData.description || !formData.category || !formData.address || !formData.zip) {
       setError('Please fill in all required fields');
       return;
@@ -63,12 +58,10 @@ export function AddVendorModal({ isOpen, onClose, onSuccess, adminSecret, testMo
         ? `${import.meta.env.VITE_API_URL}/api/admin/test-mode/vendors/manual`
         : `${import.meta.env.VITE_API_URL}/api/admin/vendors/manual`;
       
+      const headers = getAdminHeaders();
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Admin-Secret': adminSecret,
-        },
+        headers,
         body: JSON.stringify(formData),
       });
 

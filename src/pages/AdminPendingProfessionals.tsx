@@ -327,7 +327,7 @@ export default function AdminPendingProfessionals() {
           fetchPendingProfessionals();
           setShowAddModal(false);
         }}
-        adminSecret={adminSecret}
+        
       />
 
       <BulkImportModal
@@ -337,7 +337,7 @@ export default function AdminPendingProfessionals() {
           fetchPendingProfessionals();
           setShowBulkImportModal(false);
         }}
-        adminSecret={adminSecret}
+        
         type="professionals"
         apiEndpoint="/api/admin/professionals/import"
         templateUrl="/templates/professionals-template.csv"

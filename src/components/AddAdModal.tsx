@@ -3,12 +3,12 @@ import { X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { getAdminHeaders } from '@/utils/auth';
 
 interface AddAdModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  adminSecret: string;
   testMode?: boolean;
 }
 
@@ -26,7 +26,7 @@ const placements = [
   { label: 'Impact', value: 'impact' },
 ];
 
-export function AddAdModal({ isOpen, onClose, onSuccess, adminSecret, testMode = false }: AddAdModalProps) {
+export function AddAdModal({ isOpen, onClose, onSuccess, testMode = false }: AddAdModalProps) {
   const [formData, setFormData] = useState({
     advertiser_name: '',
     tagline: '',
@@ -74,12 +74,10 @@ export function AddAdModal({ isOpen, onClose, onSuccess, adminSecret, testMode =
         ? `${import.meta.env.VITE_API_URL}/api/admin/test-mode/ads/manual`
         : `${import.meta.env.VITE_API_URL}/api/admin/ads/manual`;
       
+      const headers = getAdminHeaders();
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Admin-Secret': adminSecret,
-        },
+        headers,
         body: JSON.stringify(payload),
       });
 
