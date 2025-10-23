@@ -321,7 +321,7 @@ export default function Landing() {
 
       <section className="py-8 bg-gradient-to-b from-brand-black to-brand-charcoal">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-black/40 rounded-xl p-6 shadow-lg backdrop-blur-sm border border-brand-gold/20">
+          <div className="pulse-gold bg-black/40 rounded-xl p-6 shadow-lg backdrop-blur-sm border border-brand-gold/20 transition-all duration-300">
             <div className="flex items-center justify-center gap-3 text-brand-gold">
               <Users className="w-6 h-6" />
               <p className="text-lg font-medium">
