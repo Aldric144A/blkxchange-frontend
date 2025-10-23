@@ -71,6 +71,12 @@ export interface Professional {
   rating: number;
   reviews_count: number;
   created_at: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  latitude?: number;
+  longitude?: number;
+  distance_miles?: number;
 }
 
 export interface ImpactStats {

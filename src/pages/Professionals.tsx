@@ -4,11 +4,13 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Star, Calendar, CheckCircle, Briefcase, MapPin, Navigation, Map } from 'lucide-react';
+import { Star, Calendar, CheckCircle, Briefcase, MapPin } from 'lucide-react';
 import { api } from '../api';
 import { Professional } from '../types';
 import { SidebarAd } from '../components/ads';
+import { LocationSearchBar } from '../components/LocationSearchBar';
+import { ProfessionalMap } from '../components/ProfessionalMap';
+import { NearbyProfessionalsList } from '../components/NearbyProfessionalsList';
 
 const categories = [
   { label: 'All Categories', value: 'all', group: '' },
@@ -38,12 +40,10 @@ export default function Professionals() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchMode, setSearchMode] = useState<'all' | 'nearby'>('all');
-  const [zipCode, setZipCode] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [radius, setRadius] = useState(25);
   const [showMap, setShowMap] = useState(false);
   const [nearbyResults, setNearbyResults] = useState<any[]>([]);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([39.8283, -98.5795]);
+  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
   useEffect(() => {
     if (searchMode === 'all') {
@@ -55,34 +55,26 @@ export default function Professionals() {
     }
   }, [selectedCategory, searchMode]);
 
-  const handleLocationSearch = async () => {
-    if (!zipCode && !city) {
-      alert('Please enter a ZIP code or city name');
-      return;
-    }
-
+  const handleLocationChange = async (latitude: number, longitude: number, searchRadius: number) => {
     setLoading(true);
     setSearchMode('nearby');
+    setShowMap(true);
+    setMapCenter([latitude, longitude]);
     
     try {
       const params: any = {
-        radius,
+        lat: latitude,
+        lng: longitude,
+        radius: searchRadius,
         category: selectedCategory === 'all' ? undefined : selectedCategory
       };
-
-      if (zipCode) {
-        params.zip = zipCode;
-      } else if (city) {
-        params.city = city;
-        if (state) params.state = state;
-      }
 
       const results = await api.getProfessionalsNearby(params);
       if (Array.isArray(results)) {
         setNearbyResults(results);
       } else {
         console.error('Invalid response format:', results);
-        alert('ZIP/City search requires geocoding API keys. Please use "Use My Location" button instead.');
+        alert('Failed to search by location. Please try again.');
         setSearchMode('all');
       }
     } catch (error) {
@@ -94,57 +86,12 @@ export default function Professionals() {
     }
   };
 
-  const handleUseMyLocation = () => {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser');
-      return;
+  const handleProfessionalClick = (professional: Professional) => {
+    setSelectedProfessional(professional);
+    const element = document.getElementById(`professional-${professional.id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
-    setLoading(true);
-    setSearchMode('nearby');
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const params: any = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            radius,
-            category: selectedCategory === 'all' ? undefined : selectedCategory
-          };
-
-          const results = await api.getProfessionalsNearby(params);
-          if (Array.isArray(results)) {
-            setNearbyResults(results);
-          } else {
-            console.error('Invalid response format:', results);
-            alert('Failed to search by GPS location. Please try again.');
-            setSearchMode('all');
-          }
-        } catch (error) {
-          console.error('GPS search error:', error);
-          alert('Failed to search by GPS location. Please try again.');
-          setSearchMode('all');
-        } finally {
-          setLoading(false);
-        }
-      },
-      (error) => {
-        console.error('Geolocation error:', error);
-        alert('Failed to get your location. Please enable location services.');
-        setSearchMode('all');
-        setLoading(false);
-      }
-    );
-  };
-
-  const handleClearSearch = () => {
-    setSearchMode('all');
-    setZipCode('');
-    setCity('');
-    setState('');
-    setNearbyResults([]);
-    setShowMap(false);
   };
 
   const displayedProfessionals = searchMode === 'nearby' ? nearbyResults : professionals;
@@ -192,127 +139,33 @@ export default function Professionals() {
             </div>
 
             {/* Location Search Section */}
-            <Card className="mb-8 border-2 border-brand-gold">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <MapPin className="w-5 h-5 text-brand-gold" />
-                  <h3 className="text-xl font-semibold text-brand-black">Find Professionals Near You</h3>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">ZIP Code</label>
-                    <Input
-                      type="text"
-                      placeholder="e.g., 33401"
-                      value={zipCode}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, '').slice(0, 5);
-                        setZipCode(value);
-                        if (value) {
-                          setCity('');
-                          setState('');
-                        }
-                      }}
-                      maxLength={5}
-                      className="border-gray-300"
-                    />
-                  </div>
+            <div className="mb-8">
+              <LocationSearchBar 
+                onLocationChange={handleLocationChange}
+                onLoading={setLoading}
+              />
+            </div>
 
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">City</label>
-                    <Input
-                      type="text"
-                      placeholder="e.g., Miami"
-                      value={city}
-                      onChange={(e) => {
-                        setCity(e.target.value);
-                        if (e.target.value) setZipCode('');
-                      }}
-                      disabled={!!zipCode}
-                      className="border-gray-300"
-                    />
-                  </div>
+            {/* Map Section */}
+            {searchMode === 'nearby' && showMap && nearbyResults.length > 0 && (
+              <div className="mb-8">
+                <ProfessionalMap
+                  professionals={nearbyResults}
+                  center={mapCenter}
+                  onProfessionalClick={handleProfessionalClick}
+                />
+              </div>
+            )}
 
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">State (Optional)</label>
-                    <Input
-                      type="text"
-                      placeholder="e.g., FL"
-                      value={state}
-                      onChange={(e) => setState(e.target.value.toUpperCase().slice(0, 2))}
-                      maxLength={2}
-                      disabled={!!zipCode}
-                      className="border-gray-300"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">Distance</label>
-                    <Select value={radius.toString()} onValueChange={(val) => setRadius(Number(val))}>
-                      <SelectTrigger className="border-gray-300">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="10">10 miles</SelectItem>
-                        <SelectItem value="25">25 miles</SelectItem>
-                        <SelectItem value="50">50 miles</SelectItem>
-                        <SelectItem value="100">100 miles</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <Button 
-                    onClick={handleLocationSearch}
-                    className="bg-brand-gold text-brand-black hover:bg-opacity-90"
-                    disabled={!zipCode && !city}
-                  >
-                    <MapPin className="w-4 h-4 mr-2" />
-                    Search by Location
-                  </Button>
-
-                  <Button 
-                    onClick={handleUseMyLocation}
-                    variant="outline"
-                    className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
-                  >
-                    <Navigation className="w-4 h-4 mr-2" />
-                    Use My Location
-                  </Button>
-
-                  {searchMode === 'nearby' && (
-                    <>
-                      <Button 
-                        onClick={handleClearSearch}
-                        variant="outline"
-                        className="border-gray-400 text-gray-700 hover:bg-gray-100"
-                      >
-                        Clear Search
-                      </Button>
-
-                      <Button 
-                        onClick={() => setShowMap(!showMap)}
-                        variant="outline"
-                        className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
-                      >
-                        <Map className="w-4 h-4 mr-2" />
-                        {showMap ? 'Hide Map' : 'Show Map'}
-                      </Button>
-                    </>
-                  )}
-                </div>
-
-                {searchMode === 'nearby' && nearbyResults.length > 0 && (
-                  <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-sm text-green-800">
-                      ✓ Found {nearbyResults.length} professional{nearbyResults.length !== 1 ? 's' : ''} within {radius} miles
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            {/* Nearby Professionals List */}
+            {searchMode === 'nearby' && !loading && (
+              <div className="mb-8">
+                <NearbyProfessionalsList
+                  professionals={nearbyResults}
+                  onProfessionalClick={handleProfessionalClick}
+                />
+              </div>
+            )}
 
             <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-4">
@@ -351,7 +204,13 @@ export default function Professionals() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayedProfessionals.map((professional) => (
-              <Card key={professional.id} className="hover:shadow-lg transition-shadow border-2 hover:border-brand-gold">
+              <Card 
+                key={professional.id} 
+                id={`professional-${professional.id}`}
+                className={`hover:shadow-lg transition-shadow border-2 hover:border-brand-gold ${
+                  selectedProfessional?.id === professional.id ? 'border-brand-gold shadow-xl' : ''
+                }`}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4 mb-4">
                     <div className="w-20 h-20 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden">
