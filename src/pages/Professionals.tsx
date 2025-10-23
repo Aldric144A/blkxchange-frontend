@@ -4,13 +4,14 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Star, Calendar, CheckCircle, Briefcase, MapPin } from 'lucide-react';
+import { Star, Calendar, CheckCircle, Briefcase, MapPin, Plus } from 'lucide-react';
 import { api } from '../api';
 import { Professional } from '../types';
 import { SidebarAd } from '../components/ads';
 import { LocationSearchBar } from '../components/LocationSearchBar';
 import { ProfessionalMap } from '../components/ProfessionalMap';
 import { NearbyProfessionalsList } from '../components/NearbyProfessionalsList';
+import { SubmitProfessionalModal } from '../components/SubmitProfessionalModal';
 
 const categories = [
   { label: 'All Categories', value: 'all', group: '' },
@@ -44,6 +45,7 @@ export default function Professionals() {
   const [nearbyResults, setNearbyResults] = useState<any[]>([]);
   const [mapCenter, setMapCenter] = useState<[number, number]>([39.8283, -98.5795]);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 
   useEffect(() => {
     if (searchMode === 'all') {
@@ -188,8 +190,17 @@ export default function Professionals() {
               </SelectContent>
             </Select>
           </div>
-          <div className="text-gray-600">
-            {displayedProfessionals.length} {displayedProfessionals.length === 1 ? 'professional' : 'professionals'} found
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={() => setIsSubmitModalOpen(true)}
+              className="bg-brand-gold text-brand-black hover:bg-brand-gold/90 font-semibold"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Submit a Professional
+            </Button>
+            <div className="text-gray-600">
+              {displayedProfessionals.length} {displayedProfessionals.length === 1 ? 'professional' : 'professionals'} found
+            </div>
           </div>
         </div>
 
@@ -304,6 +315,11 @@ export default function Professionals() {
           </aside>
         </div>
       </div>
+
+      <SubmitProfessionalModal
+        isOpen={isSubmitModalOpen}
+        onClose={() => setIsSubmitModalOpen(false)}
+      />
     </div>
   );
 }

@@ -13,6 +13,7 @@ import VendorDashboard from './pages/VendorDashboard';
 import AdminVendors from './pages/AdminVendors';
 import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
+import AdminPendingProfessionals from './pages/AdminPendingProfessionals';
 import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
 import NewsAll from './pages/NewsAll';
@@ -40,6 +41,7 @@ function App() {
           <Route path="/admin/vendors" element={<AdminVendors />} />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/admin/ads" element={<AdminAds />} />
+          <Route path="/admin/pending-professionals" element={<AdminPendingProfessionals />} />
           <Route path="/news" element={<News />} />
           <Route path="/news/all" element={<NewsAll />} />
           <Route path="/news/:slug" element={<NewsArticle />} />
