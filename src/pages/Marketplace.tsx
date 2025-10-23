@@ -60,6 +60,30 @@ export default function Marketplace() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
+            {/* Partner CTA Card */}
+            <Card className="mb-8 bg-[#012B1A] border-2 border-[#C5A14E] rounded-xl shadow-md">
+              <CardContent className="p-6">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="flex-shrink-0">
+                    <Store className="w-16 h-16 text-[#C5A14E]" />
+                  </div>
+                  <div className="flex-1 text-center md:text-left">
+                    <h3 className="text-2xl font-heading font-bold text-white mb-2">
+                      Become a Vendor on BlkXchange™
+                    </h3>
+                    <p className="text-gray-300 mb-4">
+                      Showcase your products, gain exposure, and join the movement supporting Black entrepreneurship.
+                    </p>
+                    <Link to="/partner">
+                      <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 hover:shadow-2xl rounded-full px-8 py-3 text-lg font-semibold shadow-lg transition-all">
+                        Partner With Us
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-4">
             <label className="font-semibold text-brand-black">Filter by:</label>
@@ -150,30 +174,6 @@ export default function Marketplace() {
             ))}
           </div>
         )}
-
-        {/* Partner CTA Card */}
-        <Card className="mt-8 bg-[#012B1A] border-2 border-[#C5A14E] rounded-xl shadow-md">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="flex-shrink-0">
-                <Store className="w-16 h-16 text-[#C5A14E]" />
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-heading font-bold text-white mb-2">
-                  Become a Vendor on BlkXchange™
-                </h3>
-                <p className="text-gray-300 mb-4">
-                  Showcase your products, gain exposure, and join the movement supporting Black entrepreneurship.
-                </p>
-                <Link to="/partner">
-                  <Button className="bg-[#C5A14E] text-white hover:bg-opacity-90 hover:shadow-2xl rounded-full px-8 py-3 text-lg font-semibold shadow-lg transition-all">
-                    Partner With Us
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
           </div>
           <aside className="hidden md:block">
             <SidebarAd page="marketplace" />
