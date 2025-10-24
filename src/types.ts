@@ -50,6 +50,8 @@ export interface Product {
   id: string;
   vendor_id: string;
   vendor_name?: string;
+  vendor_email?: string;
+  vendor_website?: string;
   name: string;
   description: string;
   price: number;

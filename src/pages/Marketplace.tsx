@@ -58,12 +58,20 @@ export default function Marketplace() {
     });
   };
 
-  const handleContactVendor = (product: Product) => {
-    alert(`Contact ${product.vendor_name || 'Vendor'}\n\nNote: Vendor contact information will be available soon. This feature requires vendor email/website to be added to the product data.`);
+  const handleVisitStore = (product: Product) => {
+    if (product.vendor_website) {
+      window.open(product.vendor_website, '_blank', 'noopener,noreferrer');
+    } else {
+      alert(`Visit ${product.vendor_name || 'Vendor'}'s Store\n\nNote: Vendor store links will be available soon. This feature requires vendor website information to be added to the product data.`);
+    }
   };
 
-  const handleVisitStore = (product: Product) => {
-    alert(`Visit ${product.vendor_name || 'Vendor'}'s Store\n\nNote: Vendor store links will be available soon. This feature requires vendor website information to be added to the product data.`);
+  const handleEmailVendor = (product: Product) => {
+    if (product.vendor_email) {
+      const subject = encodeURIComponent(`Inquiry about ${product.name}`);
+      const body = encodeURIComponent(`Hello, I'm interested in learning more about ${product.name}.`);
+      window.location.href = `mailto:${product.vendor_email}?subject=${subject}&body=${body}`;
+    }
   };
 
   return (
@@ -226,32 +234,34 @@ export default function Marketplace() {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="p-4 pt-0 flex flex-col gap-2">
-                  <div className="flex gap-2 w-full">
+                <CardFooter className="p-4 pt-0">
+                  <div className="flex flex-col gap-2 mt-4 w-full">
                     <Button 
                       onClick={() => handleAddToCart(product)}
-                      className="flex-1 bg-brand-gold text-brand-black hover:bg-opacity-90"
+                      disabled
+                      className="w-full bg-gray-300 text-gray-500 cursor-not-allowed"
                       title="Checkout coming soon"
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
                       Add to Cart
                     </Button>
                     <Button 
-                      onClick={() => handleContactVendor(product)}
-                      variant="outline"
-                      className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                      onClick={() => handleVisitStore(product)}
+                      className="w-full bg-[#00A86B] text-white hover:bg-[#00A86B]/90"
                     >
-                      <Mail className="w-4 h-4" />
+                      <Store className="w-4 h-4 mr-2" />
+                      Visit Store
                     </Button>
+                    {product.vendor_email && (
+                      <Button 
+                        onClick={() => handleEmailVendor(product)}
+                        className="w-full bg-brand-black text-white border-2 border-[#C5A14E] hover:bg-brand-black/90"
+                      >
+                        <Mail className="w-4 h-4 mr-2" />
+                        Contact Vendor
+                      </Button>
+                    )}
                   </div>
-                  <Button 
-                    onClick={() => handleVisitStore(product)}
-                    variant="outline"
-                    className="w-full border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
-                  >
-                    <Store className="w-4 h-4 mr-2" />
-                    Visit Store
-                  </Button>
                 </CardFooter>
               </Card>
             ))}

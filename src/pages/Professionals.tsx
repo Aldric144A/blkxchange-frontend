@@ -319,23 +319,24 @@ export default function Professionals() {
                     </p>
                   )}
                 </CardContent>
-                <CardFooter className="p-6 pt-0 flex flex-col gap-2">
-                  <Button 
-                    onClick={() => handleBookConsultation(professional)}
-                    className="w-full bg-brand-gold text-brand-black hover:bg-opacity-90"
-                  >
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Book Consultation
-                  </Button>
-                  {professional.website && professional.email && (
+                <CardFooter className="p-6 pt-0">
+                  <div className="flex flex-col gap-2 mt-4 w-full">
                     <Button 
-                      onClick={() => handleContactEmail(professional)}
-                      variant="outline"
-                      className="w-full border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                      onClick={() => handleBookConsultation(professional)}
+                      className="w-full bg-[#00A86B] text-white hover:bg-[#00A86B]/90"
                     >
-                      Contact via Email
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Book Consultation
                     </Button>
-                  )}
+                    {professional.website && professional.email && (
+                      <Button 
+                        onClick={() => handleContactEmail(professional)}
+                        className="w-full bg-brand-black text-white border-2 border-[#C5A14E] hover:bg-brand-black/90"
+                      >
+                        Contact via Email
+                      </Button>
+                    )}
+                  </div>
                 </CardFooter>
               </Card>
             ))}
