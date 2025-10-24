@@ -15,10 +15,13 @@ import {
   MapPin,
   Globe,
   Plus,
-  Upload
+  Upload,
+  Edit,
+  Trash2
 } from 'lucide-react';
 import { VendorApplication, VendorApplicationStatus } from '@/types';
 import { AddVendorModal } from '@/components/AddVendorModal';
+import { EditVendorModal } from '@/components/EditVendorModal';
 import { BulkImportModal } from '@/components/BulkImportModal';
 import { TestModeToggle } from '@/components/TestModeToggle';
 
@@ -29,6 +32,8 @@ export default function AdminVendors() {
   const [actionLoading, setActionLoading] = useState(false);
   const [adminSecret, setAdminSecret] = useState<string>('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingVendor, setEditingVendor] = useState<any>(null);
   const [showBulkImportModal, setShowBulkImportModal] = useState(false);
   const [testMode, setTestMode] = useState(false);
 
@@ -136,6 +141,37 @@ export default function AdminVendors() {
         return <Badge className="bg-red-500"><XCircle className="w-3 h-3 mr-1" />Rejected</Badge>;
       default:
         return <Badge>{status}</Badge>;
+    }
+  };
+
+  const handleEdit = (vendor: any) => {
+    setEditingVendor(vendor);
+    setShowEditModal(true);
+  };
+
+  const handleDelete = async (vendorId: string, vendorName: string) => {
+    if (!confirm(`Are you sure you want to delete ${vendorName}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/admin/vendors/${vendorId}`,
+        {
+          method: 'DELETE',
+          headers: { 'X-Admin-Secret': adminSecret }
+        }
+      );
+
+      if (response.ok) {
+        alert('✅ Vendor deleted successfully!');
+        fetchApplications();
+      } else {
+        throw new Error('Failed to delete vendor');
+      }
+    } catch (error) {
+      console.error('Error deleting vendor:', error);
+      alert('Failed to delete vendor. Please try again.');
     }
   };
 
@@ -429,15 +465,35 @@ export default function AdminVendors() {
                             {new Date(application.created_at).toLocaleDateString()}
                           </td>
                           <td className="py-3 px-4">
-                            <Button
-                              onClick={() => setSelectedApplication(application)}
-                              variant="outline"
-                              size="sm"
-                              className="border-brand-gold text-brand-black hover:bg-brand-gold"
-                            >
-                              <Eye className="w-4 h-4 mr-1" />
-                              View
-                            </Button>
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={() => setSelectedApplication(application)}
+                                variant="outline"
+                                size="sm"
+                                className="border-brand-gold text-brand-black hover:bg-brand-gold"
+                              >
+                                <Eye className="w-4 h-4 mr-1" />
+                                View
+                              </Button>
+                              <Button
+                                onClick={() => handleEdit(application)}
+                                variant="outline"
+                                size="sm"
+                                className="border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white"
+                              >
+                                <Edit className="w-4 h-4 mr-1" />
+                                Edit
+                              </Button>
+                              <Button
+                                onClick={() => handleDelete(application.id, application.business_name)}
+                                variant="outline"
+                                size="sm"
+                                className="border-red-500 text-red-600 hover:bg-red-500 hover:text-white"
+                              >
+                                <Trash2 className="w-4 h-4 mr-1" />
+                                Delete
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -457,7 +513,21 @@ export default function AdminVendors() {
           fetchApplications();
           setShowAddModal(false);
         }}
-        
+        testMode={testMode}
+      />
+
+      <EditVendorModal
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setEditingVendor(null);
+        }}
+        onSuccess={() => {
+          fetchApplications();
+          setShowEditModal(false);
+          setEditingVendor(null);
+        }}
+        vendor={editingVendor}
         testMode={testMode}
       />
 
@@ -468,7 +538,6 @@ export default function AdminVendors() {
           fetchApplications();
           setShowBulkImportModal(false);
         }}
-        
         type="vendors"
         apiEndpoint="/api/admin/vendors/import"
         templateUrl="/templates/vendors-template.csv"
