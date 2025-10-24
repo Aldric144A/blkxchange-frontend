@@ -42,14 +42,21 @@ export default function AdminLogin() {
       }
 
       if (rememberMe) {
-        localStorage.setItem('adminToken', data.token);
-        localStorage.setItem('adminEmail', data.email);
+        const expiryDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        localStorage.setItem('admin_token', data.token);
+        localStorage.setItem('admin_email', data.email);
+        localStorage.setItem('admin_token_expiry', expiryDate.toISOString());
       } else {
-        sessionStorage.setItem('adminToken', data.token);
-        sessionStorage.setItem('adminEmail', data.email);
+        sessionStorage.setItem('admin_token', data.token);
+        sessionStorage.setItem('admin_email', data.email);
       }
 
-      navigate('/admin/vendors');
+      setError('');
+      setForgotSuccess('✅ Successfully logged in. Redirecting to Admin Dashboard...');
+      
+      setTimeout(() => {
+        window.location.href = '/admin/vendors';
+      }, 1000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
     } finally {
