@@ -51,15 +51,13 @@ export default function AdminLogin() {
         sessionStorage.setItem('admin_email', data.email);
       }
 
-      setError('');
       setForgotSuccess('✅ Successfully logged in. Redirecting to Admin Dashboard...');
       
       setTimeout(() => {
         window.location.href = '/admin/vendors';
-      }, 1000);
+      }, 500);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
