@@ -3,7 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Star, ShoppingCart, Store } from 'lucide-react';
+import { Star, ShoppingCart, Store, Mail } from 'lucide-react';
 import { api } from '../api';
 import { Product } from '../types';
 import { SidebarAd } from '../components/ads';
@@ -56,6 +56,10 @@ export default function Marketplace() {
       image_url: product.image_url,
       vendor_name: product.vendor_name,
     });
+  };
+
+  const handleContactVendor = (product: Product) => {
+    alert(`Contact ${product.vendor_name || 'Vendor'}\n\nNote: Vendor contact information will be available soon. This feature requires vendor email/website to be added to the product data.`);
   };
 
   return (
@@ -218,13 +222,20 @@ export default function Marketplace() {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="p-4 pt-0">
+                <CardFooter className="p-4 pt-0 flex gap-2">
                   <Button 
                     onClick={() => handleAddToCart(product)}
-                    className="w-full bg-brand-gold text-brand-black hover:bg-opacity-90"
+                    className="flex-1 bg-brand-gold text-brand-black hover:bg-opacity-90"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Add to Cart
+                  </Button>
+                  <Button 
+                    onClick={() => handleContactVendor(product)}
+                    variant="outline"
+                    className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                  >
+                    <Mail className="w-4 h-4" />
                   </Button>
                 </CardFooter>
               </Card>

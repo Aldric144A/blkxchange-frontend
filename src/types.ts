@@ -139,6 +139,9 @@ export interface VendorApplicationCreate {
   email: string;
   phone: string;
   address: string;
+  city: string;
+  state: string;
+  zip: string;
   website?: string;
   category: ProductCategory;
   description: string;

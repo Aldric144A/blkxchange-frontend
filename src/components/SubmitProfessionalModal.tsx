@@ -38,6 +38,9 @@ export function SubmitProfessionalModal({ isOpen, onClose }: SubmitProfessionalM
     description: '',
     website: '',
     logo_url: '',
+    address: '',
+    city: '',
+    state: '',
     zip: '',
     email: '',
     agreement_accepted: false,
@@ -49,7 +52,7 @@ export function SubmitProfessionalModal({ isOpen, onClose }: SubmitProfessionalM
     e.preventDefault();
     setError('');
 
-    if (!formData.name || !formData.category || !formData.description || !formData.zip || !formData.email) {
+    if (!formData.name || !formData.category || !formData.description || !formData.address || !formData.city || !formData.state || !formData.zip || !formData.email) {
       setError('Please fill in all required fields');
       return;
     }
@@ -87,6 +90,9 @@ export function SubmitProfessionalModal({ isOpen, onClose }: SubmitProfessionalM
         description: '',
         website: '',
         logo_url: '',
+        address: '',
+        city: '',
+        state: '',
         zip: '',
         email: '',
         agreement_accepted: false,
@@ -232,6 +238,63 @@ export function SubmitProfessionalModal({ isOpen, onClose }: SubmitProfessionalM
               </Button>
             </div>
             <p className="text-xs text-gray-400 mt-1">Paste image URL or upload file</p>
+          </div>
+
+          {/* Address Section Header */}
+          <div className="pt-4">
+            <h3 className="text-lg font-semibold text-brand-gold mb-4">Location Information</h3>
+            <p className="text-xs text-gray-400 mb-4">
+              Address information will be used for GPS-based search on "Find Professionals Near You"
+            </p>
+          </div>
+
+          {/* Street Address */}
+          <div>
+            <label htmlFor="address" className="block text-sm font-medium text-brand-gold mb-2">
+              Street Address <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="address"
+              type="text"
+              value={formData.address}
+              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              className="bg-white/10 border-brand-gold/30 text-white placeholder:text-gray-400"
+              placeholder="123 Main Street"
+              required
+            />
+          </div>
+
+          {/* City */}
+          <div>
+            <label htmlFor="city" className="block text-sm font-medium text-brand-gold mb-2">
+              City <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="city"
+              type="text"
+              value={formData.city}
+              onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+              className="bg-white/10 border-brand-gold/30 text-white placeholder:text-gray-400"
+              placeholder="Enter city"
+              required
+            />
+          </div>
+
+          {/* State */}
+          <div>
+            <label htmlFor="state" className="block text-sm font-medium text-brand-gold mb-2">
+              State <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="state"
+              type="text"
+              value={formData.state}
+              onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+              className="bg-white/10 border-brand-gold/30 text-white placeholder:text-gray-400"
+              placeholder="Enter state (e.g., CA, NY)"
+              maxLength={2}
+              required
+            />
           </div>
 
           {/* ZIP Code */}

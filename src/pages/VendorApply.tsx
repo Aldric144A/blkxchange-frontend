@@ -16,6 +16,9 @@ export default function VendorApply() {
     email: '',
     phone: '',
     address: '',
+    city: '',
+    state: '',
+    zip: '',
     website: '',
     category: ProductCategory.OTHER,
     description: '',
@@ -225,8 +228,15 @@ export default function VendorApply() {
                   />
                 </div>
 
+                <div className="pt-4">
+                  <h4 className="text-md font-semibold text-brand-black mb-3">Business Location</h4>
+                  <p className="text-xs text-gray-600 mb-4">
+                    Address information will be used for GPS-based vendor search and local delivery options
+                  </p>
+                </div>
+
                 <div>
-                  <Label htmlFor="address" className="text-brand-black">Business Address *</Label>
+                  <Label htmlFor="address" className="text-brand-black">Street Address *</Label>
                   <Input
                     id="address"
                     name="address"
@@ -235,7 +245,51 @@ export default function VendorApply() {
                     value={formData.address}
                     onChange={handleChange}
                     className="mt-1"
-                    placeholder="Street, City, State, ZIP"
+                    placeholder="123 Main Street"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="city" className="text-brand-black">City *</Label>
+                    <Input
+                      id="city"
+                      name="city"
+                      type="text"
+                      required
+                      value={formData.city}
+                      onChange={handleChange}
+                      className="mt-1"
+                      placeholder="Enter city"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="state" className="text-brand-black">State *</Label>
+                    <Input
+                      id="state"
+                      name="state"
+                      type="text"
+                      required
+                      value={formData.state}
+                      onChange={handleChange}
+                      className="mt-1"
+                      placeholder="CA, NY, etc."
+                      maxLength={2}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="zip" className="text-brand-black">ZIP Code *</Label>
+                  <Input
+                    id="zip"
+                    name="zip"
+                    type="text"
+                    required
+                    value={formData.zip}
+                    onChange={handleChange}
+                    className="mt-1"
+                    placeholder="Enter ZIP code"
                   />
                 </div>
 
