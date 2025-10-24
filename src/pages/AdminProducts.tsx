@@ -13,19 +13,23 @@ import {
   DollarSign,
   Box,
   Plus,
-  Upload
+  Upload,
+  Edit
 } from 'lucide-react';
 import { ProductEnhanced, ProductStatus } from '@/types';
 import { AddProductModal } from '@/components/AddProductModal';
+import { EditProductModal } from '@/components/EditProductModal';
 import { BulkImportModal } from '@/components/BulkImportModal';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<ProductEnhanced[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<ProductEnhanced | null>(null);
+  const [editingProduct, setEditingProduct] = useState<ProductEnhanced | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [adminSecret, setAdminSecret] = useState<string>('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showBulkImportModal, setShowBulkImportModal] = useState(false);
 
   useEffect(() => {
@@ -107,6 +111,11 @@ export default function AdminProducts() {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleEdit = (product: ProductEnhanced) => {
+    setEditingProduct(product);
+    setShowEditModal(true);
   };
 
   const getStatusBadge = (status: ProductStatus) => {
@@ -371,15 +380,25 @@ export default function AdminProducts() {
                             {new Date(product.created_at).toLocaleDateString()}
                           </td>
                           <td className="py-3 px-4">
-                            <Button
-                              onClick={() => setSelectedProduct(product)}
-                              variant="outline"
-                              size="sm"
-                              className="border-brand-gold text-brand-black hover:bg-brand-gold"
-                            >
-                              <Eye className="w-4 h-4 mr-1" />
-                              View
-                            </Button>
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={() => setSelectedProduct(product)}
+                                variant="outline"
+                                size="sm"
+                                className="border-brand-gold text-brand-black hover:bg-brand-gold"
+                              >
+                                <Eye className="w-4 h-4 mr-1" />
+                                View
+                              </Button>
+                              <Button
+                                onClick={() => handleEdit(product)}
+                                variant="outline"
+                                size="sm"
+                                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -401,6 +420,23 @@ export default function AdminProducts() {
         }}
         
       />
+
+      {editingProduct && (
+        <EditProductModal
+          isOpen={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingProduct(null);
+          }}
+          onSuccess={() => {
+            fetchProducts();
+            setShowEditModal(false);
+            setEditingProduct(null);
+            setSelectedProduct(null);
+          }}
+          product={editingProduct}
+        />
+      )}
 
       <BulkImportModal
         isOpen={showBulkImportModal}

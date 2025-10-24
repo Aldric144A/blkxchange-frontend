@@ -16,6 +16,7 @@ import AdminResetPassword from './pages/AdminResetPassword';
 import AdminVendors from './pages/AdminVendors';
 import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
+import AdminProfessionals from './pages/AdminProfessionals';
 import AdminPendingProfessionals from './pages/AdminPendingProfessionals';
 import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
@@ -46,6 +47,7 @@ function App() {
           <Route path="/admin/vendors" element={<AdminAuthWrapper><AdminVendors /></AdminAuthWrapper>} />
           <Route path="/admin/products" element={<AdminAuthWrapper><AdminProducts /></AdminAuthWrapper>} />
           <Route path="/admin/ads" element={<AdminAuthWrapper><AdminAds /></AdminAuthWrapper>} />
+          <Route path="/admin/professionals" element={<AdminAuthWrapper><AdminProfessionals /></AdminAuthWrapper>} />
           <Route path="/admin/pending-professionals" element={<AdminAuthWrapper><AdminPendingProfessionals /></AdminAuthWrapper>} />
           <Route path="/news" element={<News />} />
           <Route path="/news/all" element={<NewsAll />} />

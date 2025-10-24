@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, ExternalLink, CheckCircle, XCircle, Plus } from 'lucide-react';
+import { Calendar, ExternalLink, CheckCircle, XCircle, Plus, Edit } from 'lucide-react';
 import { API_BASE_URL } from '../api';
 import { AddAdModal } from '@/components/AddAdModal';
+import { EditAdModal } from '@/components/EditAdModal';
 import { TestModeToggle } from '@/components/TestModeToggle';
 
 interface AdCreative {
@@ -37,6 +38,8 @@ export default function AdminAds() {
   const [adminSecret, setAdminSecret] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingAd, setEditingAd] = useState<AdCreative | null>(null);
   const [testMode, setTestMode] = useState(false);
 
   useEffect(() => {
@@ -94,6 +97,11 @@ export default function AdminAds() {
     } catch (error) {
       console.error('Error updating ad status:', error);
     }
+  };
+
+  const handleEdit = (ad: AdCreative) => {
+    setEditingAd(ad);
+    setShowEditModal(true);
   };
 
   const formatDate = (dateString: string) => {
@@ -264,6 +272,14 @@ export default function AdminAds() {
                         </div>
                         
                         <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => handleEdit(creative)}
+                            className="bg-blue-600 hover:bg-blue-700"
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            Edit
+                          </Button>
                           {creative.status === 'pending' && (
                             <Button
                               size="sm"
@@ -340,6 +356,22 @@ export default function AdminAds() {
         
         testMode={testMode}
       />
+
+      {editingAd && (
+        <EditAdModal
+          isOpen={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingAd(null);
+          }}
+          onSuccess={() => {
+            loadData(adminSecret);
+            setShowEditModal(false);
+            setEditingAd(null);
+          }}
+          ad={editingAd}
+        />
+      )}
     </div>
   );
 }
