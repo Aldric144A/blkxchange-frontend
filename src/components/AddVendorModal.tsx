@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getAdminHeaders } from '@/utils/auth';
+import ImageUpload from './ImageUpload';
 
 interface AddVendorModalProps {
   isOpen: boolean;
@@ -225,30 +226,29 @@ export function AddVendorModal({ isOpen, onClose, onSuccess, testMode = false }:
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Website URL
-              </label>
-              <Input
-                type="url"
-                value={formData.website}
-                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                placeholder="https://example.com"
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Website URL
+            </label>
+            <Input
+              type="url"
+              value={formData.website}
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              placeholder="https://example.com"
+            />
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Logo URL
-              </label>
-              <Input
-                type="url"
-                value={formData.logo_url}
-                onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
-                placeholder="https://example.com/logo.png"
-              />
-            </div>
+          <div>
+            <ImageUpload
+              section="vendors"
+              imageType="logo"
+              isVerified={formData.status === 'approved'}
+              testMode={testMode}
+              onUploadSuccess={(url) => setFormData({ ...formData, logo_url: url })}
+              onUploadError={(error) => setError(error)}
+              currentImage={formData.logo_url}
+              label="Upload Vendor Logo"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

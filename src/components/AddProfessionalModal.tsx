@@ -4,6 +4,7 @@ import { X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ImageUpload from './ImageUpload';
 
 interface AddProfessionalModalProps {
   isOpen: boolean;
@@ -292,14 +293,15 @@ export function AddProfessionalModal({ isOpen, onClose, onSuccess, testMode = fa
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Profile Image URL
-            </label>
-            <Input
-              type="url"
-              value={formData.image_url}
-              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-              placeholder="https://example.com/profile.jpg"
+            <ImageUpload
+              section="professionals"
+              imageType="profile"
+              isVerified={formData.status === 'approved'}
+              testMode={testMode}
+              onUploadSuccess={(url) => setFormData({ ...formData, image_url: url })}
+              onUploadError={(error) => setError(error)}
+              currentImage={formData.image_url}
+              label="Upload Profile/Business Logo"
             />
           </div>
 

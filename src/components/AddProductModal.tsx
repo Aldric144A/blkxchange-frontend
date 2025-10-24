@@ -4,6 +4,7 @@ import { X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ImageUpload from './ImageUpload';
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -33,7 +34,7 @@ export function AddProductModal({ isOpen, onClose, onSuccess }: AddProductModalP
     price: '',
     description: '',
     sku: '',
-    image_urls: '',
+    image_urls: [] as string[],
     quantity: '0',
     status: 'approved',
   });
@@ -74,11 +75,6 @@ export function AddProductModal({ isOpen, onClose, onSuccess }: AddProductModalP
     setLoading(true);
 
     try {
-      const imageUrls = formData.image_urls
-        .split(',')
-        .map((url) => url.trim())
-        .filter((url) => url.length > 0);
-
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/products/manual`, {
         method: 'POST',
         headers: {
@@ -89,7 +85,7 @@ export function AddProductModal({ isOpen, onClose, onSuccess }: AddProductModalP
           ...formData,
           price: parseFloat(formData.price),
           quantity: parseInt(formData.quantity),
-          image_urls: imageUrls,
+          image_urls: formData.image_urls.filter(url => url.length > 0),
           sku: formData.sku || `SKU-${Date.now()}`,
         }),
       });
@@ -109,7 +105,7 @@ export function AddProductModal({ isOpen, onClose, onSuccess }: AddProductModalP
         price: '',
         description: '',
         sku: '',
-        image_urls: '',
+        image_urls: [],
         quantity: '0',
         status: 'approved',
       });
@@ -245,16 +241,29 @@ export function AddProductModal({ isOpen, onClose, onSuccess }: AddProductModalP
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Image URLs (comma-separated)
+            <label className="block text-sm font-medium text-gray-700 mb-4">
+              Product Images (up to 5)
             </label>
-            <textarea
-              value={formData.image_urls}
-              onChange={(e) => setFormData({ ...formData, image_urls: e.target.value })}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
-              rows={2}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[0, 1, 2, 3, 4].map((index) => (
+                <div key={index}>
+                  <ImageUpload
+                    section="products"
+                    imageType="product"
+                    isVerified={formData.status === 'approved'}
+                    testMode={false}
+                    onUploadSuccess={(url) => {
+                      const newUrls = [...formData.image_urls];
+                      newUrls[index] = url;
+                      setFormData({ ...formData, image_urls: newUrls });
+                    }}
+                    onUploadError={(error) => setError(error)}
+                    currentImage={formData.image_urls[index]}
+                    label={`Image ${index + 1}${index === 0 ? ' (Primary)' : ''}`}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           <div>

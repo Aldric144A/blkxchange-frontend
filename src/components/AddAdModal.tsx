@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getAdminHeaders } from '@/utils/auth';
+import ImageUpload from './ImageUpload';
 
 interface AddAdModalProps {
   isOpen: boolean;
@@ -172,15 +173,15 @@ export function AddAdModal({ isOpen, onClose, onSuccess, testMode = false }: Add
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Image URL <span className="text-red-500">*</span>
-            </label>
-            <Input
-              type="url"
-              value={formData.asset_url}
-              onChange={(e) => setFormData({ ...formData, asset_url: e.target.value })}
-              placeholder="https://example.com/ad-image.jpg"
-              required
+            <ImageUpload
+              section="ads"
+              imageType="ad"
+              isVerified={false}
+              testMode={testMode}
+              onUploadSuccess={(url) => setFormData({ ...formData, asset_url: url })}
+              onUploadError={(error) => setError(error)}
+              currentImage={formData.asset_url}
+              label="Upload Ad Banner/Creative"
             />
           </div>
 
