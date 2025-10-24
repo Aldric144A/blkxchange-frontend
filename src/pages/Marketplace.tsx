@@ -7,6 +7,8 @@ import { Star, ShoppingCart, Store } from 'lucide-react';
 import { api } from '../api';
 import { Product } from '../types';
 import { SidebarAd } from '../components/ads';
+import { addToCart } from '../utils/cart';
+import FloatingCart from '../components/FloatingCart';
 
 const categories = [
   { label: 'All Categories', value: 'all', group: '' },
@@ -44,6 +46,16 @@ export default function Marketplace() {
     } else {
       setSearchParams({});
     }
+  };
+
+  const handleAddToCart = (product: Product) => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image_url: product.image_url,
+      vendor_name: product.vendor_name,
+    });
   };
 
   return (
@@ -207,7 +219,10 @@ export default function Marketplace() {
                   </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0">
-                  <Button className="w-full bg-brand-gold text-brand-black hover:bg-opacity-90">
+                  <Button 
+                    onClick={() => handleAddToCart(product)}
+                    className="w-full bg-brand-gold text-brand-black hover:bg-opacity-90"
+                  >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Add to Cart
                   </Button>
@@ -222,6 +237,8 @@ export default function Marketplace() {
           </aside>
         </div>
       </div>
+
+      <FloatingCart />
     </div>
   );
 }

@@ -96,6 +96,18 @@ export default function Professionals() {
     }
   };
 
+  const handleBookConsultation = (professional: Professional) => {
+    if (professional.website) {
+      window.open(professional.website, '_blank', 'noopener,noreferrer');
+    } else if (professional.email) {
+      const subject = encodeURIComponent('Consultation Request from BlkXchange');
+      const body = encodeURIComponent("Hello, I'm interested in scheduling a consultation.");
+      window.location.href = `mailto:${professional.email}?subject=${subject}&body=${body}`;
+    } else {
+      alert('This professional has not yet enabled direct booking.');
+    }
+  };
+
   const displayedProfessionals = searchMode === 'nearby' ? nearbyResults : professionals;
 
   return (
@@ -300,7 +312,10 @@ export default function Professionals() {
                   )}
                 </CardContent>
                 <CardFooter className="p-6 pt-0">
-                  <Button className="w-full bg-brand-gold text-brand-black hover:bg-opacity-90">
+                  <Button 
+                    onClick={() => handleBookConsultation(professional)}
+                    className="w-full bg-brand-gold text-brand-black hover:bg-opacity-90"
+                  >
                     <Calendar className="w-4 h-4 mr-2" />
                     Book Consultation
                   </Button>

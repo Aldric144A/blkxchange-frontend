@@ -66,6 +66,7 @@ export interface Professional {
   credentials: string;
   hourly_rate?: number;
   phone?: string;
+  website?: string;
   image_url?: string;
   verified: boolean;
   rating: number;
