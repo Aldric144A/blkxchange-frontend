@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Loader2, ExternalLink, Mail, MapPin, Plus, Upload } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2, ExternalLink, Mail, MapPin, Plus, Upload, Edit, Trash2 } from 'lucide-react';
 import { AddProfessionalModal } from '@/components/AddProfessionalModal';
+import { EditProfessionalModal } from '@/components/EditProfessionalModal';
 import { BulkImportModal } from '@/components/BulkImportModal';
 
 interface PendingProfessional {
@@ -47,6 +48,8 @@ export default function AdminPendingProfessionals() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [adminSecret, setAdminSecret] = useState<string>('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingProfessional, setEditingProfessional] = useState<any>(null);
   const [showBulkImportModal, setShowBulkImportModal] = useState(false);
 
   useEffect(() => {
@@ -134,6 +137,40 @@ export default function AdminPendingProfessionals() {
     } catch (error) {
       console.error('Error rejecting professional:', error);
       alert('Failed to reject professional. Please try again.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleEdit = (professional: any) => {
+    setEditingProfessional(professional);
+    setShowEditModal(true);
+  };
+
+  const handleDelete = async (professionalId: string) => {
+    if (!confirm('Are you sure you want to delete this professional? This action cannot be undone.')) {
+      return;
+    }
+
+    setActionLoading(professionalId);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/admin/professionals/${professionalId}`,
+        {
+          method: 'DELETE',
+          headers: { 'X-Admin-Secret': adminSecret },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to delete professional');
+      }
+
+      alert('✅ Professional deleted successfully!');
+      await fetchPendingProfessionals();
+    } catch (error) {
+      console.error('Error deleting professional:', error);
+      alert('Failed to delete professional. Please try again.');
     } finally {
       setActionLoading(null);
     }
@@ -277,6 +314,24 @@ export default function AdminPendingProfessionals() {
 
                   <div className="flex gap-3 pt-4">
                     <Button
+                      onClick={() => handleEdit(professional)}
+                      disabled={actionLoading === professional.id}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      <Edit className="w-4 h-4 mr-2" />
+                      Edit
+                    </Button>
+
+                    <Button
+                      onClick={() => handleDelete(professional.id)}
+                      disabled={actionLoading === professional.id}
+                      variant="destructive"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete
+                    </Button>
+
+                    <Button
                       onClick={() => handleApprove(professional.id)}
                       disabled={actionLoading === professional.id}
                       className="flex-1 bg-green-600 hover:bg-green-700 text-white"
@@ -328,6 +383,16 @@ export default function AdminPendingProfessionals() {
           setShowAddModal(false);
         }}
         
+      />
+
+      <EditProfessionalModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        onSuccess={() => {
+          fetchPendingProfessionals();
+          setShowEditModal(false);
+        }}
+        professional={editingProfessional}
       />
 
       <BulkImportModal

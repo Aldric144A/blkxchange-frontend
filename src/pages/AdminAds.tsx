@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, ExternalLink, CheckCircle, XCircle, Plus } from 'lucide-react';
+import { Calendar, ExternalLink, CheckCircle, XCircle, Plus, Edit, Trash2 } from 'lucide-react';
 import { API_BASE_URL } from '../api';
 import { AddAdModal } from '@/components/AddAdModal';
+import { EditAdModal } from '@/components/EditAdModal';
 import { TestModeToggle } from '@/components/TestModeToggle';
 
 interface AdCreative {
@@ -37,6 +38,8 @@ export default function AdminAds() {
   const [adminSecret, setAdminSecret] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingAd, setEditingAd] = useState<any>(null);
   const [testMode, setTestMode] = useState(false);
 
   useEffect(() => {
@@ -93,6 +96,37 @@ export default function AdminAds() {
       }
     } catch (error) {
       console.error('Error updating ad status:', error);
+    }
+  };
+
+  const handleEdit = (ad: any) => {
+    setEditingAd(ad);
+    setShowEditModal(true);
+  };
+
+  const handleDelete = async (adId: string) => {
+    if (!confirm('Are you sure you want to delete this ad? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/ads/${adId}`,
+        {
+          method: 'DELETE',
+          headers: { 'X-Admin-Secret': adminSecret },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to delete ad');
+      }
+
+      alert('✅ Ad deleted successfully!');
+      await loadData(adminSecret);
+    } catch (error) {
+      console.error('Error deleting ad:', error);
+      alert('Failed to delete ad. Please try again.');
     }
   };
 
@@ -264,6 +298,22 @@ export default function AdminAds() {
                         </div>
                         
                         <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => handleEdit(creative)}
+                            className="bg-blue-600 hover:bg-blue-700"
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            Edit
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleDelete(creative.id)}
+                          >
+                            <Trash2 className="w-4 h-4 mr-1" />
+                            Delete
+                          </Button>
                           {creative.status === 'pending' && (
                             <Button
                               size="sm"
@@ -338,6 +388,17 @@ export default function AdminAds() {
           setShowAddModal(false);
         }}
         
+        testMode={testMode}
+      />
+
+      <EditAdModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        onSuccess={() => {
+          loadData(adminSecret);
+          setShowEditModal(false);
+        }}
+        ad={editingAd}
         testMode={testMode}
       />
     </div>

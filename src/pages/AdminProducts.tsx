@@ -13,10 +13,13 @@ import {
   DollarSign,
   Box,
   Plus,
-  Upload
+  Upload,
+  Edit,
+  Trash2
 } from 'lucide-react';
 import { ProductEnhanced, ProductStatus } from '@/types';
 import { AddProductModal } from '@/components/AddProductModal';
+import { EditProductModal } from '@/components/EditProductModal';
 import { BulkImportModal } from '@/components/BulkImportModal';
 
 export default function AdminProducts() {
@@ -26,6 +29,8 @@ export default function AdminProducts() {
   const [actionLoading, setActionLoading] = useState(false);
   const [adminSecret, setAdminSecret] = useState<string>('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<any>(null);
   const [showBulkImportModal, setShowBulkImportModal] = useState(false);
 
   useEffect(() => {
@@ -104,6 +109,40 @@ export default function AdminProducts() {
     } catch (error) {
       console.error('Error rejecting product:', error);
       alert('Failed to reject product. Please try again.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleEdit = (product: any) => {
+    setEditingProduct(product);
+    setShowEditModal(true);
+  };
+
+  const handleDelete = async (productId: string) => {
+    if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/admin/products/${productId}`,
+        {
+          method: 'DELETE',
+          headers: { 'X-Admin-Secret': adminSecret },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to delete product');
+      }
+
+      alert('✅ Product deleted successfully!');
+      await fetchProducts();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Failed to delete product. Please try again.');
     } finally {
       setActionLoading(false);
     }
@@ -371,15 +410,35 @@ export default function AdminProducts() {
                             {new Date(product.created_at).toLocaleDateString()}
                           </td>
                           <td className="py-3 px-4">
-                            <Button
-                              onClick={() => setSelectedProduct(product)}
-                              variant="outline"
-                              size="sm"
-                              className="border-brand-gold text-brand-black hover:bg-brand-gold"
-                            >
-                              <Eye className="w-4 h-4 mr-1" />
-                              View
-                            </Button>
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={() => handleEdit(product)}
+                                variant="outline"
+                                size="sm"
+                                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                              >
+                                <Edit className="w-4 h-4 mr-1" />
+                                Edit
+                              </Button>
+                              <Button
+                                onClick={() => handleDelete(product.id)}
+                                variant="outline"
+                                size="sm"
+                                className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
+                              >
+                                <Trash2 className="w-4 h-4 mr-1" />
+                                Delete
+                              </Button>
+                              <Button
+                                onClick={() => setSelectedProduct(product)}
+                                variant="outline"
+                                size="sm"
+                                className="border-brand-gold text-brand-black hover:bg-brand-gold"
+                              >
+                                <Eye className="w-4 h-4 mr-1" />
+                                View
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -400,6 +459,16 @@ export default function AdminProducts() {
           setShowAddModal(false);
         }}
         
+      />
+
+      <EditProductModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        onSuccess={() => {
+          fetchProducts();
+          setShowEditModal(false);
+        }}
+        product={editingProduct}
       />
 
       <BulkImportModal
