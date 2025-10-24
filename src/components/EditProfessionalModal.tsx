@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Professional, ProfessionalCategory } from '@/types';
 import ImageUpload from '@/components/ImageUpload';
 import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface EditProfessionalModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface EditProfessionalModalProps {
 }
 
 export function EditProfessionalModal({ isOpen, onClose, onSuccess, professional }: EditProfessionalModalProps) {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: professional.name,
     title: professional.title,
@@ -78,9 +80,21 @@ export function EditProfessionalModal({ isOpen, onClose, onSuccess, professional
         throw new Error('Failed to update professional');
       }
 
+      toast({
+        title: "✅ Category Saved Successfully",
+        description: "Professional information has been updated.",
+      });
+      
       onSuccess();
+      onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update professional');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update professional';
+      setError(errorMessage);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -157,18 +171,23 @@ export function EditProfessionalModal({ isOpen, onClose, onSuccess, professional
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ProfessionalCategory.HEALTH}>Health & Medical</SelectItem>
-                  <SelectItem value={ProfessionalCategory.LEGAL}>Legal & Advocacy</SelectItem>
-                  <SelectItem value={ProfessionalCategory.FINANCE}>Finance & Insurance</SelectItem>
-                  <SelectItem value={ProfessionalCategory.COACHING}>Coaching</SelectItem>
-                  <SelectItem value={ProfessionalCategory.CONSULTING}>Consulting</SelectItem>
-                  <SelectItem value={ProfessionalCategory.EDUCATION}>Education & Tutoring</SelectItem>
-                  <SelectItem value={ProfessionalCategory.REAL_ESTATE}>Real Estate & Wealth</SelectItem>
-                  <SelectItem value={ProfessionalCategory.BARBERS_BEAUTY}>Barbers & Beauty</SelectItem>
-                  <SelectItem value={ProfessionalCategory.PHOTOGRAPHY_DESIGN}>Photography & Design</SelectItem>
-                  <SelectItem value={ProfessionalCategory.AUTOMOTIVE_HOUSING}>Automotive & Housing Finance</SelectItem>
+                  <SelectItem value={ProfessionalCategory.COACHING_CONSULTING}>Coaching & Consulting</SelectItem>
+                  <SelectItem value={ProfessionalCategory.EDUCATION_TUTORING}>Education & Tutoring</SelectItem>
+                  <SelectItem value={ProfessionalCategory.EVENT_HOSPITALITY}>Event & Hospitality Services</SelectItem>
+                  <SelectItem value={ProfessionalCategory.FINANCE_INSURANCE}>Finance & Insurance</SelectItem>
+                  <SelectItem value={ProfessionalCategory.HEALTH_MEDICAL}>Health & Medical</SelectItem>
+                  <SelectItem value={ProfessionalCategory.LEGAL_ADVOCACY}>Legal & Advocacy</SelectItem>
                   <SelectItem value={ProfessionalCategory.MEDIA_MARKETING}>Media & Marketing</SelectItem>
-                  <SelectItem value={ProfessionalCategory.NONPROFITS}>Nonprofits & Community</SelectItem>
+                  <SelectItem value={ProfessionalCategory.NONPROFITS_COMMUNITY}>Nonprofits & Community Services</SelectItem>
+                  <SelectItem value={ProfessionalCategory.REAL_ESTATE_WEALTH}>Real Estate & Wealth Advisors</SelectItem>
+                  <SelectItem value={ProfessionalCategory.TECHNOLOGY_INNOVATION}>Technology & Innovation</SelectItem>
+                  <SelectItem value={ProfessionalCategory.TRADES_HOME}>Trades & Home Services</SelectItem>
+                  <SelectItem value={ProfessionalCategory.TRANSPORTATION_LOGISTICS}>Transportation & Logistics</SelectItem>
+                  <SelectItem value={ProfessionalCategory.ARTS_CULTURE}>Arts & Culture Education</SelectItem>
+                  <SelectItem value={ProfessionalCategory.BLACK_MEDIA}>Black Media & Publications</SelectItem>
+                  <SelectItem value={ProfessionalCategory.FAITH_RESILIENCE}>Faith & Resilience</SelectItem>
+                  <SelectItem value={ProfessionalCategory.HBCUS_EDUCATION}>HBCUs & Educational Partners</SelectItem>
+                  <SelectItem value={ProfessionalCategory.TRAVEL_HERITAGE}>Travel & Heritage Experiences</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -104,7 +104,15 @@ export default function Professionals() {
       const body = encodeURIComponent("Hello, I'm interested in scheduling a consultation.");
       window.location.href = `mailto:${professional.email}?subject=${subject}&body=${body}`;
     } else {
-      alert('This professional has not yet enabled direct booking.');
+      alert('This professional has not added contact information yet.');
+    }
+  };
+
+  const handleContactEmail = (professional: Professional) => {
+    if (professional.email) {
+      const subject = encodeURIComponent('Consultation Request from BlkXchange');
+      const body = encodeURIComponent("Hello, I'm interested in scheduling a consultation.");
+      window.location.href = `mailto:${professional.email}?subject=${subject}&body=${body}`;
     }
   };
 
@@ -311,7 +319,7 @@ export default function Professionals() {
                     </p>
                   )}
                 </CardContent>
-                <CardFooter className="p-6 pt-0">
+                <CardFooter className="p-6 pt-0 flex flex-col gap-2">
                   <Button 
                     onClick={() => handleBookConsultation(professional)}
                     className="w-full bg-brand-gold text-brand-black hover:bg-opacity-90"
@@ -319,6 +327,15 @@ export default function Professionals() {
                     <Calendar className="w-4 h-4 mr-2" />
                     Book Consultation
                   </Button>
+                  {professional.website && professional.email && (
+                    <Button 
+                      onClick={() => handleContactEmail(professional)}
+                      variant="outline"
+                      className="w-full border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                    >
+                      Contact via Email
+                    </Button>
+                  )}
                 </CardFooter>
               </Card>
             ))}

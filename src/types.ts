@@ -12,18 +12,23 @@ export enum ProductCategory {
 }
 
 export enum ProfessionalCategory {
-  HEALTH = "health",
-  LEGAL = "legal",
-  FINANCE = "finance",
-  COACHING = "coaching",
-  CONSULTING = "consulting",
-  EDUCATION = "education",
-  REAL_ESTATE = "real_estate",
-  BARBERS_BEAUTY = "barbers_beauty",
-  PHOTOGRAPHY_DESIGN = "photography_design",
-  AUTOMOTIVE_HOUSING = "automotive_housing",
+  COACHING_CONSULTING = "coaching_consulting",
+  EDUCATION_TUTORING = "education_tutoring",
+  EVENT_HOSPITALITY = "event_hospitality",
+  FINANCE_INSURANCE = "finance_insurance",
+  HEALTH_MEDICAL = "health_medical",
+  LEGAL_ADVOCACY = "legal_advocacy",
   MEDIA_MARKETING = "media_marketing",
-  NONPROFITS = "nonprofits",
+  NONPROFITS_COMMUNITY = "nonprofits_community",
+  REAL_ESTATE_WEALTH = "real_estate_wealth",
+  TECHNOLOGY_INNOVATION = "technology_innovation",
+  TRADES_HOME = "trades_home",
+  TRANSPORTATION_LOGISTICS = "transportation_logistics",
+  ARTS_CULTURE = "arts_culture",
+  BLACK_MEDIA = "black_media",
+  FAITH_RESILIENCE = "faith_resilience",
+  HBCUS_EDUCATION = "hbcus_education",
+  TRAVEL_HERITAGE = "travel_heritage",
   OTHER = "other"
 }
 

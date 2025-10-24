@@ -62,6 +62,10 @@ export default function Marketplace() {
     alert(`Contact ${product.vendor_name || 'Vendor'}\n\nNote: Vendor contact information will be available soon. This feature requires vendor email/website to be added to the product data.`);
   };
 
+  const handleVisitStore = (product: Product) => {
+    alert(`Visit ${product.vendor_name || 'Vendor'}'s Store\n\nNote: Vendor store links will be available soon. This feature requires vendor website information to be added to the product data.`);
+  };
+
   return (
     <div className="min-h-screen bg-brand-ivory">
       <div className="bg-brand-black text-brand-ivory py-12">
@@ -222,20 +226,31 @@ export default function Marketplace() {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="p-4 pt-0 flex gap-2">
+                <CardFooter className="p-4 pt-0 flex flex-col gap-2">
+                  <div className="flex gap-2 w-full">
+                    <Button 
+                      onClick={() => handleAddToCart(product)}
+                      className="flex-1 bg-brand-gold text-brand-black hover:bg-opacity-90"
+                      title="Checkout coming soon"
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Add to Cart
+                    </Button>
+                    <Button 
+                      onClick={() => handleContactVendor(product)}
+                      variant="outline"
+                      className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                    >
+                      <Mail className="w-4 h-4" />
+                    </Button>
+                  </div>
                   <Button 
-                    onClick={() => handleAddToCart(product)}
-                    className="flex-1 bg-brand-gold text-brand-black hover:bg-opacity-90"
-                  >
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Add to Cart
-                  </Button>
-                  <Button 
-                    onClick={() => handleContactVendor(product)}
+                    onClick={() => handleVisitStore(product)}
                     variant="outline"
-                    className="border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
+                    className="w-full border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-black"
                   >
-                    <Mail className="w-4 h-4" />
+                    <Store className="w-4 h-4 mr-2" />
+                    Visit Store
                   </Button>
                 </CardFooter>
               </Card>
