@@ -117,7 +117,6 @@ export function LocationSearchBar({ onLocationChange, onLoading }: LocationSearc
             onChange={(e) => setRadius(Number(e.target.value))}
             className="bg-white/10 border border-brand-gold/30 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-gold"
           >
-            <option value={5}>5 miles</option>
             <option value={10}>10 miles</option>
             <option value={25}>25 miles</option>
             <option value={50}>50 miles</option>

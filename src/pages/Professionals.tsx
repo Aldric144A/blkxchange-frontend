@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Star, Calendar, CheckCircle, Briefcase, MapPin, Plus } from 'lucide-react';
+import { Star, Calendar, Briefcase, MapPin, Plus } from 'lucide-react';
 import { api } from '../api';
 import { Professional } from '../types';
 import { SidebarAd } from '../components/ads';
@@ -12,6 +12,7 @@ import { LocationSearchBar } from '../components/LocationSearchBar';
 import { ProfessionalMap } from '../components/ProfessionalMap';
 import { NearbyProfessionalsList } from '../components/NearbyProfessionalsList';
 import { SubmitProfessionalModal } from '../components/SubmitProfessionalModal';
+import { VerificationBadge } from '../components/VerificationBadge';
 
 const categories = [
   { label: 'All Categories', value: 'all', group: '' },
@@ -265,9 +266,7 @@ export default function Professionals() {
                           </h3>
                           <p className="text-sm text-gray-600">{professional.title}</p>
                         </div>
-                        {professional.verified && (
-                          <CheckCircle className="w-5 h-5 text-brand-gold flex-shrink-0" />
-                        )}
+                        <VerificationBadge verified={professional.verified} size="md" />
                       </div>
                     </div>
                   </div>
