@@ -104,7 +104,15 @@ export default function Professionals() {
       const body = encodeURIComponent("Hello, I'm interested in scheduling a consultation.");
       window.location.href = `mailto:${professional.email}?subject=${subject}&body=${body}`;
     } else {
-      alert('This professional has not yet enabled direct booking.');
+      alert('This professional has not added contact information yet.');
+    }
+  };
+
+  const handleContactEmail = (professional: Professional) => {
+    if (professional.email) {
+      const subject = encodeURIComponent('Consultation Request from BlkXchange');
+      const body = encodeURIComponent("Hello, I'm interested in scheduling a consultation.");
+      window.location.href = `mailto:${professional.email}?subject=${subject}&body=${body}`;
     }
   };
 
@@ -312,13 +320,23 @@ export default function Professionals() {
                   )}
                 </CardContent>
                 <CardFooter className="p-6 pt-0">
-                  <Button 
-                    onClick={() => handleBookConsultation(professional)}
-                    className="w-full bg-brand-gold text-brand-black hover:bg-opacity-90"
-                  >
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Book Consultation
-                  </Button>
+                  <div className="flex flex-col gap-2 mt-4 w-full">
+                    <Button 
+                      onClick={() => handleBookConsultation(professional)}
+                      className="w-full bg-[#00A86B] text-white hover:bg-[#00A86B]/90"
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Book Consultation
+                    </Button>
+                    {professional.website && professional.email && (
+                      <Button 
+                        onClick={() => handleContactEmail(professional)}
+                        className="w-full bg-brand-black text-white border-2 border-[#C5A14E] hover:bg-brand-black/90"
+                      >
+                        Contact Professional
+                      </Button>
+                    )}
+                  </div>
                 </CardFooter>
               </Card>
             ))}
