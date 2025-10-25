@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Users, Heart, Info, TrendingUp, Newspaper, Briefcase } from 'lucide-react';
+import { ShoppingBag, Users, Heart, Info, TrendingUp, Newspaper, Briefcase, MessageCircle } from 'lucide-react';
 
 export default function Navigation() {
   return (
@@ -33,6 +33,13 @@ export default function Navigation() {
             >
               <TrendingUp className="w-4 h-4" />
               <span>Invest</span>
+            </Link>
+            <Link 
+              to="/community" 
+              className="flex items-center space-x-1 hover:text-brand-gold transition-colors"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>Community</span>
             </Link>
             <Link 
               to="/partner" 

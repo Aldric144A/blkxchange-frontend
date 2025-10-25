@@ -25,6 +25,12 @@ import SubmitStory from './pages/SubmitStory';
 import Partner from './pages/Partner';
 import VendorPartner from './pages/VendorPartner';
 import Cultural from './pages/Cultural';
+import MembershipUpgrade from './pages/MembershipUpgrade';
+import { Community } from './pages/Community';
+import { Forum } from './pages/Forum';
+import { Events } from './pages/Events';
+import { Questions } from './pages/Questions';
+import { Leads } from './pages/Leads';
 
 function App() {
   return (
@@ -56,6 +62,12 @@ function App() {
           <Route path="/partner" element={<Partner />} />
           <Route path="/vendor-partner" element={<VendorPartner />} />
           <Route path="/cultural" element={<Cultural />} />
+          <Route path="/membership-upgrade" element={<MembershipUpgrade />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/community/forum" element={<Forum />} />
+          <Route path="/community/events" element={<Events />} />
+          <Route path="/community/questions" element={<Questions />} />
+          <Route path="/community/leads" element={<Leads />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
