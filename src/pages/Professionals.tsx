@@ -9,10 +9,11 @@ import { api } from '../api';
 import { Professional } from '../types';
 import { SidebarAd } from '../components/ads';
 import { LocationSearchBar } from '../components/LocationSearchBar';
-import { ProfessionalMap } from '../components/ProfessionalMap';
-import { NearbyProfessionalsList } from '../components/NearbyProfessionalsList';
 import { SubmitProfessionalModal } from '../components/SubmitProfessionalModal';
 import { VerificationBadge } from '../components/VerificationBadge';
+import { MembershipBadge } from '../components/MembershipBadge';
+import { MapboxMap } from '../components/MapboxMap';
+import { List, Map as MapIcon } from 'lucide-react';
 
 const categories = [
   { label: 'All Categories', value: 'all', group: '' },
@@ -47,6 +48,7 @@ export default function Professionals() {
   const [mapCenter, setMapCenter] = useState<[number, number]>([39.8283, -98.5795]);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const [entityFilter, setEntityFilter] = useState<'all' | 'professional' | 'vendor'>('all');
 
   useEffect(() => {
     if (searchMode === 'all') {
@@ -69,10 +71,11 @@ export default function Professionals() {
         lat: latitude,
         lng: longitude,
         radius: searchRadius,
+        entity_type: entityFilter === 'all' ? undefined : entityFilter,
         category: selectedCategory === 'all' ? undefined : selectedCategory
       };
 
-      const results = await api.getProfessionalsNearby(params);
+      const results = await api.getDirectoryNearby(params);
       if (Array.isArray(results)) {
         setNearbyResults(results);
       } else {
@@ -169,47 +172,74 @@ export default function Professionals() {
               />
             </div>
 
-            {/* Map Section */}
-            {searchMode === 'nearby' && showMap && nearbyResults.length > 0 && (
+            {/* Map/List Toggle */}
+            {displayedProfessionals.length > 0 && (
+              <div className="mb-6 flex justify-end">
+                <div className="inline-flex rounded-lg border border-gray-300 bg-white">
+                  <Button
+                    onClick={() => setShowMap(false)}
+                    className={`rounded-l-lg ${!showMap ? 'bg-brand-gold text-brand-black' : 'bg-white text-gray-700'} hover:bg-brand-gold/90`}
+                  >
+                    <List className="w-4 h-4 mr-2" />
+                    List View
+                  </Button>
+                  <Button
+                    onClick={() => setShowMap(true)}
+                    className={`rounded-r-lg ${showMap ? 'bg-brand-gold text-brand-black' : 'bg-white text-gray-700'} hover:bg-brand-gold/90`}
+                  >
+                    <MapIcon className="w-4 h-4 mr-2" />
+                    Map View
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Mapbox Interactive Map */}
+            {showMap && displayedProfessionals.length > 0 && (
               <div className="mb-8">
-                <ProfessionalMap
-                  professionals={nearbyResults}
+                <MapboxMap
+                  professionals={displayedProfessionals}
                   center={mapCenter}
                   onProfessionalClick={handleProfessionalClick}
                 />
               </div>
             )}
 
-            {/* Nearby Professionals List */}
-            {searchMode === 'nearby' && !loading && (
-              <div className="mb-8">
-                <NearbyProfessionalsList
-                  professionals={nearbyResults}
-                  onProfessionalClick={handleProfessionalClick}
-                />
-              </div>
-            )}
-
             <div className="mb-8 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          <div className="flex items-center gap-4">
-            <label className="font-semibold text-brand-black">Filter by:</label>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="All Categories" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem 
-                    key={cat.value} 
-                    value={cat.value}
-                    disabled={cat.disabled}
-                    className={cat.group === 'header' ? 'font-semibold text-[#C5A14E] cursor-default' : 'text-brand-black hover:text-[#C5A14E] transition'}
-                  >
-                    {cat.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center gap-4">
+              <label className="font-semibold text-brand-black">Type:</label>
+              <Select value={entityFilter} onValueChange={(value: any) => setEntityFilter(value)}>
+                <SelectTrigger className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Listings</SelectItem>
+                  <SelectItem value="professional">Professionals</SelectItem>
+                  <SelectItem value="vendor">Vendors</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-4">
+              <label className="font-semibold text-brand-black">Category:</label>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => (
+                    <SelectItem 
+                      key={cat.value} 
+                      value={cat.value}
+                      disabled={cat.disabled}
+                      className={cat.group === 'header' ? 'font-semibold text-[#C5A14E] cursor-default' : 'text-brand-black hover:text-[#C5A14E] transition'}
+                    >
+                      {cat.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <Button
@@ -233,7 +263,7 @@ export default function Professionals() {
           <div className="text-center py-12">
             <div className="text-xl text-gray-600">No professionals found{searchMode === 'nearby' ? ' in this area' : ' in this category'}.</div>
           </div>
-        ) : (
+        ) : !showMap ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayedProfessionals.map((professional) => (
               <Card 
@@ -273,8 +303,14 @@ export default function Professionals() {
 
                   <div className="flex items-center gap-2 mb-3">
                     <Badge className="capitalize bg-brand-charcoal text-brand-gold">
-                      {professional.category}
+                      {professional.type === 'vendor' ? 'Vendor' : professional.category}
                     </Badge>
+                    {professional.type && (
+                      <Badge className={professional.type === 'vendor' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'}>
+                        {professional.type === 'vendor' ? '🏪 Vendor' : '👔 Professional'}
+                      </Badge>
+                    )}
+                    <MembershipBadge tier={professional.membership_tier} size="sm" />
                     {searchMode === 'nearby' && professional.distance_miles !== undefined && (
                       <Badge className="bg-green-100 text-green-800 border-green-300">
                         <MapPin className="w-3 h-3 mr-1" />
@@ -325,14 +361,14 @@ export default function Professionals() {
                       className="w-full bg-[#00A86B] text-white hover:bg-[#00A86B]/90"
                     >
                       <Calendar className="w-4 h-4 mr-2" />
-                      Book Consultation
+                      {professional.type === 'vendor' ? 'Contact Vendor' : 'Book Consultation'}
                     </Button>
                     {professional.website && professional.email && (
                       <Button 
                         onClick={() => handleContactEmail(professional)}
                         className="w-full bg-brand-black text-white border-2 border-[#C5A14E] hover:bg-brand-black/90"
                       >
-                        Contact Professional
+                        {professional.type === 'vendor' ? 'Email Vendor' : 'Contact Professional'}
                       </Button>
                     )}
                   </div>
@@ -340,7 +376,7 @@ export default function Professionals() {
               </Card>
             ))}
           </div>
-        )}
+        ) : null}
           </div>
           <aside className="hidden md:block">
             <SidebarAd page="professionals" />
