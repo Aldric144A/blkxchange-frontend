@@ -138,5 +138,10 @@ export const api = {
   async getInvestImpactStats(): Promise<InvestImpactStats> {
     const response = await fetch(`${API_URL}/api/invest-impact`);
     return response.json();
+  },
+
+  async getNewListingsCount(): Promise<{ vendors: number; professionals: number; total: number }> {
+    const response = await fetch(`${API_URL}/api/listings/new-count`);
+    return response.json();
   }
 };
