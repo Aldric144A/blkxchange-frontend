@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Users, Heart, Info, TrendingUp, Newspaper, Briefcase, MessageCircle, Menu, X, Facebook, Instagram, Linkedin } from 'lucide-react';
+import { ShoppingBag, Users, Heart, Info, TrendingUp, Newspaper, Briefcase, MessageCircle, Menu, X, Facebook, Instagram, Linkedin, Crown } from 'lucide-react';
 import { api } from '../api';
 
 export default function Navigation() {
@@ -95,6 +95,13 @@ export default function Navigation() {
 
             <div className="hidden md:flex items-center space-x-4">
               <Link 
+                to="/blkxchange360" 
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-yellow-600 text-white font-bold rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-300"
+              >
+                <Crown className="w-4 h-4" />
+                <span>BlkXchange 360™</span>
+              </Link>
+              <Link 
                 to="/vendor-apply" 
                 className="px-4 py-2 bg-brand-gold text-brand-black font-semibold rounded hover:bg-opacity-90 transition-colors"
               >
@@ -153,8 +160,17 @@ export default function Navigation() {
             ))}
 
             <Link
+              to="/blkxchange360"
+              className="flex items-center justify-center gap-2 px-4 py-3 mt-4 bg-gradient-to-r from-emerald-600 to-yellow-600 text-white font-bold rounded-lg hover:shadow-lg transition-all"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Crown className="w-5 h-5" />
+              <span>BlkXchange 360™</span>
+            </Link>
+
+            <Link
               to="/vendor-apply"
-              className="flex items-center justify-center px-4 py-3 mt-4 bg-brand-gold text-brand-black font-bold rounded-lg hover:bg-opacity-90 transition-colors"
+              className="flex items-center justify-center px-4 py-3 mt-2 bg-brand-gold text-brand-black font-bold rounded-lg hover:bg-opacity-90 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Become a Vendor

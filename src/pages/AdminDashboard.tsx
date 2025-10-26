@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, Users, Briefcase, ShoppingBag, Megaphone, Clock, 
   Globe, Settings, LogOut, Menu, X, Search, Plus, Download,
-  CheckCircle
+  CheckCircle, Crown, BookOpen, Award, History, MessageSquare, BarChart3
 } from 'lucide-react';
 import { isAdminAuthenticated } from '@/utils/auth';
 
@@ -47,6 +47,14 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     { path: '/admin/pending', icon: Clock, label: 'Pending Submissions' },
     { path: '/admin/community', icon: Globe, label: 'Community & Events' },
     { path: '/admin/settings', icon: Settings, label: 'Settings' },
+  ];
+
+  const blkXchange360Items = [
+    { path: '/admin/360/wealth', icon: BookOpen, label: 'Wealth Hub Management' },
+    { path: '/admin/360/legacy', icon: Award, label: 'Legacy Wall Moderation' },
+    { path: '/admin/360/history', icon: History, label: 'History Import' },
+    { path: '/admin/360/forum', icon: MessageSquare, label: 'Forum Moderation' },
+    { path: '/admin/360/analytics', icon: BarChart3, label: '360 Analytics Dashboard' },
   ];
 
   const isActive = (path: string, exact?: boolean) => {
@@ -109,6 +117,34 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                   </Link>
                 );
               })}
+
+              {/* BlkXchange 360 Manager Section */}
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <div className="flex items-center space-x-2 px-4 mb-3">
+                  <Crown className="w-5 h-5 text-[#C5A14E]" />
+                  <h3 className="text-sm font-bold text-[#C5A14E] uppercase tracking-wider">
+                    BlkXchange 360™ Manager
+                  </h3>
+                </div>
+                {blkXchange360Items.map((item) => {
+                  const Icon = item.icon;
+                  const active = isActive(item.path);
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                        active
+                          ? 'bg-[#00A86B] text-white'
+                          : 'text-white/80 hover:bg-white/10 hover:text-[#C5A14E]'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span className="font-medium text-sm">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </nav>
 

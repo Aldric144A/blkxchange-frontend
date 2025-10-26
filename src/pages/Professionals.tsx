@@ -9,10 +9,11 @@ import { api } from '../api';
 import { Professional } from '../types';
 import { SidebarAd } from '../components/ads';
 import { LocationSearchBar } from '../components/LocationSearchBar';
-import { ProfessionalMap } from '../components/ProfessionalMap';
-import { NearbyProfessionalsList } from '../components/NearbyProfessionalsList';
 import { SubmitProfessionalModal } from '../components/SubmitProfessionalModal';
 import { VerificationBadge } from '../components/VerificationBadge';
+import { MembershipBadge } from '../components/MembershipBadge';
+import { MapboxMap } from '../components/MapboxMap';
+import { List, Map as MapIcon } from 'lucide-react';
 
 const categories = [
   { label: 'All Categories', value: 'all', group: '' },
@@ -169,22 +170,34 @@ export default function Professionals() {
               />
             </div>
 
-            {/* Map Section */}
-            {searchMode === 'nearby' && showMap && nearbyResults.length > 0 && (
-              <div className="mb-8">
-                <ProfessionalMap
-                  professionals={nearbyResults}
-                  center={mapCenter}
-                  onProfessionalClick={handleProfessionalClick}
-                />
+            {/* Map/List Toggle */}
+            {displayedProfessionals.length > 0 && (
+              <div className="mb-6 flex justify-end">
+                <div className="inline-flex rounded-lg border border-gray-300 bg-white">
+                  <Button
+                    onClick={() => setShowMap(false)}
+                    className={`rounded-l-lg ${!showMap ? 'bg-brand-gold text-brand-black' : 'bg-white text-gray-700'} hover:bg-brand-gold/90`}
+                  >
+                    <List className="w-4 h-4 mr-2" />
+                    List View
+                  </Button>
+                  <Button
+                    onClick={() => setShowMap(true)}
+                    className={`rounded-r-lg ${showMap ? 'bg-brand-gold text-brand-black' : 'bg-white text-gray-700'} hover:bg-brand-gold/90`}
+                  >
+                    <MapIcon className="w-4 h-4 mr-2" />
+                    Map View
+                  </Button>
+                </div>
               </div>
             )}
 
-            {/* Nearby Professionals List */}
-            {searchMode === 'nearby' && !loading && (
+            {/* Mapbox Interactive Map */}
+            {showMap && displayedProfessionals.length > 0 && (
               <div className="mb-8">
-                <NearbyProfessionalsList
-                  professionals={nearbyResults}
+                <MapboxMap
+                  professionals={displayedProfessionals}
+                  center={mapCenter}
                   onProfessionalClick={handleProfessionalClick}
                 />
               </div>
@@ -233,7 +246,7 @@ export default function Professionals() {
           <div className="text-center py-12">
             <div className="text-xl text-gray-600">No professionals found{searchMode === 'nearby' ? ' in this area' : ' in this category'}.</div>
           </div>
-        ) : (
+        ) : !showMap ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayedProfessionals.map((professional) => (
               <Card 
@@ -275,6 +288,7 @@ export default function Professionals() {
                     <Badge className="capitalize bg-brand-charcoal text-brand-gold">
                       {professional.category}
                     </Badge>
+                    <MembershipBadge tier={professional.membership_tier} size="sm" />
                     {searchMode === 'nearby' && professional.distance_miles !== undefined && (
                       <Badge className="bg-green-100 text-green-800 border-green-300">
                         <MapPin className="w-3 h-3 mr-1" />
@@ -340,7 +354,7 @@ export default function Professionals() {
               </Card>
             ))}
           </div>
-        )}
+        ) : null}
           </div>
           <aside className="hidden md:block">
             <SidebarAd page="professionals" />

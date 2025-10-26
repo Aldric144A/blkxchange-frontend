@@ -32,6 +32,17 @@ import { Forum } from './pages/Forum';
 import { Events } from './pages/Events';
 import { Questions } from './pages/Questions';
 import { Leads } from './pages/Leads';
+import BlkXchange360 from './pages/BlkXchange360';
+import WealthHub from './pages/WealthHub';
+import LegacyWall from './pages/LegacyWall';
+import HistoryWindow from './pages/HistoryWindow';
+import Community360 from './pages/Community360';
+import Admin360 from './pages/Admin360';
+import Admin360Wealth from './pages/Admin360Wealth';
+import Admin360Legacy from './pages/Admin360Legacy';
+import Admin360History from './pages/Admin360History';
+import Admin360Forum from './pages/Admin360Forum';
+import Admin360Analytics from './pages/Admin360Analytics';
 
 function App() {
   return (
@@ -59,6 +70,14 @@ function App() {
             <Route path="professionals" element={<AdminProfessionals />} />
             <Route path="pending" element={<AdminPendingProfessionals />} />
           </Route>
+          <Route path="/admin/360" element={<Admin360 />}>
+            <Route index element={<Admin360Wealth />} />
+            <Route path="wealth" element={<Admin360Wealth />} />
+            <Route path="legacy" element={<Admin360Legacy />} />
+            <Route path="history" element={<Admin360History />} />
+            <Route path="forum" element={<Admin360Forum />} />
+            <Route path="analytics" element={<Admin360Analytics />} />
+          </Route>
           <Route path="/news" element={<News />} />
           <Route path="/news/all" element={<NewsAll />} />
           <Route path="/news/:slug" element={<NewsArticle />} />
@@ -72,6 +91,11 @@ function App() {
           <Route path="/community/events" element={<Events />} />
           <Route path="/community/questions" element={<Questions />} />
           <Route path="/community/leads" element={<Leads />} />
+          <Route path="/blkxchange360" element={<BlkXchange360 />} />
+          <Route path="/blkxchange360/wealth-hub" element={<WealthHub />} />
+          <Route path="/blkxchange360/legacy-wall" element={<LegacyWall />} />
+          <Route path="/blkxchange360/history-window" element={<HistoryWindow />} />
+          <Route path="/blkxchange360/community" element={<Community360 />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

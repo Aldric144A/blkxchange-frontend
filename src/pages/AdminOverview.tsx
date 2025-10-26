@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { 
   Users, Briefcase, ShoppingBag, DollarSign, TrendingUp, 
-  Clock, CheckCircle, XCircle, AlertCircle 
+  Clock, CheckCircle, XCircle, AlertCircle, Crown, ArrowRight 
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface MetricsData {
   vendors: {
@@ -126,9 +127,19 @@ export default function AdminOverview() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-[#C5A14E] mb-2">Admin Overview</h2>
-        <p className="text-white/60">Welcome to the BlkXchange™ Admin Portal</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-[#C5A14E] mb-2">Admin Overview</h2>
+          <p className="text-white/60">Welcome to the BlkXchange™ Admin Portal</p>
+        </div>
+        <Link
+          to="/admin/360"
+          className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+        >
+          <Crown className="w-5 h-5" />
+          Go to BlkXchange 360 Manager
+          <ArrowRight className="w-5 h-5" />
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
