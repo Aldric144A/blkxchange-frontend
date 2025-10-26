@@ -19,6 +19,7 @@ import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
 import AdminProfessionals from './pages/AdminProfessionals';
 import AdminPendingProfessionals from './pages/AdminPendingProfessionals';
+import Admin360 from './pages/Admin360';
 import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
 import NewsAll from './pages/NewsAll';
@@ -32,6 +33,7 @@ import { Forum } from './pages/Forum';
 import { Events } from './pages/Events';
 import { Questions } from './pages/Questions';
 import { Leads } from './pages/Leads';
+import BlkXchange360 from './pages/BlkXchange360';
 
 function App() {
   return (
@@ -58,6 +60,7 @@ function App() {
             <Route path="ads" element={<AdminAds />} />
             <Route path="professionals" element={<AdminProfessionals />} />
             <Route path="pending" element={<AdminPendingProfessionals />} />
+            <Route path="360" element={<Admin360 />} />
           </Route>
           <Route path="/news" element={<News />} />
           <Route path="/news/all" element={<NewsAll />} />
@@ -72,6 +75,7 @@ function App() {
           <Route path="/community/events" element={<Events />} />
           <Route path="/community/questions" element={<Questions />} />
           <Route path="/community/leads" element={<Leads />} />
+          <Route path="/blkxchange360" element={<BlkXchange360 />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -36,6 +36,8 @@ export interface Vendor {
   phone?: string;
   stripe_account_id?: string;
   verified: boolean;
+  membership_tier: MembershipTier;
+  subscription_id?: string;
   total_sales: number;
   community_contribution: number;
   created_at: string;
@@ -56,6 +58,12 @@ export interface Product {
   created_at: string;
 }
 
+export enum MembershipTier {
+  BASIC = "basic",
+  FEATURED = "featured",
+  ELITE = "elite"
+}
+
 export interface Professional {
   id: string;
   email: string;
@@ -69,6 +77,8 @@ export interface Professional {
   website?: string;
   image_url?: string;
   verified: boolean;
+  membership_tier: MembershipTier;
+  subscription_id?: string;
   rating: number;
   reviews_count: number;
   created_at: string;

@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, Users, Briefcase, ShoppingBag, Megaphone, Clock, 
   Globe, Settings, LogOut, Menu, X, Search, Plus, Download,
-  CheckCircle
+  CheckCircle, Sparkles
 } from 'lucide-react';
 import { isAdminAuthenticated } from '@/utils/auth';
 
@@ -45,6 +45,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     { path: '/admin/products', icon: ShoppingBag, label: 'Products' },
     { path: '/admin/ads', icon: Megaphone, label: 'Ads' },
     { path: '/admin/pending', icon: Clock, label: 'Pending Submissions' },
+    { path: '/admin/360', icon: Sparkles, label: 'BlkXchange 360 Manager' },
     { path: '/admin/community', icon: Globe, label: 'Community & Events' },
     { path: '/admin/settings', icon: Settings, label: 'Settings' },
   ];
