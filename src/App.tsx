@@ -19,6 +19,8 @@ import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
 import AdminProfessionals from './pages/AdminProfessionals';
 import AdminPendingProfessionals from './pages/AdminPendingProfessionals';
+import AdminCommunityEvents from './pages/AdminCommunityEvents';
+import AdminSettings from './pages/AdminSettings';
 import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
 import NewsAll from './pages/NewsAll';
@@ -69,6 +71,8 @@ function App() {
             <Route path="ads" element={<AdminAds />} />
             <Route path="professionals" element={<AdminProfessionals />} />
             <Route path="pending" element={<AdminPendingProfessionals />} />
+            <Route path="community" element={<AdminCommunityEvents />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
           <Route path="/admin/360" element={<Admin360 />}>
             <Route index element={<Admin360Wealth />} />

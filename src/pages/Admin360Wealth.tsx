@@ -22,6 +22,17 @@ const Admin360Wealth = () => {
   const [modules, setModules] = useState<WealthModule[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    category: 'financial_literacy',
+    description: '',
+    video_url: '',
+    article_url: '',
+    pdf_url: '',
+    thumbnail_url: '',
+    access_level: 'free',
+  });
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchModules();
@@ -48,6 +59,40 @@ const Admin360Wealth = () => {
       console.error('Error deleting module:', error);
       alert('Failed to delete module');
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    
+    try {
+      const response = await axios.post(`${API_URL}/api/blk360/wealth-modules`, formData);
+      setModules([...modules, response.data]);
+      setShowAddForm(false);
+      setFormData({
+        title: '',
+        category: 'financial_literacy',
+        description: '',
+        video_url: '',
+        article_url: '',
+        pdf_url: '',
+        thumbnail_url: '',
+        access_level: 'free',
+      });
+      alert('Module created successfully!');
+    } catch (error) {
+      console.error('Error creating module:', error);
+      alert('Failed to create module');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   if (loading) {
@@ -156,18 +201,155 @@ const Admin360Wealth = () => {
         </div>
       )}
 
-      {/* Add Form Placeholder */}
+      {/* Add Module Form */}
       {showAddForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">Add New Module</h3>
-            <p className="text-gray-600 mb-4">Module creation form coming soon. For now, modules are seeded via backend.</p>
-            <button
-              onClick={() => setShowAddForm(false)}
-              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
-            >
-              Close
-            </button>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h3 className="text-2xl font-bold mb-6 text-gray-900">Add New Wealth Module</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="e.g., Building Generational Wealth"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category *
+                </label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                >
+                  <option value="financial_literacy">Financial Literacy</option>
+                  <option value="investing">Investing</option>
+                  <option value="entrepreneurship">Entrepreneurship</option>
+                  <option value="real_estate">Real Estate</option>
+                  <option value="credit_building">Credit Building</option>
+                  <option value="tax_strategies">Tax Strategies</option>
+                  <option value="retirement_planning">Retirement Planning</option>
+                  <option value="wealth_preservation">Wealth Preservation</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description *
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  required
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="Describe the module content and learning objectives..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Access Level *
+                </label>
+                <select
+                  name="access_level"
+                  value={formData.access_level}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                >
+                  <option value="free">Free - Available to all users</option>
+                  <option value="premium">Premium - Requires subscription</option>
+                  <option value="elite">Elite - Exclusive content</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Thumbnail URL
+                </label>
+                <input
+                  type="url"
+                  name="thumbnail_url"
+                  value={formData.thumbnail_url}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Video URL (YouTube, Vimeo, etc.)
+                </label>
+                <input
+                  type="url"
+                  name="video_url"
+                  value={formData.video_url}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="https://youtube.com/watch?v=..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Article URL
+                </label>
+                <input
+                  type="url"
+                  name="article_url"
+                  value={formData.article_url}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="https://example.com/article"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  PDF URL (Downloadable Resource)
+                </label>
+                <input
+                  type="url"
+                  name="pdf_url"
+                  value={formData.pdf_url}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="https://example.com/resource.pdf"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex-1 bg-gradient-to-r from-emerald-600 to-yellow-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                >
+                  {submitting ? 'Creating...' : 'Create Module'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowAddForm(false)}
+                  disabled={submitting}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
