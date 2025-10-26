@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import { AdminAuthWrapper } from './components/AdminAuthWrapper';
 import Landing from './pages/Landing';
 import Marketplace from './pages/Marketplace';
 import Professionals from './pages/Professionals';
@@ -13,6 +12,8 @@ import VendorAgreement from './pages/VendorAgreement';
 import VendorDashboard from './pages/VendorDashboard';
 import AdminLogin from './pages/AdminLogin';
 import AdminResetPassword from './pages/AdminResetPassword';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminOverview from './pages/AdminOverview';
 import AdminVendors from './pages/AdminVendors';
 import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
@@ -50,11 +51,14 @@ function App() {
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/reset-password" element={<AdminResetPassword />} />
-          <Route path="/admin/vendors" element={<AdminAuthWrapper><AdminVendors /></AdminAuthWrapper>} />
-          <Route path="/admin/products" element={<AdminAuthWrapper><AdminProducts /></AdminAuthWrapper>} />
-          <Route path="/admin/ads" element={<AdminAuthWrapper><AdminAds /></AdminAuthWrapper>} />
-          <Route path="/admin/professionals" element={<AdminAuthWrapper><AdminProfessionals /></AdminAuthWrapper>} />
-          <Route path="/admin/pending-professionals" element={<AdminAuthWrapper><AdminPendingProfessionals /></AdminAuthWrapper>} />
+          <Route path="/admin" element={<AdminDashboard />}>
+            <Route index element={<AdminOverview />} />
+            <Route path="vendors" element={<AdminVendors />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="ads" element={<AdminAds />} />
+            <Route path="professionals" element={<AdminProfessionals />} />
+            <Route path="pending" element={<AdminPendingProfessionals />} />
+          </Route>
           <Route path="/news" element={<News />} />
           <Route path="/news/all" element={<NewsAll />} />
           <Route path="/news/:slug" element={<NewsArticle />} />

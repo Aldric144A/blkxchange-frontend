@@ -17,7 +17,7 @@ export default function AdminLogin() {
 
   useEffect(() => {
     if (isAdminAuthenticated()) {
-      navigate('/admin/vendors');
+      navigate('/admin');
     }
   }, [navigate]);
 
@@ -54,7 +54,7 @@ export default function AdminLogin() {
       setForgotSuccess('✅ Successfully logged in. Redirecting to Admin Dashboard...');
       
       setTimeout(() => {
-        window.location.href = '/admin/vendors';
+        window.location.href = '/admin';
       }, 500);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
