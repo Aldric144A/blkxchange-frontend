@@ -45,6 +45,10 @@ import Admin360Legacy from './pages/Admin360Legacy';
 import Admin360History from './pages/Admin360History';
 import Admin360Forum from './pages/Admin360Forum';
 import Admin360Analytics from './pages/Admin360Analytics';
+import CommunityHub from './pages/CommunityHub';
+import Wallet from './pages/Wallet';
+import CommunityFund from './pages/CommunityFund';
+import Governance from './pages/Governance';
 
 function App() {
   return (
@@ -100,6 +104,10 @@ function App() {
           <Route path="/blkxchange360/legacy-wall" element={<LegacyWall />} />
           <Route path="/blkxchange360/history-window" element={<HistoryWindow />} />
           <Route path="/blkxchange360/community" element={<Community360 />} />
+          <Route path="/blkxchange360/community-hub" element={<CommunityHub />} />
+          <Route path="/blkxchange360/wallet" element={<Wallet />} />
+          <Route path="/blkxchange360/fund" element={<CommunityFund />} />
+          <Route path="/blkxchange360/governance" element={<Governance />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
