@@ -14,7 +14,9 @@ import {
   Box,
   Plus,
   Upload,
-  Edit
+  Edit,
+  Trash2,
+  RefreshCw
 } from 'lucide-react';
 import { ProductEnhanced, ProductStatus } from '@/types';
 import { AddProductModal } from '@/components/AddProductModal';
@@ -22,6 +24,7 @@ import { EditProductModal } from '@/components/EditProductModal';
 import { BulkImportModal } from '@/components/BulkImportModal';
 
 export default function AdminProducts() {
+  const [activeTab, setActiveTab] = useState<'live' | 'pending'>('live');
   const [products, setProducts] = useState<ProductEnhanced[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<ProductEnhanced | null>(null);
@@ -118,6 +121,36 @@ export default function AdminProducts() {
     setShowEditModal(true);
   };
 
+  const handleDelete = async (productId: string, productName: string) => {
+    if (!confirm(`Are you sure you want to delete "${productName}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/products-enhanced/${productId}`,
+        {
+          method: 'DELETE',
+          headers: { 'X-Admin-Secret': adminSecret }
+        }
+      );
+
+      if (response.ok) {
+        alert('Product deleted successfully!');
+        fetchProducts();
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.detail || 'Failed to delete product'}`);
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Failed to delete product. Please try again.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const getStatusBadge = (status: ProductStatus) => {
     switch (status) {
       case ProductStatus.PENDING:
@@ -157,13 +190,47 @@ export default function AdminProducts() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Tab Navigation */}
+        <div className="flex gap-4 mb-8 border-b-2 border-gray-200">
+          <button
+            onClick={() => setActiveTab('live')}
+            className={`px-6 py-3 font-semibold transition-colors ${
+              activeTab === 'live'
+                ? 'border-b-4 border-brand-gold text-brand-gold'
+                : 'text-gray-600 hover:text-brand-gold'
+            }`}
+          >
+            <Package className="w-5 h-5 inline mr-2" />
+            Live Products ({products.filter(p => p.status === ProductStatus.APPROVED).length})
+          </button>
+          <button
+            onClick={() => setActiveTab('pending')}
+            className={`px-6 py-3 font-semibold transition-colors ${
+              activeTab === 'pending'
+                ? 'border-b-4 border-brand-gold text-brand-gold'
+                : 'text-gray-600 hover:text-brand-gold'
+            }`}
+          >
+            <Clock className="w-5 h-5 inline mr-2" />
+            Pending Products ({products.filter(p => p.status === ProductStatus.PENDING).length})
+          </button>
+        </div>
+
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="border-2 border-brand-gold">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Total Products</p>
-                  <p className="text-3xl font-bold text-brand-black">{products.length}</p>
+                  <p className="text-sm text-gray-600">
+                    {activeTab === 'live' ? 'Live Products' : 'Total Products'}
+                  </p>
+                  <p className="text-3xl font-bold text-brand-black">
+                    {activeTab === 'live' 
+                      ? products.filter(p => p.status === ProductStatus.APPROVED).length
+                      : products.length
+                    }
+                  </p>
                 </div>
                 <Package className="w-12 h-12 text-brand-gold" />
               </div>
@@ -174,9 +241,14 @@ export default function AdminProducts() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Pending Review</p>
+                  <p className="text-sm text-gray-600">
+                    {activeTab === 'live' ? 'Total Value' : 'Pending Review'}
+                  </p>
                   <p className="text-3xl font-bold text-brand-black">
-                    {products.filter(p => p.status === ProductStatus.PENDING).length}
+                    {activeTab === 'live'
+                      ? `$${products.filter(p => p.status === ProductStatus.APPROVED).reduce((sum, p) => sum + (p.price * p.quantity), 0).toFixed(2)}`
+                      : products.filter(p => p.status === ProductStatus.PENDING).length
+                    }
                   </p>
                 </div>
                 <Clock className="w-12 h-12 text-yellow-500" />
@@ -188,9 +260,14 @@ export default function AdminProducts() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Approved</p>
+                  <p className="text-sm text-gray-600">
+                    {activeTab === 'live' ? 'Total Stock' : 'Approved'}
+                  </p>
                   <p className="text-3xl font-bold text-brand-black">
-                    {products.filter(p => p.status === ProductStatus.APPROVED).length}
+                    {activeTab === 'live'
+                      ? products.filter(p => p.status === ProductStatus.APPROVED).reduce((sum, p) => sum + p.quantity, 0)
+                      : products.filter(p => p.status === ProductStatus.APPROVED).length
+                    }
                   </p>
                 </div>
                 <CheckCircle className="w-12 h-12 text-green-500" />
@@ -314,8 +391,18 @@ export default function AdminProducts() {
           <Card className="border-2 border-brand-gold">
             <CardHeader className="bg-brand-gold">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-2xl text-brand-black">Product Submissions</CardTitle>
+                <CardTitle className="text-2xl text-brand-black">
+                  {activeTab === 'live' ? 'Live Products' : 'Pending Product Submissions'}
+                </CardTitle>
                 <div className="flex gap-3">
+                  <Button
+                    onClick={() => fetchProducts()}
+                    variant="outline"
+                    className="bg-white border-black hover:bg-gray-100"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Refresh
+                  </Button>
                   <Button
                     onClick={() => setShowBulkImportModal(true)}
                     className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
@@ -334,10 +421,13 @@ export default function AdminProducts() {
               </div>
             </CardHeader>
             <CardContent className="p-6">
-              {products.length === 0 ? (
+              {products.filter(p => activeTab === 'live' ? p.status === ProductStatus.APPROVED : p.status === ProductStatus.PENDING).length === 0 ? (
                 <Alert>
                   <AlertDescription>
-                    No products found. Products will appear here once vendors submit them.
+                    {activeTab === 'live' 
+                      ? 'No live products found. Products will appear here once approved.'
+                      : 'No pending products found. Products will appear here once vendors submit them.'
+                    }
                   </AlertDescription>
                 </Alert>
               ) : (
@@ -349,13 +439,17 @@ export default function AdminProducts() {
                         <th className="text-left py-3 px-4 font-semibold text-brand-black">Category</th>
                         <th className="text-left py-3 px-4 font-semibold text-brand-black">Price</th>
                         <th className="text-left py-3 px-4 font-semibold text-brand-black">Quantity</th>
-                        <th className="text-left py-3 px-4 font-semibold text-brand-black">Status</th>
+                        {activeTab === 'pending' && (
+                          <th className="text-left py-3 px-4 font-semibold text-brand-black">Status</th>
+                        )}
                         <th className="text-left py-3 px-4 font-semibold text-brand-black">Submitted</th>
                         <th className="text-left py-3 px-4 font-semibold text-brand-black">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {products.map((product) => (
+                      {products
+                        .filter(p => activeTab === 'live' ? p.status === ProductStatus.APPROVED : p.status === ProductStatus.PENDING)
+                        .map((product) => (
                         <tr key={product.id} className="border-b border-gray-200 hover:bg-gray-50">
                           <td className="py-3 px-4">
                             <div className="flex items-center gap-3">
@@ -375,7 +469,9 @@ export default function AdminProducts() {
                           <td className="py-3 px-4 capitalize">{product.category}</td>
                           <td className="py-3 px-4 font-medium">${product.price.toFixed(2)}</td>
                           <td className="py-3 px-4">{product.quantity}</td>
-                          <td className="py-3 px-4">{getStatusBadge(product.status)}</td>
+                          {activeTab === 'pending' && (
+                            <td className="py-3 px-4">{getStatusBadge(product.status)}</td>
+                          )}
                           <td className="py-3 px-4 text-sm text-gray-600">
                             {new Date(product.created_at).toLocaleDateString()}
                           </td>
@@ -398,6 +494,17 @@ export default function AdminProducts() {
                               >
                                 <Edit className="w-4 h-4" />
                               </Button>
+                              {activeTab === 'live' && (
+                                <Button
+                                  onClick={() => handleDelete(product.id, product.name)}
+                                  variant="outline"
+                                  size="sm"
+                                  className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                                  disabled={actionLoading}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              )}
                             </div>
                           </td>
                         </tr>

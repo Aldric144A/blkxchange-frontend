@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { 
   Users, Briefcase, ShoppingBag, DollarSign, TrendingUp, 
-  Clock, CheckCircle, XCircle, AlertCircle, Crown, ArrowRight 
+  Clock, CheckCircle, XCircle, AlertCircle, Crown, ArrowRight, RefreshCw 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+  PieChart, Pie, Cell, BarChart, Bar,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+} from 'recharts';
 
 interface MetricsData {
   vendors: {
@@ -132,14 +136,23 @@ export default function AdminOverview() {
           <h2 className="text-2xl font-bold text-[#C5A14E] mb-2">Admin Overview</h2>
           <p className="text-white/60">Welcome to the BlkXchange™ Admin Portal</p>
         </div>
-        <Link
-          to="/admin/360"
-          className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
-        >
-          <Crown className="w-5 h-5" />
-          Go to BlkXchange 360 Manager
-          <ArrowRight className="w-5 h-5" />
-        </Link>
+        <div className="flex gap-3">
+          <button
+            onClick={fetchMetrics}
+            className="flex items-center gap-2 bg-[#1A1A1A] border border-white/10 text-white px-4 py-3 rounded-lg font-semibold hover:border-[#C5A14E]/50 transition-all"
+          >
+            <RefreshCw className="w-5 h-5" />
+            Refresh Metrics
+          </button>
+          <Link
+            to="/admin/360"
+            className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+          >
+            <Crown className="w-5 h-5" />
+            Go to BlkXchange 360 Manager
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -278,6 +291,131 @@ export default function AdminOverview() {
             <p className="text-white/50 text-center py-4">No recent activity</p>
           )}
         </div>
+      </div>
+
+      {/* Analytics Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Vendor Status Distribution Pie Chart */}
+        <div className="bg-[#1A1A1A] border border-white/10 rounded-xl p-6">
+          <h3 className="text-lg font-bold text-[#C5A14E] mb-4">Vendor Status Distribution</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={[
+                  { name: 'Approved', value: metrics.vendors.approved },
+                  { name: 'Pending', value: metrics.vendors.pending },
+                  { name: 'Rejected', value: metrics.vendors.rejected },
+                ]}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                <Cell fill="#00A86B" />
+                <Cell fill="#C5A14E" />
+                <Cell fill="#EF4444" />
+              </Pie>
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: '#1A1A1A', 
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '8px',
+                  color: '#fff'
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Product Status Distribution Pie Chart */}
+        <div className="bg-[#1A1A1A] border border-white/10 rounded-xl p-6">
+          <h3 className="text-lg font-bold text-[#C5A14E] mb-4">Product Status Distribution</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={[
+                  { name: 'Approved', value: metrics.products.approved },
+                  { name: 'Pending', value: metrics.products.pending },
+                  { name: 'Rejected', value: metrics.products.rejected },
+                ]}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                <Cell fill="#00A86B" />
+                <Cell fill="#C5A14E" />
+                <Cell fill="#EF4444" />
+              </Pie>
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: '#1A1A1A', 
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '8px',
+                  color: '#fff'
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Revenue Trend Bar Chart */}
+      <div className="bg-[#1A1A1A] border border-white/10 rounded-xl p-6">
+        <h3 className="text-lg font-bold text-[#C5A14E] mb-4">Revenue Comparison</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart
+            data={[
+              { name: 'Last Month', revenue: metrics.revenue.lastMonth },
+              { name: 'This Month', revenue: metrics.revenue.thisMonth },
+            ]}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+            <XAxis dataKey="name" stroke="#fff" />
+            <YAxis stroke="#fff" />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: '#1A1A1A', 
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '8px',
+                color: '#fff'
+              }}
+            />
+            <Bar dataKey="revenue" fill="#00A86B" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Community Impact Bar Chart */}
+      <div className="bg-[#1A1A1A] border border-white/10 rounded-xl p-6">
+        <h3 className="text-lg font-bold text-[#C5A14E] mb-4">Community Impact Breakdown</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart
+            data={[
+              { name: 'HBCU Funds', amount: metrics.impact.hbcuFunds },
+              { name: 'Startup Investments', amount: metrics.impact.startupInvestments },
+            ]}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+            <XAxis dataKey="name" stroke="#fff" />
+            <YAxis stroke="#fff" />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: '#1A1A1A', 
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '8px',
+                color: '#fff'
+              }}
+            />
+            <Bar dataKey="amount" fill="#C5A14E" />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
