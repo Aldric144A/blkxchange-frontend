@@ -49,6 +49,10 @@ import CommunityHub from './pages/CommunityHub';
 import Wallet from './pages/Wallet';
 import CommunityFund from './pages/CommunityFund';
 import Governance from './pages/Governance';
+import SubscriptionCheckout from './pages/SubscriptionCheckout';
+import AffiliateDashboard from './pages/AffiliateDashboard';
+import ImpactDashboardV15 from './pages/ImpactDashboardV15';
+import AdminAIContent from './pages/AdminAIContent';
 
 function App() {
   return (
@@ -76,6 +80,7 @@ function App() {
             <Route path="professionals" element={<AdminProfessionals />} />
             <Route path="pending" element={<AdminPendingProfessionals />} />
             <Route path="community" element={<AdminCommunityEvents />} />
+            <Route path="ai-content" element={<AdminAIContent />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
           <Route path="/admin/360" element={<Admin360 />}>
@@ -108,6 +113,9 @@ function App() {
           <Route path="/blkxchange360/wallet" element={<Wallet />} />
           <Route path="/blkxchange360/fund" element={<CommunityFund />} />
           <Route path="/blkxchange360/governance" element={<Governance />} />
+          <Route path="/subscribe" element={<SubscriptionCheckout />} />
+          <Route path="/affiliate" element={<AffiliateDashboard />} />
+          <Route path="/impact-dashboard" element={<ImpactDashboardV15 />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

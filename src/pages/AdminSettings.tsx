@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Settings, Shield, DollarSign, Users, Info } from 'lucide-react';
+import { Settings, Shield, DollarSign, Users, Info, TrendingUp, Link2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function AdminSettings() {
   return (
@@ -17,11 +18,79 @@ export default function AdminSettings() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Phase 5A Monetization Section */}
+        <Card className="border-2 border-brand-gold mb-8">
+          <CardHeader className="bg-gradient-to-r from-emerald-600 to-yellow-600">
+            <CardTitle className="text-2xl text-white flex items-center gap-2">
+              <DollarSign className="w-6 h-6" />
+              Phase 5A: Monetization & AI Automation
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-8">
+            <div className="grid md:grid-cols-3 gap-6">
+              <Link
+                to="/subscribe"
+                className="block p-6 bg-purple-50 border-2 border-purple-300 rounded-lg hover:border-brand-gold hover:shadow-lg transition-all"
+              >
+                <TrendingUp className="w-10 h-10 text-purple-600 mb-4" />
+                <h3 className="text-xl font-bold text-brand-black mb-2">
+                  Subscription Plans
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  Premium ($29.99/mo) and Elite 360 ($99.99/mo) subscription management
+                </p>
+                <span className="text-brand-gold font-semibold">View Plans →</span>
+              </Link>
+
+              <Link
+                to="/affiliate"
+                className="block p-6 bg-blue-50 border-2 border-blue-300 rounded-lg hover:border-brand-gold hover:shadow-lg transition-all"
+              >
+                <Link2 className="w-10 h-10 text-blue-600 mb-4" />
+                <h3 className="text-xl font-bold text-brand-black mb-2">
+                  Affiliate Program
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  10% commission tracking, referral links, and performance analytics
+                </p>
+                <span className="text-brand-gold font-semibold">View Dashboard →</span>
+              </Link>
+
+              <Link
+                to="/impact-dashboard"
+                className="block p-6 bg-emerald-50 border-2 border-emerald-300 rounded-lg hover:border-brand-gold hover:shadow-lg transition-all"
+              >
+                <TrendingUp className="w-10 h-10 text-emerald-600 mb-4" />
+                <h3 className="text-xl font-bold text-brand-black mb-2">
+                  Impact Dashboard V1.5
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  Platform metrics, AI automation stats, and community fund tracking
+                </p>
+                <span className="text-brand-gold font-semibold">View Metrics →</span>
+              </Link>
+            </div>
+
+            <div className="mt-8 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg">
+              <h4 className="font-bold text-yellow-900 mb-2">AI Automation Suite</h4>
+              <p className="text-yellow-800 mb-4">
+                Manage AI-generated content, mentor matching, and history crawler approvals
+              </p>
+              <Link
+                to="/admin/ai-content"
+                className="inline-block px-6 py-3 bg-brand-gold text-white rounded-lg font-semibold hover:bg-opacity-90 transition-all"
+              >
+                Manage AI Content
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="border-2 border-brand-gold">
           <CardHeader className="bg-gradient-to-r from-emerald-600 to-yellow-600">
             <CardTitle className="text-2xl text-white flex items-center gap-2">
               <Info className="w-6 h-6" />
-              Settings Panel Under Development
+              Additional Settings (Under Development)
             </CardTitle>
           </CardHeader>
           <CardContent className="p-8">
