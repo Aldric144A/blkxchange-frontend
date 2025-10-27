@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { BookOpen, Award, History, MessageSquare, Crown } from 'lucide-react';
+import { BookOpen, Award, History, MessageSquare, Crown, Users, Wallet, DollarSign, Vote } from 'lucide-react';
 
 const BlkXchange360 = () => {
 
@@ -194,6 +194,58 @@ const BlkXchange360 = () => {
             <h3 className="text-xl font-bold text-white mb-2">Community Forum</h3>
             <p className="text-gray-400 text-sm">
               Connect with like-minded entrepreneurs, share insights, and build lasting relationships.
+            </p>
+          </Link>
+
+          <Link
+            to="/blkxchange360/community-hub"
+            className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl border border-gray-700 hover:border-emerald-500 transition-all duration-300 hover:scale-105 group"
+          >
+            <div className="w-12 h-12 bg-gradient-to-r from-emerald-600 to-yellow-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Users className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">Community Hub</h3>
+            <p className="text-gray-400 text-sm">
+              Join the public feed, discover events, and connect with community groups.
+            </p>
+          </Link>
+
+          <Link
+            to="/blkxchange360/wallet"
+            className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl border border-gray-700 hover:border-emerald-500 transition-all duration-300 hover:scale-105 group"
+          >
+            <div className="w-12 h-12 bg-gradient-to-r from-emerald-600 to-yellow-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Wallet className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">BlkXchange Wallet</h3>
+            <p className="text-gray-400 text-sm">
+              Earn and manage BlkPoints through community engagement and marketplace activity.
+            </p>
+          </Link>
+
+          <Link
+            to="/blkxchange360/fund"
+            className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl border border-gray-700 hover:border-emerald-500 transition-all duration-300 hover:scale-105 group"
+          >
+            <div className="w-12 h-12 bg-gradient-to-r from-emerald-600 to-yellow-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <DollarSign className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">Community Fund</h3>
+            <p className="text-gray-400 text-sm">
+              Track community impact with transparent fund allocation to vendors, operations, and HBCUs.
+            </p>
+          </Link>
+
+          <Link
+            to="/blkxchange360/governance"
+            className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl border border-gray-700 hover:border-emerald-500 transition-all duration-300 hover:scale-105 group"
+          >
+            <div className="w-12 h-12 bg-gradient-to-r from-emerald-600 to-yellow-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Vote className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">DAO Governance</h3>
+            <p className="text-gray-400 text-sm">
+              Participate in community decisions through proposals and democratic voting.
             </p>
           </Link>
         </div>
