@@ -99,6 +99,9 @@ function App() {
             <Route path="forum" element={<Admin360Forum />} />
             <Route path="analytics" element={<Admin360Analytics />} />
           </Route>
+          <Route path="/admin360" element={<Admin360 />}>
+            <Route path="community" element={<Admin360Community />} />
+          </Route>
           <Route path="/news" element={<News />} />
           <Route path="/news/all" element={<NewsAll />} />
           <Route path="/news/:slug" element={<NewsArticle />} />
@@ -127,7 +130,6 @@ function App() {
           <Route path="/blkcoin" element={<BlkCoinWallet />} />
           <Route path="/scholarships" element={<ScholarshipPortal />} />
           <Route path="/blkxchange360/events" element={<Blk360Events />} />
-          <Route path="/admin360/community" element={<Admin360Community />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

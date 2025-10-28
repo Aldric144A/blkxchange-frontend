@@ -63,32 +63,31 @@ const Admin360Community: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#C5A14E] mb-2">
-            Admin 360™ Community Panel
-          </h1>
-          <p className="text-gray-400">
-            Manage events, partners, nonprofits, volunteers, and community impact
-          </p>
-        </div>
+    <div className="bg-white">
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          Community & Events Management
+        </h2>
+        <p className="text-gray-600">
+          Manage events, partners, nonprofits, volunteers, and community impact
+        </p>
+      </div>
 
-        <div className="flex gap-4 mb-8 overflow-x-auto">
-          {['overview', 'events', 'partners', 'nonprofits', 'volunteers', 'donations'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all ${
-                activeTab === tab
-                  ? 'bg-[#C5A14E] text-black'
-                  : 'bg-[#2A2A2A] text-white hover:bg-[#3A3A3A]'
-              }`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </div>
+      <div className="flex gap-4 mb-8 overflow-x-auto border-b border-gray-200">
+        {['overview', 'events', 'partners', 'nonprofits', 'volunteers', 'donations'].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-6 py-3 font-semibold whitespace-nowrap transition-all border-b-2 ${
+              activeTab === tab
+                ? 'border-emerald-600 text-emerald-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
+      </div>
 
         {loading ? (
           <div className="text-center py-12">
@@ -163,18 +162,18 @@ const Admin360Community: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-[#2A2A2A] p-8 rounded-xl text-center">
-            <h3 className="text-2xl font-bold text-[#C5A14E] mb-4">
+          <div className="bg-gray-50 p-8 rounded-xl text-center border border-gray-200">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
               {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Management
             </h3>
-            <p className="text-gray-400 mb-6">
+            <p className="text-gray-600 mb-6">
               Use the dedicated admin pages to manage {activeTab}
             </p>
             <div className="flex gap-4 justify-center">
               {activeTab === 'events' && (
                 <a
                   href="/admin360/events"
-                  className="bg-[#C5A14E] text-black font-bold px-6 py-3 rounded-lg hover:bg-[#D4B15F]"
+                  className="bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-emerald-700"
                 >
                   Manage Events
                 </a>
@@ -182,7 +181,7 @@ const Admin360Community: React.FC = () => {
               {activeTab === 'partners' && (
                 <a
                   href="/admin360/partners"
-                  className="bg-[#C5A14E] text-black font-bold px-6 py-3 rounded-lg hover:bg-[#D4B15F]"
+                  className="bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-emerald-700"
                 >
                   Manage Partners
                 </a>
@@ -190,7 +189,7 @@ const Admin360Community: React.FC = () => {
               {activeTab === 'nonprofits' && (
                 <a
                   href="/admin360/nonprofits"
-                  className="bg-[#C5A14E] text-black font-bold px-6 py-3 rounded-lg hover:bg-[#D4B15F]"
+                  className="bg-emerald-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-emerald-700"
                 >
                   Manage Nonprofits
                 </a>
@@ -198,7 +197,6 @@ const Admin360Community: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
     </div>
   );
 };

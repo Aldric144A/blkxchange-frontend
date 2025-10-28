@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { BookOpen, Award, History, MessageSquare, BarChart3, Crown } from 'lucide-react';
+import { BookOpen, Award, History, MessageSquare, BarChart3, Crown, Globe } from 'lucide-react';
 
 const Admin360 = () => {
   const location = useLocation();
@@ -8,7 +8,7 @@ const Admin360 = () => {
 
   useEffect(() => {
     const path = location.pathname.split('/').pop();
-    if (path && ['wealth', 'legacy', 'history', 'forum', 'analytics'].includes(path)) {
+    if (path && ['wealth', 'legacy', 'history', 'forum', 'analytics', 'community'].includes(path)) {
       setActiveTab(path);
     }
   }, [location]);
@@ -19,6 +19,7 @@ const Admin360 = () => {
     { id: 'history', label: 'History Import', icon: History, path: '/admin/360/history' },
     { id: 'forum', label: 'Forum Moderation', icon: MessageSquare, path: '/admin/360/forum' },
     { id: 'analytics', label: '360 Analytics Dashboard', icon: BarChart3, path: '/admin/360/analytics' },
+    { id: 'community', label: 'Community & Events', icon: Globe, path: '/admin360/community' },
   ];
 
   return (
