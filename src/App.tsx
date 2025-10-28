@@ -12,8 +12,6 @@ import VendorAgreement from './pages/VendorAgreement';
 import VendorDashboard from './pages/VendorDashboard';
 import AdminLogin from './pages/AdminLogin';
 import AdminResetPassword from './pages/AdminResetPassword';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminOverview from './pages/AdminOverview';
 import AdminVendors from './pages/AdminVendors';
 import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
@@ -39,7 +37,6 @@ import WealthHub from './pages/WealthHub';
 import LegacyWall from './pages/LegacyWall';
 import HistoryWindow from './pages/HistoryWindow';
 import Community360 from './pages/Community360';
-import Admin360 from './pages/Admin360';
 import Admin360Wealth from './pages/Admin360Wealth';
 import Admin360Legacy from './pages/Admin360Legacy';
 import Admin360History from './pages/Admin360History';
@@ -59,6 +56,8 @@ import AdminBlkCoin from './pages/AdminBlkCoin';
 import AdminScholarships from './pages/AdminScholarships';
 import Blk360Events from './pages/Blk360Events';
 import Admin360Community from './pages/Admin360Community';
+import AdminConsole from './pages/AdminConsole';
+import AdminOverview360 from './pages/AdminOverview360';
 
 function App() {
   return (
@@ -76,31 +75,61 @@ function App() {
           <Route path="/vendor-apply" element={<VendorApply />} />
           <Route path="/vendor-agreement" element={<VendorAgreement />} />
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
+          {/* Admin Login Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/reset-password" element={<AdminResetPassword />} />
-          <Route path="/admin" element={<AdminDashboard />}>
-            <Route index element={<AdminOverview />} />
+          
+          {/* Legacy Admin Routes - Redirect to Unified Console */}
+          <Route path="/admin" element={<Navigate to="/admin360" replace />} />
+          <Route path="/admin/vendors" element={<Navigate to="/admin360/vendors" replace />} />
+          <Route path="/admin/products" element={<Navigate to="/admin360/products" replace />} />
+          <Route path="/admin/ads" element={<Navigate to="/admin360/ads" replace />} />
+          <Route path="/admin/professionals" element={<Navigate to="/admin360/professionals" replace />} />
+          <Route path="/admin/pending" element={<Navigate to="/admin360/pending" replace />} />
+          <Route path="/admin/community" element={<Navigate to="/admin360/community" replace />} />
+          <Route path="/admin/ai-content" element={<Navigate to="/admin360/ai-content" replace />} />
+          <Route path="/admin/blkcoin" element={<Navigate to="/admin360/blkcoin" replace />} />
+          <Route path="/admin/scholarships" element={<Navigate to="/admin360/scholarships" replace />} />
+          <Route path="/admin/settings" element={<Navigate to="/admin360/settings" replace />} />
+          <Route path="/admin/360" element={<Navigate to="/admin360" replace />} />
+          <Route path="/admin/360/*" element={<Navigate to="/admin360" replace />} />
+          
+          {/* Unified Admin Console - All Admin Routes */}
+          <Route path="/admin360" element={<AdminConsole />}>
+            <Route index element={<AdminOverview360 />} />
+            {/* Marketplace Management */}
             <Route path="vendors" element={<AdminVendors />} />
             <Route path="products" element={<AdminProducts />} />
-            <Route path="ads" element={<AdminAds />} />
             <Route path="professionals" element={<AdminProfessionals />} />
             <Route path="pending" element={<AdminPendingProfessionals />} />
-            <Route path="community" element={<Navigate to="/admin360/community" replace />} />
+            {/* Monetization & AI */}
+            <Route path="subscriptions" element={<SubscriptionCheckout />} />
+            <Route path="affiliate" element={<AffiliateDashboard />} />
             <Route path="ai-content" element={<AdminAIContent />} />
-            <Route path="blkcoin" element={<AdminBlkCoin />} />
+            <Route path="ads" element={<AdminAds />} />
+            {/* Community Ecosystem */}
+            <Route path="community" element={<Admin360Community />} />
+            <Route path="events" element={<Blk360Events />} />
+            <Route path="partners" element={<AdminOverview360 />} />
+            <Route path="nonprofits" element={<AdminOverview360 />} />
+            <Route path="volunteers" element={<AdminOverview360 />} />
+            <Route path="donations" element={<AdminOverview360 />} />
             <Route path="scholarships" element={<AdminScholarships />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Route>
-          <Route path="/admin/360" element={<Admin360 />}>
-            <Route index element={<Admin360Wealth />} />
+            <Route path="blkcoin" element={<AdminBlkCoin />} />
+            {/* Legacy & Culture */}
             <Route path="wealth" element={<Admin360Wealth />} />
             <Route path="legacy" element={<Admin360Legacy />} />
             <Route path="history" element={<Admin360History />} />
             <Route path="forum" element={<Admin360Forum />} />
+            {/* Analytics & Impact */}
             <Route path="analytics" element={<Admin360Analytics />} />
-          </Route>
-          <Route path="/admin360" element={<Admin360 />}>
-            <Route path="community" element={<Admin360Community />} />
+            <Route path="impact" element={<ImpactDashboardV15 />} />
+            <Route path="reports" element={<AdminOverview360 />} />
+            {/* Settings & Security */}
+            <Route path="settings" element={<AdminSettings />} />
+            <Route path="roles" element={<AdminOverview360 />} />
+            <Route path="security" element={<AdminOverview360 />} />
+            <Route path="system" element={<AdminOverview360 />} />
           </Route>
           <Route path="/news" element={<News />} />
           <Route path="/news/all" element={<NewsAll />} />
