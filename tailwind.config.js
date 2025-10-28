@@ -13,6 +13,7 @@ export default {
   			brand: {
   				black: '#000000',
   				gold: '#C5A14E',
+  				emerald: '#047857',
   				ivory: '#F8F8F6',
   				charcoal: '#1A1A1A'
   			},
