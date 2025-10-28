@@ -110,14 +110,14 @@ Impact Value,$${demoMode ? 'XXX' : stats.impactValue.toFixed(2)}`;
                 onClick={exportToCSV}
                 className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
-                <Download size={18} />
+                <Download className="h-5 w-5" />
                 Export CSV
               </button>
               <button
                 onClick={exportToPDF}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                <FileText size={18} />
+                <FileText className="h-5 w-5" />
                 Export PDF
               </button>
             </div>
@@ -134,8 +134,8 @@ Impact Value,$${demoMode ? 'XXX' : stats.impactValue.toFixed(2)}`;
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white">
               <div className="flex items-center justify-between mb-4">
-                <Users size={32} />
-                <TrendingUp size={24} className="opacity-75" />
+                <Users className="h-8 w-8" />
+                <TrendingUp className="h-6 w-6 opacity-75" />
               </div>
               <h3 className="text-sm font-medium opacity-90 mb-1">Total Vendors</h3>
               <p className="text-3xl font-bold">{displayValue(stats.totalVendors)}</p>
@@ -144,8 +144,8 @@ Impact Value,$${demoMode ? 'XXX' : stats.impactValue.toFixed(2)}`;
 
             <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white">
               <div className="flex items-center justify-between mb-4">
-                <Package size={32} />
-                <TrendingUp size={24} className="opacity-75" />
+                <Package className="h-8 w-8" />
+                <TrendingUp className="h-6 w-6 opacity-75" />
               </div>
               <h3 className="text-sm font-medium opacity-90 mb-1">Total Products</h3>
               <p className="text-3xl font-bold">{displayValue(stats.totalProducts)}</p>
@@ -154,8 +154,8 @@ Impact Value,$${demoMode ? 'XXX' : stats.impactValue.toFixed(2)}`;
 
             <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white">
               <div className="flex items-center justify-between mb-4">
-                <DollarSign size={32} />
-                <TrendingUp size={24} className="opacity-75" />
+                <DollarSign className="h-8 w-8" />
+                <TrendingUp className="h-6 w-6 opacity-75" />
               </div>
               <h3 className="text-sm font-medium opacity-90 mb-1">Total Revenue</h3>
               <p className="text-3xl font-bold">{displayValue(stats.totalRevenue, '$')}</p>
@@ -164,8 +164,8 @@ Impact Value,$${demoMode ? 'XXX' : stats.impactValue.toFixed(2)}`;
 
             <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-lg p-6 text-white">
               <div className="flex items-center justify-between mb-4">
-                <Heart size={32} />
-                <TrendingUp size={24} className="opacity-75" />
+                <Heart className="h-8 w-8" />
+                <TrendingUp className="h-6 w-6 opacity-75" />
               </div>
               <h3 className="text-sm font-medium opacity-90 mb-1">Community Impact</h3>
               <p className="text-3xl font-bold">{displayValue(stats.communityImpact, '$')}</p>
@@ -177,7 +177,7 @@ Impact Value,$${demoMode ? 'XXX' : stats.impactValue.toFixed(2)}`;
             <div className="bg-white border-2 border-emerald-200 rounded-lg p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="text-white" size={24} />
+                  <BarChart3 className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-gray-600">BlkCoin Distributed</h3>
@@ -194,7 +194,7 @@ Impact Value,$${demoMode ? 'XXX' : stats.impactValue.toFixed(2)}`;
             <div className="bg-white border-2 border-emerald-200 rounded-lg p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-lg flex items-center justify-center">
-                  <Users className="text-white" size={24} />
+                  <Users className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-gray-600">Volunteer Hours</h3>
@@ -211,7 +211,7 @@ Impact Value,$${demoMode ? 'XXX' : stats.impactValue.toFixed(2)}`;
             <div className="bg-white border-2 border-emerald-200 rounded-lg p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-lg flex items-center justify-center">
-                  <Heart className="text-white" size={24} />
+                  <Heart className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-gray-600">Impact Value</h3>

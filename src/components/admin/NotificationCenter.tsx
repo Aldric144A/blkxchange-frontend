@@ -90,7 +90,7 @@ export default function NotificationCenter() {
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
       >
-        <Bell size={20} className="text-gray-600" />
+        <Bell className="h-5 w-5 text-gray-600" />
         {unreadCount > 0 && (
           <span className="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
             {unreadCount > 9 ? '9+' : unreadCount}
@@ -122,7 +122,7 @@ export default function NotificationCenter() {
                   onClick={() => setIsOpen(false)}
                   className="p-1 hover:bg-gray-100 rounded transition-colors"
                 >
-                  <X size={18} className="text-gray-400" />
+                  <X className="h-4 w-4 text-gray-400" />
                 </button>
               </div>
             </div>
@@ -155,7 +155,7 @@ export default function NotificationCenter() {
                                   className="p-1 hover:bg-gray-200 rounded transition-colors"
                                   title="Mark as read"
                                 >
-                                  <Check size={14} className="text-gray-600" />
+                                  <Check className="h-4 w-4 text-gray-600" />
                                 </button>
                               )}
                               <button
@@ -163,7 +163,7 @@ export default function NotificationCenter() {
                                 className="p-1 hover:bg-gray-200 rounded transition-colors"
                                 title="Delete"
                               >
-                                <Trash2 size={14} className="text-gray-600" />
+                                <Trash2 className="h-4 w-4 text-gray-600" />
                               </button>
                             </div>
                           </div>

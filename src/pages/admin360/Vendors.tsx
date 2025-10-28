@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Users, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Users, CheckCircle, Clock } from 'lucide-react';
 import Admin360Layout from '@/components/admin/Admin360Layout';
 
 interface Vendor {
@@ -71,7 +71,7 @@ export default function Admin360Vendors() {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Users className="text-blue-600" size={24} />
+                <Users className="h-6 w-6 text-blue-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Vendors</p>
@@ -82,7 +82,7 @@ export default function Admin360Vendors() {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <CheckCircle className="text-green-600" size={24} />
+                <CheckCircle className="h-6 w-6 text-green-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-600">Verified</p>
@@ -95,7 +95,7 @@ export default function Admin360Vendors() {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <Clock className="text-yellow-600" size={24} />
+                <Clock className="h-6 w-6 text-yellow-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-600">Pending</p>
@@ -180,12 +180,12 @@ export default function Admin360Vendors() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {vendor.verified ? (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          <CheckCircle size={14} />
+                          <CheckCircle className="h-4 w-4" />
                           Verified
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                          <Clock size={14} />
+                          <Clock className="h-4 w-4" />
                           Pending
                         </span>
                       )}

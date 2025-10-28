@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Search, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 interface SearchResult {
   id: string;
@@ -69,7 +68,7 @@ export default function GlobalSearch() {
         onClick={() => setIsOpen(true)}
         className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:border-emerald-500 transition-colors"
       >
-        <Search size={18} className="text-gray-400" />
+        <Search className="h-5 w-5 text-gray-400" />
         <span className="text-gray-500 text-sm">Search...</span>
         <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-xs font-mono bg-gray-100 border border-gray-300 rounded">
           ⌘K
@@ -91,7 +90,7 @@ export default function GlobalSearch() {
         <div className="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
           {/* Search Input */}
           <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200">
-            <Search size={20} className="text-gray-400" />
+            <Search className="h-5 w-5 text-gray-400" />
             <input
               ref={inputRef}
               type="text"
@@ -104,7 +103,7 @@ export default function GlobalSearch() {
               onClick={() => setIsOpen(false)}
               className="p-1 hover:bg-gray-100 rounded transition-colors"
             >
-              <X size={18} className="text-gray-400" />
+              <X className="h-4 w-4 text-gray-400" />
             </button>
           </div>
 

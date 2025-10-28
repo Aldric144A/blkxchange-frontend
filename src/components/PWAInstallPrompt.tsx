@@ -47,7 +47,7 @@ export default function PWAInstallPrompt() {
       <div className="bg-white rounded-lg shadow-2xl border-2 border-emerald-600 p-4">
         <div className="flex items-start gap-3">
           <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Download className="text-white" size={24} />
+            <Download className="h-6 w-6 text-white" />
           </div>
           <div className="flex-1">
             <h3 className="font-bold text-gray-900 mb-1">Install BlkXchange™</h3>
@@ -73,7 +73,7 @@ export default function PWAInstallPrompt() {
             onClick={handleDismiss}
             className="p-1 hover:bg-gray-100 rounded transition-colors"
           >
-            <X size={18} className="text-gray-400" />
+            <X className="h-4 w-4 text-gray-400" />
           </button>
         </div>
       </div>

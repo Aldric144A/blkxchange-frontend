@@ -156,7 +156,7 @@ export default function Admin360Dashboard() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
-                    <Icon className="text-white" size={24} />
+                    <Icon className="h-6 w-6 text-white" />
                   </div>
                   <span className="text-sm font-medium text-green-600">{stat.change}</span>
                 </div>

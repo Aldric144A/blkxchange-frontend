@@ -10,8 +10,6 @@ import {
   Handshake,
   UserCheck,
   GraduationCap,
-  Search,
-  Bell,
   ChevronLeft,
   ChevronRight,
   Settings,
@@ -72,7 +70,7 @@ export default function AdminSidebar({ userRole = 'SuperAdmin' }: AdminSidebarPr
           onClick={() => setCollapsed(!collapsed)}
           className="p-1 hover:bg-emerald-800 rounded transition-colors"
         >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          {collapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
         </button>
       </div>
 
@@ -97,7 +95,7 @@ export default function AdminSidebar({ userRole = 'SuperAdmin' }: AdminSidebarPr
               {isActive && (
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-400" />
               )}
-              <Icon className={cn('flex-shrink-0', isActive ? 'text-yellow-400' : '')} size={20} />
+              <Icon className={cn('flex-shrink-0', isActive ? 'text-yellow-400' : '')} />
               {!collapsed && <span>{item.title}</span>}
             </Link>
           );
@@ -114,7 +112,7 @@ export default function AdminSidebar({ userRole = 'SuperAdmin' }: AdminSidebarPr
           )}
           title={collapsed ? 'Settings' : undefined}
         >
-          <Settings size={20} />
+          <Settings className="h-5 w-5" />
           {!collapsed && <span>Settings</span>}
         </Link>
         <button
@@ -124,7 +122,7 @@ export default function AdminSidebar({ userRole = 'SuperAdmin' }: AdminSidebarPr
           )}
           title={collapsed ? 'Logout' : undefined}
         >
-          <LogOut size={20} />
+          <LogOut className="h-5 w-5" />
           {!collapsed && <span>Logout</span>}
         </button>
       </div>
