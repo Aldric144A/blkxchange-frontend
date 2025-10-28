@@ -19,8 +19,8 @@ import AdminProducts from './pages/AdminProducts';
 import AdminAds from './pages/AdminAds';
 import AdminProfessionals from './pages/AdminProfessionals';
 import AdminPendingProfessionals from './pages/AdminPendingProfessionals';
-import AdminCommunityEvents from './pages/AdminCommunityEvents';
 import AdminSettings from './pages/AdminSettings';
+import { Navigate } from 'react-router-dom';
 import News from './pages/News';
 import NewsArticle from './pages/NewsArticle';
 import NewsAll from './pages/NewsAll';
@@ -53,6 +53,12 @@ import SubscriptionCheckout from './pages/SubscriptionCheckout';
 import AffiliateDashboard from './pages/AffiliateDashboard';
 import ImpactDashboardV15 from './pages/ImpactDashboardV15';
 import AdminAIContent from './pages/AdminAIContent';
+import BlkCoinWallet from './pages/BlkCoinWallet';
+import ScholarshipPortal from './pages/ScholarshipPortal';
+import AdminBlkCoin from './pages/AdminBlkCoin';
+import AdminScholarships from './pages/AdminScholarships';
+import Blk360Events from './pages/Blk360Events';
+import Admin360Community from './pages/Admin360Community';
 
 function App() {
   return (
@@ -79,8 +85,10 @@ function App() {
             <Route path="ads" element={<AdminAds />} />
             <Route path="professionals" element={<AdminProfessionals />} />
             <Route path="pending" element={<AdminPendingProfessionals />} />
-            <Route path="community" element={<AdminCommunityEvents />} />
+            <Route path="community" element={<Navigate to="/admin360/community" replace />} />
             <Route path="ai-content" element={<AdminAIContent />} />
+            <Route path="blkcoin" element={<AdminBlkCoin />} />
+            <Route path="scholarships" element={<AdminScholarships />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
           <Route path="/admin/360" element={<Admin360 />}>
@@ -116,6 +124,10 @@ function App() {
           <Route path="/subscribe" element={<SubscriptionCheckout />} />
           <Route path="/affiliate" element={<AffiliateDashboard />} />
           <Route path="/impact-dashboard" element={<ImpactDashboardV15 />} />
+          <Route path="/blkcoin" element={<BlkCoinWallet />} />
+          <Route path="/scholarships" element={<ScholarshipPortal />} />
+          <Route path="/blkxchange360/events" element={<Blk360Events />} />
+          <Route path="/admin360/community" element={<Admin360Community />} />
         </Routes>
         <footer className="bg-brand-black text-brand-ivory py-8 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
